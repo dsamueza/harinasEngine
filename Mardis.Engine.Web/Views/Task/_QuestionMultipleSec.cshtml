@@ -1,0 +1,77 @@
+﻿<div v-for="(answer,j) in question.QuestionDetailCollection">
+    <!--Titulos-->
+    <div v-if="j===0">
+        <div class="col-sm-12">
+            <div class="checkSeccion">
+                <label for="answer.Id" class="col-sm-9 mardis-checkSub" style="    font-size: 14px !important">
+                    <span>Tiene</span>
+                </label>
+            </div>
+            <div v-for="(question, i) in _modelServicef(section.Id,answer.Id)">
+
+                <div v-bind:style="col_sm_mardis(answer.Weight)">
+                    {{question.Title}}
+                </div>
+            </div>
+            <br />
+        </div>
+    </div>
+    <!--Titulos-->
+    <div class="col-sm-12">
+        <div class="checkSeccion">
+            <label for="answer.Id" class="col-sm-9 mardis-checkSub">
+                <span>{{ answer.Answer }}</span>
+                <input v-for-events type="checkbox" class="inputcheckSub subsec" v-bind:id="answer.Id" v-bind:value="answer.IdQuestion" v-bind:name="question.IdAnswer" v-model="answer.Checked" onchange="onToggle(this)">
+            </label>
+        </div>
+        <div v-for="(question, i) in _modelServicef(section.Id,answer.Id)">
+
+            <div v-bind:style="col_sm_mardis(answer.Weight)">
+                <input v-info-sender v-if="question.CodeTypePoll == 'OPEN'" class="form-control inputmardis subsec" style="margin: 0 auto; float: none; background-color: #cccccc;" v-model="question.Answer" v-bind:id="question.Id" v-bind:name="question.IdAnswer" />
+                <select v-info-sender v-if="question.CodeTypePoll == 'ONE'" class="inputmardis subsec" v-model="question.IdQuestionDetail" v-bind:id="question.Id" v-bind:name="question.IdAnswer"
+                        style="margin:0 auto; float: none;" onchange="valorseleccion(this)">
+                    <div class="panel-body" style="padding: 5px;">
+                        <div class="panel panel-mardis-grey " style="margin-bottom: 5px;">
+                            <option v-for="answer in question.QuestionDetailCollection" v-bind:value="answer.Id">{{answer.Answer}}</option>
+                        </div>
+                    </div>
+                </select>
+                <v-autocomplete v-model="question.QuestionComplete"
+                                :disabled="isUpdating"
+                                :items="question.QuestionDetailCollection"
+                                box
+                                chips
+                                color="blue-grey lighten-2"
+                                item-text="Idconcept"
+                                item-value="Id"
+                                multiple
+                                v-if="question.CodeTypePoll == 'COMPLETE'"
+                                :get-label="getLabel"
+                                v-complete>
+                    <template slot="selection"
+                              slot-scope="data">
+                        <v-chip :selected="data.selected"
+                                class="chip--select-multi"
+                                color="blue-grey_mardis">
+                            {{ data.item.Idconcept }}
+                        </v-chip>
+                    </template>
+                    <template slot="item"
+                              slot-scope="data">
+                        <template v-if="typeof data.item !== 'object'">
+                            <v-list-tile-content v-text="data.item"></v-list-tile-content>
+                        </template>
+                        <template v-else>
+
+                            <v-list-tile-content>
+                                <v-list-tile-title v-html="data.item.Idconcept"></v-list-tile-title>
+                                <v-list-tile-sub-title v-html="data.item.Answer"></v-list-tile-sub-title>
+                            </v-list-tile-content>
+                        </template>
+                    </template>
+                </v-autocomplete>
+            </div>
+        </div>
+        <br />
+    </div>
+</div>

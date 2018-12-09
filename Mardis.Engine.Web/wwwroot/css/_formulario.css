@@ -1,0 +1,243 @@
+﻿body {
+}
+.checkSeccion {
+    padding-right: 0px;
+    width: 15%;
+    float: left;
+   
+    display: -webkit-inline-box;
+    font-size: 13px;
+    margin: 10px 0px 0px 15px;
+    font-weight: 700;
+    font-family: 'Source Sans Pro', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+.QuestionSeccion {
+    padding-right: 0px;
+    width: 20%;
+    float: left;
+    text-align: center;
+}
+.mardis-check {
+    display: -webkit-inline-box;
+    font-size: 13px;
+    margin: 10px 0px 0px 15px;
+    font-weight: 700;
+    font-family: 'Source Sans Pro', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+
+.mardis-checkSub {
+    display: -webkit-inline-box;
+    font-size: 12px;
+   
+    font-weight: 700;
+    font-family: 'Source Sans Pro', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+.inputcheckSub {
+    height: 18px;
+    padding: 2px 5px;
+    /* font-size: 10px; */
+    line-height: 1.5;
+    -ms-border-radius: 5px;
+    border-radius: 5px;
+    width: 70%;
+    background-color: #cccccc;
+    /* text-align: center; */
+    /* margin: 0; */
+    font-weight: bold;
+    display: block;
+    margin-left: -50% !important;
+}
+/*--------------------------------------------------------
+Perfil
+--------------------------------------------------------*/
+.inputeditable {
+}
+
+.input-xs {
+    height: 22px;
+    padding: 2px 5px;
+    font-size: 12px;
+    line-height: 1.5;
+    -ms-border-radius: 0;
+    border-radius: 0;
+    width: 100%;
+}
+
+.inputmardis {
+    height: 27px;
+    padding: 2px 5px;
+    line-height: 1.5;
+    -ms-border-radius: 5px;
+    border-radius: 5px;
+    width: 100%;
+    background-color: #cccccc;
+    text-align: center;
+    margin: 0;
+    /*font-weight: bold;*/
+    display: block;
+    /*font-family: Arial, Geneva, sans-serif;
+        font-size: 12px;
+        letter-spacing: 0px;
+        word-spacing: -0.4px;
+        color: #007bff;
+        font-weight: 600;
+        text-decoration: none;*/
+    /*font-style: normal;
+        font-variant: normal;
+        text-transform: capitalize;*/
+    webkit-appearance: none !important;
+    background-color: rgb(236, 236, 236) !important;
+    font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+    font-size: 13px;
+    letter-spacing: 0.4px;
+    word-spacing: 0px;
+    color: #0656e8;
+    font-weight: 500;
+    text-decoration: none;
+    font-style: normal;
+    font-variant: normal;
+    text-transform: none;
+}
+.badge {
+
+    min-width: 20px !important;
+
+}
+.badge-danger a {
+    color: white !important;
+}
+.badge-danger {
+    background-color: #337ab7 !important;
+}
+.v-text-field.v-text-field--enclosed .v-text-field__details, .v-text-field.v-text-field--enclosed .v-input__slot {
+    padding: 0 12px;
+    height: 27px;
+}
+
+.casounasem {
+    padding-right: 0px;
+    width: 3.43333%;
+    float: left;
+    text-align: center;
+}
+
+.col-sm-18 {
+    padding-right: 0px;
+    width: 4.9%;
+    float: left;
+    text-align: center;
+}
+.col-sm-7 {
+    padding-right: 0px;
+    width: 11.8%;
+    float: left;
+    text-align: center;
+}
+* {
+    padding: 0;
+}
+
+.input-subline {
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid #000000;
+}
+
+#divImages .panel-body {
+    height: auto !important;
+    overflow-y: hidden !important;
+}
+
+.headQuestion {
+}
+
+input,
+select,
+textarea {
+    max-width: none !important;
+}
+
+.v-menu__content {
+    top: 0px !important;
+    left: 40px !important;
+    min-width: 500px !important;
+}
+
+.v-list__tile {
+    height: 70px !important;
+    font-size: 13px !important;
+}
+
+.v-text-field__details {
+    display: none !important;
+}
+
+.v-input__slot {
+    margin-bottom: 0px !important;
+    border-radius: 5px !important;
+}
+
+.v-input__slot {
+    margin-bottom: 5px !important;
+}
+
+.v-select.v-select--chips:not(.v-text-field--single-line).v-text-field--box .v-select__selections, .v-select.v-select--chips:not(.v-text-field--single-line).v-text-field--enclosed .v-select__selections {
+    /* min-height: 68px; */
+    min-height: 1px !important;
+}
+
+.v-text-field--box .v-input__slot, .v-text-field--outline .v-input__slot {
+    /* min-height: 56px; */
+    min-height: 1px !important;
+}
+
+.v-select.v-text-field--enclosed:not(.v-text-field--single-line) .v-select__selections {
+    padding-top: 0px !important;
+}
+
+.blue-grey_mardis {
+    border-radius: 30px !important;
+    width: 30px !important;
+    height: 22px !important;
+    padding-top: 2px !important;
+    text-align: center !important;
+    background-color: #0656e8 !important;
+    border-color: #364a54 !important;
+    color: white !important;
+    font-weight: 700;
+    font-size: 10px;
+    margin-left: 1px;
+    /*-webkit-box-shadow: -1px 2px 5px 0px rgba(0,0,0,0.75);
+        -moz-box-shadow: -1px 2px 5px 0px rgba(0,0,0,0.75);
+        box-shadow: -1px 2px 5px 0px rgba(0,0,0,0.75);*/
+}
+
+.v-text-field.v-text-field--enclosed .v-input__prepend-outer, .v-text-field.v-text-field--enclosed .v-input__prepend-inner, .v-text-field.v-text-field--enclosed .v-input__append-inner, .v-text-field.v-text-field--enclosed .v-input__append-outer {
+    margin-top: 0px;
+}
+
+.wrapper {
+    overflow-y: initial !important;
+    overflow-x: initial !important;
+}
+
+/*estilos nuevos*/
+.panel-warning {
+    border-color: #013c13 !important;
+}
+
+    .panel-warning > .panel-heading {
+        color: #b01e27 !important;
+        background-color: #bfbfbf !important;
+        border-color: #faebcc !important;
+        font-weight: 700 !important;
+        text-transform: capitalize !important;
+    }
+
+.panel-mardis-grey > .panel-heading {
+    color: #2b2b2b !important;
+    border-color: #d50000;
+    text-transform: capitalize;
+    background-color: white !important;
+    font-size: 13px !important;
+}

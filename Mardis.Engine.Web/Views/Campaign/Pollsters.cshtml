@@ -1,0 +1,260 @@
+﻿@model IEnumerable<Mardis.Engine.DataAccess.MardisCommon.Pollster>
+@{
+    ViewData["Menu"] = "Mercaderistas";
+    ViewData["Title"] = "Mercaderistas";
+    ViewData["Description"] = "";
+    Layout = "_Layout";
+}
+@section buttons{
+
+
+}
+@{
+    var _ActionData = (string)ViewData["ReturnUrl"];
+}
+@section filters{}
+<style>
+    #DatosTabla tbody {
+        font-size: 12px;
+        color: #545454;
+        font-weight: 600;
+    }
+
+    .user-footer a {
+        color: #be0811 !important;
+    }
+
+    #DatosTabla th {
+        font-size: 12px;
+        font-weight: 700;
+        color: black;
+    }
+
+    #DatosTabla a {
+        color: #20a0c6;
+        font-size: 16px;
+    }
+
+        #DatosTabla a:hover {
+            color: #20a0c6;
+            font-size: 18px;
+        }
+
+    .paginate_button {
+        font-size: 13px !important
+    }
+
+    .input-group .input-group__selections__comma {
+        padding-left: 0.9pc !important;
+    }
+
+    .input-group label {
+        left: 0.9pc !important;
+        font-weight: 700 !important;
+    }
+
+    .input-group .input-group--select__autocomplete {
+        padding-left: 0.9pc !important;
+        display: block;
+        width: 100%;
+        height: 38px;
+        padding: 6px 12px;
+        font-size: 14px;
+        line-height: 1.42857143;
+        color: #555;
+        background-color: #fff;
+        background-image: none;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+        box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+        -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
+        -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+        transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+    }
+
+    .btn-app {
+        top: -1.3pc !important;
+        margin: 0px !important;
+        color: white !important;
+        background-color: #76787a;
+        font-size: 11px !important;
+        font-weight: 700 !important;
+        border-radius: 0.3pc !important;
+        padding: 7px 5px !important;
+        height: 45px !important;
+    }
+
+        .btn-app:hover {
+            background-color: #a1a1a1 !important;
+        }
+
+    .breadcrumb i {
+        color: rgba(221, 24, 34, 0.98) !important;
+    }
+</style>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-beta.35/css/uikit.min.css" rel="stylesheet" />
+<link href="https://cdn.datatables.net/1.10.19/css/dataTables.uikit.min.css" rel="stylesheet" />
+<link href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" rel="stylesheet" />
+<link href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons' rel="stylesheet">
+<section class="content-header" style="margin-bottom: 15px;">
+    <h1>
+        Administración
+        <small>Gestión de Mercaderistas</small>
+    </h1>
+    <ol class="breadcrumb" style="right: 40px; !important">
+        <a href="@Url.Action("PollsterRegister","Campaign")" class="btn btn-app" style="top: -1.3pc; margin:0px !important">
+            <i class="fa fa-plus"></i> Nuevo
+        </a>
+    </ol>
+</section>
+<section class="content">
+    <div class="col-md-12">
+        <div id="VueEcuestador">
+            <div class="box box-default">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Encuestadores en la ruta</h3>
+                    @*<div class="box-tools pull-right">
+
+                            <button type="button" class="btn btn-box-tool " style="    color: #76787a;    font-size: 13px;   font-weight: 700;" v-on:click="OpenModalEncuesta('1')">   <i class="fa fa-plus-square" v-on:click="OpenModalEncuesta('1')"></i> Agregar</button>
+                        </div>*@
+                </div>
+                <div class="box-body no-padding">
+                    <div class="col-md-12">
+                        <div id="DatosTabla" class="col-xs-10 col-md-12 col-lg-12 " style="overflow: auto; width: 100%; ">
+                            <table id="table-mardis-mc" class="uk-table uk-table-hover uk-table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.Name)
+                                        </th>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.IMEI)
+                                        </th>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.Phone)
+                                        </th>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.Qsupport)
+                                        </th>
+                                        <th>
+                                            Fecha Inicio
+                                        </th>
+                                        <th>
+                                            Fecha Fin
+                                        </th>
+                                        <th>
+                                            Estado
+                                        </th>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.Oficina)
+                                        </th>
+                                        <th>
+                                            Usuario Movil
+                                        </th>
+                                        <th>
+                                            Password Movil
+                                        </th>
+                                        <th></th>
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model)
+                                    {
+                                        <tr>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Name)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.IMEI)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Phone)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Qsupport)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Fecha_Inicio)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Fecha_Fin)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Status)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Oficina)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.UserCel)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.PassCel)
+                                            </td>
+                                            <td>
+                                                <a href="@Url.Action("PollsterRegister", "Campaign", new {idPolls = item.Id})"><i class="fa fa-edit"></i></a>|
+                                                <a href="@Url.Action("DeletePollster", "Campaign", new {idPolls = item.Id})"><i class="fa fa-trash"></i></a>|
+                                                <a href="@Url.Action("UpdatePollster", "Campaign", new {Imei = item.IMEI})"><i class="fa  fa-mobile"></i></a>
+                                            </td>
+
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-12">
+        <a href="@Url.Action("Route", "Campaign")"><i class="fa  fa-arrow-left"></i> Atras</a>
+    </div>
+</section>
+
+@section Scripts {
+
+
+
+    <script src="~/js/viewModel/EncuestadorView.js"></script>
+    <script type="text/javascript">
+        @*var table=  $('#datosCoord').dataTable({
+        "language": {
+        "url": "@Url.Content("~/js/latin.json")"
+            },
+            "pageLength": 25,
+            "scrollX": true
+             });
+        </script>*@
+        var table
+        generarTabla();
+        var _action = '@Html.Raw(_ActionData)';
+        Message(_action) 
+        function Message(_action) {
+            if (_action == "Tasks") { bootbox.alert("Existen Tareas asociadas al Encuenstador. No se pudo borrar el registro")}
+               
+            if (_action == "Branch") { bootbox.alert("Se desactivo todas las encuestas asociadas al Encuestador") }
+        }
+
+        function generarTabla() {
+
+            table = $('#table-mardis-mc').dataTable({
+                "language": {
+                    "url": "@Url.Content("~/js/latin.json")"
+                }
+
+
+
+            })
+        };
+
+
+
+
+
+    </script>
+
+
+}

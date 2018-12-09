@@ -1,0 +1,76 @@
+<div id="responsive" class="modal fade" role="dialog">
+    <div class="modal-dialog  modal-scrollable">
+        <div class="modal-content">
+            @*<div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+
+                    <h4 class="modal-title">Encuestadores</h4>
+                </div>*@
+
+            <div class="modal-body" style="background-color:#d2d6de">
+                <div class="row">
+                    @*<div class="col-md-4">
+                             START LOCK SCREEN ITEM
+
+                            <v-select :items="encuestadores"
+                                      :filter="customFilter"
+                                      v-model="imei"
+                                      item-text="name"
+                                      label="Encuestador"
+                                      autocomplete></v-select>
+                            <div class="input-group-btn">
+                                <button type="button" class="btn" v-on:click="addItem"><i class="fa fa-plus text-muted"></i></button>
+                            </div>
+
+                        </div>*@
+
+                    <div class="lockscreen-wrapper" style="  margin-top: 5% !important;">
+                        <div class="lockscreen-logo" style="margin-bottom: 45px !important;">
+                            <a href="#"><h4><b>Asignación</b> Códigos</h4></a>
+                        </div>
+                        <!-- User name -->
+                        <!-- START LOCK SCREEN ITEM -->
+                      
+
+
+                        <!-- START LOCK SCREEN ITEM -->
+                        <div class="lockscreen-item">
+                            <!-- lockscreen image -->
+                            <div class="lockscreen-image">
+                                <img src="~/images/icon/google-forms.png" alt="User Image">
+
+                            </div>
+                            <!-- /.lockscreen-image -->
+                            <!-- lockscreen credentials (contains the form) -->
+                            <form class="lockscreen-credentials">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" placeholder="Código Encuestas" v-model="poll.BranchCodeNew"  :disabled="poll.StatusBranch==='A'">
+                                    <div class="input-group-btn">
+                                        <button type="button" class="btn" v-on:click="AcceptCode" :disabled="poll.StatusBranch==='A'"><i class="fa fa-save text-muted"  ></i></button>
+                                    </div>
+                                </div>
+                            </form>
+                            <!-- /.lockscreen credentials -->
+                        </div>
+                        <!-- /.lockscreen-item -->
+                        <div class="help-block text-center">
+                            <div id="idCodeAsigE" hidden>
+                                Se asigno correctamente en nuevo código al Local
+                            </div>
+                            <div id="idCodeAsigN" hidden>
+                                Existió inconvenientes al cambiar el código, Favor actualizar la página y vuelva a realizar el proceso
+                            </div>
+                        </div>
+                        <div class="text-center">
+                            <a href="#" data-dismiss="modal">Salir</a>
+                        </div>
+                        @*<div class="lockscreen-footer text-center">
+            Copyright © 2014-2016 <b><a href="https://adminlte.io" class="text-black">Almsaeed Studio</a></b><br>
+            All rights reserved
+        </div>*@
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

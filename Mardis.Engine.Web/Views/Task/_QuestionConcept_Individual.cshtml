@@ -1,0 +1,40 @@
+﻿
+    <div class="panel panel-mardis-grey" style="margin-bottom: 1px;">
+        <div class="panel-heading headQuestion" style="padding-bottom: 0; padding-top: 0; height: 10%; color: white;">
+            {{question.Title}}
+        </div>
+        <div class="panel-body" style="padding-bottom: 5px; padding-top: 5px; height:38px">
+            <v-autocomplete v-model="question.QuestionComplete"
+                            :disabled="isUpdating"
+                            :items="question.QuestionDetailCollection"
+                            box
+                            chips
+                            color="blue-grey lighten-2"
+                            item-text="Answer"
+                            item-value="Id"
+                            multiple>
+                <template slot="selection"
+                          slot-scope="data">
+                    <v-chip :selected="data.selected"
+                            class="chip--select-multi"
+                            color="blue-grey_mardis">
+                        {{ data.item.Idconcept }}
+                    </v-chip>
+                </template>
+                <template slot="item"
+                          slot-scope="data">
+                    <template v-if="typeof data.item !== 'object'">
+                        <v-list-tile-content v-text="data.item"></v-list-tile-content>
+                    </template>
+                    <template v-else>
+
+                        <v-list-tile-content>
+                            <v-list-tile-title v-html="data.item.Idconcept"></v-list-tile-title>
+                            <v-list-tile-sub-title v-html="data.item.Answer"></v-list-tile-sub-title>
+                        </v-list-tile-content>
+                    </template>
+                </template>
+            </v-autocomplete>
+        </div>
+    </div>
+                       
