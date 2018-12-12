@@ -202,7 +202,7 @@ namespace Mardis.Engine.Web.Controllers
                 }
                 var filters = GetFilters(filterValues, deleteFilter);
                 var tasks = _campaignBusiness.GetPaginatedTaskPerCampaignViewModelDinamic(id, pageIndex, pageSize, filters, ApplicationUserCurrent.AccountId);
-                ViewBag.CountTasks = _taskCampaignBusiness._CountAllTasCamping(id).ToString();
+                ViewBag.CountTasks = _taskCampaignBusiness._CountAllTasCamping(id, filters).ToString();
                 var _MyTask = _taskCampaignBusiness._ModelTasks(tasks);
            //     _taskCampaignBusiness.taskunBlock(Guid.Parse(ApplicationUserCurrent.UserId));
                 if (view == "list")
@@ -305,6 +305,7 @@ namespace Mardis.Engine.Web.Controllers
             {
                 ViewData[CTask.IdRegister] = idTask.ToString();
                 ViewData[CTask.IsUse] =  _taskCampaignBusiness._IstaskBlock(Guid.Parse(ApplicationUserCurrent.UserId), idTask,ApplicationUserCurrent.UserName);
+                ViewData["taskcampaign"] = GetSessionVariable("idCampaign");
                 LoadSelectItems();
 
                 return View();

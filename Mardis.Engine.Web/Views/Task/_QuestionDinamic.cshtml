@@ -39,11 +39,19 @@
                                 <label for="exampleInputPassword1">Peso</label>
                                 <input type="text" class="form-control" v-model="harinas[0].Peso">
                             </div>
-                            <div  v-for="(service, index) in poll.ServiceCollection">
+                            <div class="form-group">
+                                <label for="exampleInputPassword1">Tiene Factura</label>
+      
+                                <select v-model="harinas[0].Factura" class="form-control">
+                                    <option>si</option>
+                                    <option>no</option>
+                                </select>
+                            </div>
+                            <div v-for="(service, index) in poll.ServiceCollection">
                                 <div v-for="(section, i) in service.ServiceDetailCollection">
-                           
+
                                     <div v-if="section.GroupName=='modal'">
-                                        <label for="exampleInputPassword1">Complete</label>
+                                        <label for="exampleInputPassword1">Codificar</label>
                                         <div v-for="(question, j) in section.QuestionCollection">
                                             <div class="form-group">
                                                 <div v-bind:class="classlenght(question.Weight)" v-if="question.CodeTypePoll=='COMPLETE'">

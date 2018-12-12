@@ -3,12 +3,14 @@
 var vueVM;
 var vueVMS;
 var idTask = "";
+var idTaskcampaing = ""
 var espera = 0;
 
 
 
-function LoadTaskById(idTask) {
+function LoadTaskById(idTask,campaign) {
     idTask = idTask;
+    idTaskcampaing = campaign;
     $.blockUI({ message: "cargando..." });
     $.ajax({
         type: "GET",
@@ -26,13 +28,13 @@ function LoadTaskById(idTask) {
                
             } else {
                 alert("Error! no se ha encontrado la tarea" + error);
-                window.location.href = "/Task/TasksCampaign";
+                window.location.href = "/Task/TasksCampaign?idCampaign="+idTaskcampaing;
             }
         },
         error: function (error) {
             console.log(error);
             alert("Error! no se ha encontrado la tarea" + error);
-            window.location.href = "/Task/TasksCampaign";
+            window.location.href = "/Task/TasksCampaign?idCampaign="+idTaskcampaing;
         }
     });
 }
@@ -114,6 +116,7 @@ Vue.directive('info-sender', {
 });
 
 function SaveQuestionRepeat() {
+    $.blockUI({ message: "" });
     $.ajax({
         url: '/Task/SaveQuestionDinamic',
         type: "POST",
@@ -124,6 +127,7 @@ function SaveQuestionRepeat() {
             , dinamic: ko.toJSON(vueVM.$data.harinas)
         },
         success: function (data) {
+            $.unblockUI();
             if (data == "1") {
                 $.notify({
                     title: '<strong>Información :</strong>',
@@ -141,12 +145,14 @@ function SaveQuestionRepeat() {
                 $.notify({
                     title: '<strong>Información :</strong>',
                     message: 'La información no pudo se guarda. Intente de nuevo o contactese con el administrado'
-                });}
+                });
+            }
+
         },
 
         error: function () {
 
-
+            $.unblockUI();
         }
         ,
         async: true, // La petición es síncrona
@@ -576,7 +582,7 @@ function Save() {
                         store.clearAll();
                         bootbox.alert("Registros Actualizados Satisfactoriamente");
 
-                        window.location.href = "/Task/TasksCampaign";
+                        window.location.href = "/Task/TasksCampaign?idCampaign="+idTaskcampaing;
                     }
                 },
                 error: function (xhr, ajaxOptions, thrownError) {
@@ -593,21 +599,21 @@ function Save() {
             //    success: function (data) {
             //        if (data) {
             //            bootbox.alert("Registros Actualizados Satisfactoriamente");
-            //            window.location.href = "/Task/TasksCampaign";
+            //            window.location.href = "/Task/TasksCampaign?idCampaign="+idTaskcampaing;
             //            alert("Error! no se ha encontrado la tarea" + data);
             //        } else {
             //            bootbox.alert("Error al tratar de Grabar su encuesta");
-            //            window.location.href = "/Task/TasksCampaign";
+            //            window.location.href = "/Task/TasksCampaign?idCampaign="+idTaskcampaing;
             //            alert("Error! no se ha encontrado la tarea" + data);
             //        }
             //    },
             //    error: function (xhr, ajaxOptions, thrownError) {
             //        bootbox.alert("Error al tratar de Grabar su encuesta " + thrownError);
-            //        window.location.href = "/Task/TasksCampaign";
+            //        window.location.href = "/Task/TasksCampaign?idCampaign="+idTaskcampaing;
             //        $.unblockUI();
             //    }
             //});
-            //window.location.href = "/Task/TasksCampaign";
+            //window.location.href = "/Task/TasksCampaign?idCampaign="+idTaskcampaing;
         } else {
             alert('Sin Conexión...Intente mas tarde.')
             $.unblockUI();
@@ -635,7 +641,7 @@ function ChangeStatusNotImplemented(element) {
 
             if (data) {
                 bootbox.alert("Registros Actualizados Satisfactoriamente");
-                window.location.href = "/Task/TasksCampaign";
+                window.location.href = "/Task/TasksCampaign?idCampaign="+idTaskcampaing;
             } else {
                 bootbox.alert("Existío un error, Vuelva a intentarlo");
             }

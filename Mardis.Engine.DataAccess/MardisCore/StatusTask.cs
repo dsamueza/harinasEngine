@@ -25,7 +25,6 @@ namespace Mardis.Engine.DataAccess.MardisCore
 
         public ICollection<historialTareas> HistoryTasks { get; set; }
         public ICollection<StatusTaskAccount> EstadoTarea { get; set; }
-
         public ICollection<StatustaskUser> statusTasksuser { get; set; }
     }
 }

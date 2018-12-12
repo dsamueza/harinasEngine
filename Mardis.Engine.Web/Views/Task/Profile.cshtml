@@ -1,6 +1,7 @@
 ﻿@{
     var IdRegister = (string)ViewData[CTask.IdRegister];
     var Active = (string)ViewData[CTask.IsUse];
+    var idcampaign = (string)ViewData["taskcampaign"];
 }
 
 @section buttons{}
@@ -66,7 +67,7 @@
                             </div>
                         </div>*@
                     <div class="col-sm-2">
-                        <a href="#" class="btn bg-purple" v-if="poll.novelty">Nuevo Producto</a>
+                        <a href="#" class="btn bg-purple" v-if="poll.novelty">{{poll.novelty}}</a>
 
                     </div>
                     <div class="col-sm-1">
@@ -145,14 +146,15 @@
 
                         <div class="row">
                             <div class="col-sm-4">
+                                <strong>PT Indice: </strong> {{poll.BranchMardisCode}}
+                            </div>
+                            <div class="col-sm-4">
                                 <strong>Nombre de Local: </strong> {{poll.BranchName}}
                             </div>
                             <div class="col-sm-4">
                                 <strong>Calle Principal: </strong> {{poll.BranchMainStreet}}
                             </div>
-                            <div class="col-sm-4">
-                                <strong>Rótulo: </strong> {{poll.BranchLabel}}
-                            </div>
+
                         </div>
 
                         <div class="row">
@@ -169,18 +171,6 @@
 
                         <div class="row">
                             <div class="col-sm-4">
-                                <strong>Parroquia: </strong> {{poll.BranchParish}}
-                            </div>
-                            <div class="col-sm-4">
-                                <strong>Barrio: </strong> {{poll.BranchNeighborhood}}
-                            </div>
-                            <div class="col-sm-4">
-                                <strong>Propietario: </strong> {{poll.BranchOwnerName}}
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-sm-4">
                                 <strong>Cédula/Ruc: </strong> {{poll.BranchOwnerDocument}}
                             </div>
                             <div class="col-sm-4">
@@ -188,6 +178,15 @@
                             </div>
                             <div class="col-sm-4">
                                 <strong>Celular: </strong> {{poll.BranchOwnerMobile}}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-4">
+                                <strong>Parroquia: </strong> {{poll.BranchParish}}
+                            </div>
+
+                            <div class="col-sm-4">
+                                <strong>Propietario: </strong> {{poll.BranchOwnerName}}
                             </div>
                         </div>
 
@@ -243,14 +242,15 @@
         <script src="~/bower_components/notify/bootstrap-notify.min.js"></script>
         <script>
         $.blockUI({ message: "" });
-        var IdTask = '@Html.Raw(IdRegister)';
+            var IdTask = '@Html.Raw(IdRegister)';
+            var Idcampaigns = '@Html.Raw(idcampaign)';
             var Permit = '@Html.Raw(Active)';
         
         AccessTask()
             $('[data-toggle="tooltip"]').tooltip();   
         function AccessTask() {
 
-            if (Permit == "") { LoadTaskById(IdTask); } else {
+            if (Permit == "") { LoadTaskById(IdTask, Idcampaigns); } else {
               
                 bootbox.confirm({
                     title: "Bloqueo de encuesta",
@@ -263,7 +263,7 @@
 
                     },
                     callback: function (result) {
-                        window.location.href = "/Task/TasksCampaign";
+                        window.location.href = "/Task/TasksCampaign?idCampaign="+Idcampaigns;
                     }
                 });
                 

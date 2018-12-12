@@ -137,6 +137,8 @@ namespace Mardis.Engine.Web
             {
                 // Set a short timeout for easy testing.
 
+                options.IdleTimeout = TimeSpan.FromMinutes(sessionTimeOut);
+
             });
 
 

@@ -23,7 +23,7 @@
             <div class="panel-heading">
                 <div class="col-sm-4">
                     
-                    <strong>CAMPAÑA:</strong>
+                    <strong>PERIODO:</strong>
                     <a href="#">@campaign.Name</a>
                 </div>
                 <div class="col-sm-4">
@@ -90,10 +90,10 @@
              
                 <div class="col-sm-1" style="text-align: center">
                     <div class="row">
-                        <a class="fa fa-angle-double-right fa-4x" href="@Url.Action("TasksCampaign", "Task", new {idCampaign = campaign.Id})"></a>
+                        <a class="fa fa-tasks fa-4x" href="@Url.Action("TasksCampaign", "Task", new {idCampaign = campaign.Id})"></a>
                     </div>
                     <div class="row">
-                        @("Visualizar " + campaign.TotalTasks + " TAREAS")
+                        @( campaign.TotalTasks + " Encuestas")
                     </div>
                 </div>
                 <div class="col-sm-1">

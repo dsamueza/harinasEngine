@@ -34,6 +34,8 @@ using System.Net;
 using DocumentFormat.OpenXml;
 using System.Text.RegularExpressions;
 using Mardis.Engine.Web.ViewModel.UserViewModels;
+using System.Text;
+using System.Linq.Dynamic.Core;
 
 namespace Mardis.Engine.Business.MardisCore
 {
@@ -2021,11 +2023,20 @@ namespace Mardis.Engine.Business.MardisCore
             return _marpermodel;
         }
 
-        public int _CountAllTasCamping(Guid Idcampaign)
+        public int _CountAllTasCamping(Guid Idcampaign, List<FilterValue> filters)
         {
             try
             {
-                var _data = Context.TaskCampaigns.Where(z => z.IdCampaign.Equals(Idcampaign) && z.StatusRegister.Equals("A")).Count();
+
+                filters = filters ?? new List<FilterValue>();
+
+                var itemResult = new TaskPerCampaignViewModel();
+
+                filters = AddHiddenFilter("IdCampaign", Idcampaign.ToString(), filters, itemResult.FilterName);
+                var strPredicate = $"StatusRegister ==  \"{CStatusRegister.Active}\" ";
+                strPredicate += GetFilterPredicate(filters);
+
+                var _data =  Context.TaskCampaigns.Where(strPredicate).Count();
                 return _data;
             }
             catch (Exception)
@@ -2036,6 +2047,51 @@ namespace Mardis.Engine.Business.MardisCore
        
        
         }
+
+        protected string GetFilterPredicate(List<FilterValue> filterValues, string operatorFilter = "AND")
+        {
+            var op = operatorFilter == "OR" ? "|| " : "&& ";
+            var builderPredicate = new StringBuilder();
+
+            if (filterValues != null)
+            {
+                foreach (var filterValue in filterValues)
+                {
+                    var filter = CoreFilterDetailDao.GetCoreFilterDetail(filterValue.IdFilter);
+
+                    var filterTable = string.IsNullOrEmpty(filter.Table) ? "" : filter.Table + ".";
+
+                    switch (filterValue.Criteria)
+                    {
+                        case "Contains":
+                            builderPredicate.Append(op + filterTable + filter.Property + ".");
+                            builderPredicate.Append(filterValue.Criteria + "(\"");
+                            builderPredicate.Append(filterValue.Value + "\")");
+                            break;
+                        case "NotContains":
+                            builderPredicate.Append(op + "!" + filterTable + filter.Property + ".");
+                            builderPredicate.Append("Contains(\"");
+                            builderPredicate.Append(filterValue.Value + "\")");
+                            break;
+                        default:
+                            if (filterValue.NameFilter.IndexOf("Id", StringComparison.Ordinal) >= 0)
+                            {
+                                var fs = $" == \"{filterValue.Value}\" ";
+                                builderPredicate.Append(op + filterTable + filter.Property + fs);
+                            }
+                            else
+                            {
+                                builderPredicate.Append(op + filterTable + filter.Property + " ");
+                                builderPredicate.Append(filterValue.Criteria + " \"");
+                                builderPredicate.Append(filterValue.Value + "\"");
+                            }
+                            break;
+                    }
+                }
+            }
+            return builderPredicate.ToString();
+        }
+
         #endregion
 
 
