@@ -140,6 +140,7 @@ namespace Mardis.Engine.Business.MardisCore
                     CampaignId = task.IdCampaign,
                     CampaignName = campaign.Name,
                     BranchCode = branch.ExternalCode
+                    ,BranchId=branch.Id
                 };
 
                 itemResult.TasksList.Add(tvm);
@@ -754,7 +755,27 @@ namespace Mardis.Engine.Business.MardisCore
 
                     Context.AnswerDetailSecondLevels.UpdateRange(itemResult);
                     Context.SaveChanges();
+                    var _isfac = Context.AnswerDetails.Include(tb=>tb.Answer).Where(x => x.Id.Equals(Model.First().AnswerDetailId));
+                    if (_isfac.Count() > 0) {
 
+                        var idtask = _isfac.First().Answer.IdTask;
+                        var idquestion = _isfac.First().Answer.IdQuestion;
+
+                        var distintc = from a in Context.Answers
+                                       join b in Context.AnswerDetails on a.Id equals b.IdAnswer
+                                       join c in Context.AnswerDetailSecondLevels on b.Id equals c.AnswerDetailId
+                                       where a.IdTask.Equals(idtask) && a.Question.Equals(idquestion)
+                                       select c.Factura.Distinct();
+
+                        if (distintc.Count() > 1) {
+
+
+                        }
+                                     
+                    
+                    }
+                  
+                       
 
                     foreach (var _item in _data)
                     {

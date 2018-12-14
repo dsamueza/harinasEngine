@@ -39,7 +39,7 @@ namespace Mardis.Engine.DataObject.MardisCore
                 .Include(b => b.District)
                 .Include(b => b.BranchImages)
                 .FirstOrDefault(tb => tb.Id == id &&
-                                      tb.StatusRegister == CStatusRegister.Active &&
+                                    
                                       tb.IdAccount == idAccount);
         }
         public Branch GetOnebyId(Guid id, Guid idAccount)

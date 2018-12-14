@@ -14,8 +14,8 @@ namespace Mardis.Engine.Web.ViewModel.TaskViewModels
 
         public string BranchName { get; set; }
 
-        public string BranchCode { get; set; }  
-
+        public string BranchCode { get; set; }
+        public Guid BranchId { get; set; }
         public string StatusName { get; set; }
 
         public string MerchantName { get; set; }
