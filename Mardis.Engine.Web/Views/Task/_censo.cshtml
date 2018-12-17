@@ -17,7 +17,7 @@
             </div>
 
             <div v-bind:id="'pnlService_'+service.Code" class="panel-collapse collapse in">
-                <div class="panel-body">
+                <div class="panel-body fixed-panel">
 
                     <div class="row">
                         <div class="col-sm-12">
@@ -94,10 +94,10 @@
                                              
                                                 <!--Fin  Seccion de respuestas multiples diseño a lo largo-->
                                                 <!--Inicio Seccion de respuestas Dinamicas-->
-                                                <div v-bind:class="classlenght(question.Weight)" v-if="question.CodeTypePoll=='MANY' && question.HasPhoto=='D' " style="text-align:-webkit-center; margin-top:15PX">
+                                                <div v-bind:class="classlenght(question.Weight)" v-if="question.CodeTypePoll=='MANY' && question.HasPhoto=='D' " style="text-align:-webkit-center; margin-top:25PX;margin-bottom:25px">
                                                
                                                   
-                                                    <span style="font-weight:600; font-size: 12px !important;">{{question.Title}}</span>
+                                                    <span style="font-weight:600; font-size: 14px !important;color:#0040a0;">{{question.Title}}</span>
                                                     <div v-for="answer in question.QuestionDetailCollection">
                                                 
                                                         <div v-if="answer.Checked">

@@ -761,13 +761,36 @@ namespace Mardis.Engine.Business.MardisCore
                         var idtask = _isfac.First().Answer.IdTask;
                         var idquestion = _isfac.First().Answer.IdQuestion;
 
-                        var distintc = from a in Context.Answers
-                                       join b in Context.AnswerDetails on a.Id equals b.IdAnswer
-                                       join c in Context.AnswerDetailSecondLevels on b.Id equals c.AnswerDetailId
-                                       where a.IdTask.Equals(idtask) && a.Question.Equals(idquestion)
-                                       select c.Factura.Distinct();
+                        var distintc = (from a in Context.Answers
+                                        join b in Context.AnswerDetails on a.Id equals b.IdAnswer
+                                        join c in Context.AnswerDetailSecondLevels on b.Id equals c.AnswerDetailId
+                                        where a.IdTask.Equals(idtask) && a.Question.Equals(idquestion)
+                                        select new {
+                                            c.Factura
+                                        })
+                           .Distinct()   ;
 
-                        if (distintc.Count() > 1) {
+                        var tasksmodel = Context.PollTasks.Where(x => x.idtask.Equals(idtask)).First();
+                        if (distintc.Count() > 1)
+                        {
+
+                            
+                            tasksmodel.novelty = null;
+                            Context.PollTasks.Update(tasksmodel);
+                            Context.SaveChanges();
+                        }
+                        else {
+                            if (distintc.First().Factura.Equals("no"))
+                            {
+                                tasksmodel.novelty = null;
+                                Context.PollTasks.Update(tasksmodel);
+                                Context.SaveChanges();
+                            }
+                            else {
+                                tasksmodel.novelty = "CON FACTURA";
+                                Context.PollTasks.Update(tasksmodel);
+                                Context.SaveChanges();
+                            }
 
 
                         }

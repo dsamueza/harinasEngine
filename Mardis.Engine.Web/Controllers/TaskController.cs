@@ -329,7 +329,7 @@ namespace Mardis.Engine.Web.Controllers
 
             }
 
-            catch (Exception e)
+         catch (Exception e)
             {
                 _logger.LogError(new EventId(0, "Error Index"), e.Message);
                 return null;
@@ -661,6 +661,8 @@ namespace Mardis.Engine.Web.Controllers
                 Encuestador = x.Pollster == null ? "Sin Indentificar" : x.Pollster.Name
                 ,Estado_c=x.PollsTaskss.First().pollsstatus
                 ,Commentario=x.PollsTaskss.First().Comment
+                ,x.IdAccount,
+                factura=x.PollsTaskss.First().novelty!=null?"SI":"NO"
             }).ToList();
             var log = DateTime.Now;
             string LogFile = log.ToString("yyyyMMddHHmmss");
@@ -692,7 +694,9 @@ namespace Mardis.Engine.Web.Controllers
                 worksheet.Column(10).Width = 20;
                 worksheet.Column(11).Width = 20;
                 worksheet.Column(12).Width = 40;
-
+                if(listado.First().IdAccount.Equals(Guid.Parse("85024910-FC12-4DD8-AE58-761BF972DEB7"))){
+                    worksheet.Column(13).Width = 20;
+                }
                 worksheet.Cells[1, 1].Value = "Ciudad";
 
                 worksheet.Cells[1, 1].Style.Font.Color.SetColor(Color.White);
@@ -774,6 +778,16 @@ namespace Mardis.Engine.Web.Controllers
                 worksheet.Cells[1, 12].Style.Fill.BackgroundColor.SetColor(colFromHex);
                 worksheet.Cells[1, 12].Style.Font.Color.SetColor(Color.White);
                 worksheet.Cells[1, 12].Style.Font.Bold = true;
+
+                if (listado.First().IdAccount.Equals(Guid.Parse("85024910-FC12-4DD8-AE58-761BF972DEB7")))
+                {
+                    worksheet.Cells[1, 13].Value = "Factura";
+                    worksheet.Cells[1, 13].Style.Font.Size = 12;
+                    worksheet.Cells[1, 13].Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
+                    worksheet.Cells[1, 13].Style.Fill.BackgroundColor.SetColor(colFromHex);
+                    worksheet.Cells[1, 13].Style.Font.Color.SetColor(Color.White);
+                    worksheet.Cells[1, 13].Style.Font.Bold = true;
+                }
                 int rows = 2;
                 foreach (var t in listado)
                 {
@@ -790,6 +804,10 @@ namespace Mardis.Engine.Web.Controllers
                     worksheet.Cells[rows, 10].Value = t.Estado_Tarea;
                     worksheet.Cells[rows, 11].Value = t.Estado_c;
                     worksheet.Cells[rows, 12].Value = t.Commentario;
+                    if (listado.First().IdAccount.Equals(Guid.Parse("85024910-FC12-4DD8-AE58-761BF972DEB7")))
+                    {
+                        worksheet.Cells[rows, 13].Value = t.factura;
+                    }
                     rows++;
                 }
                 //Add values

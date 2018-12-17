@@ -117,6 +117,9 @@ Vue.directive('info-sender', {
 
 function SaveQuestionRepeat() {
     $.blockUI({ message: "" });
+    $('#btndinamic').prop("disabled", true);
+    $('#idsavedinamic').show();
+    idsavedinamic
     $.ajax({
         url: '/Task/SaveQuestionDinamic',
         type: "POST",
@@ -128,6 +131,9 @@ function SaveQuestionRepeat() {
         },
         success: function (data) {
             $.unblockUI();
+            $("#btndinamic").prop("disabled", false);
+
+            $('#idsavedinamic').hide();
             if (data == "1") {
                 $.notify({
                     title: '<strong>Información :</strong>',

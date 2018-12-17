@@ -10,17 +10,21 @@
             <div class="modal-body" style="background-color:#d2d6de">
                 <div class="box">
                     <div class="box-header with-border">
-                        <h4 class="box-title">Información Marca</h4>
+                        <h4 class="box-title">Información Harinas</h4>
                         <button type="button" class="pull-right close" data-dismiss="modal" style="    color: black;    font-size: 20px;    font-weight: 700;">&times;</button>
+
+                        <div class="callout callout-warning" id="idsavedinamic" hidden>
+                            <h5>Guardando la información...!</h5>
+                        </div>
                     </div>
                     <div class="box-body">
                         <div class="box-body">
                             <div class="form-group col-md-6">
-                                <label for="exampleInputEmail1">Marca</label>
+                                <label for="exampleInputEmail1" class="txtHarinas">Harina</label>
                                 <input type="text" class="form-control" v-model="harinas[0].Marca">
                             </div>
                             <div class="form-group  col-md-6">
-                                <label for="exampleInputPassword1">Tiene Factura</label>
+                                <label for="exampleInputPassword1" class="txtHarinas">Revisión de precio con Factura</label>
 
                                 <select v-model="harinas[0].Factura" class="form-control">
                                     <option>si</option>
@@ -28,27 +32,28 @@
                                 </select>
                             </div>
                             <div class="form-group col-md-6">
-                                <label for="exampleInputPassword1">Precio Sacos</label>
-                                <input type="text" class="form-control" v-model="harinas[0].PrecioSaco">
-                            </div>
-                            <div class="form-group col-md-6">
-                                <label for="exampleInputPassword1">Peso</label>
+                                <label for="exampleInputPassword1" class="txtHarinas">Peso(kg)</label>
                                 <input type="text" class="form-control" v-model="harinas[0].Peso">
                             </div>
+                            <div class="form-group col-md-6">
+                                <label for="exampleInputPassword1" class="txtHarinas">Precio($)</label>
+                                <input type="text" class="form-control" v-model="harinas[0].PrecioSaco">
+                            </div>
+
                             <div class="form-group  col-md-6">
-                              
-                                    <label for="exampleInputPassword1">Tiene descuento</label>
-                                    <select v-model="harinas[0].Descuento" class="form-control">
-                                        <option>si</option>
-                                        <option>no</option>
-                                    </select>
-             
+
+                                <label for="exampleInputPassword1" class="txtHarinas">Le ofrecieron algún descuento</label>
+                                <select v-model="harinas[0].Descuento" class="form-control">
+                                    <option>si</option>
+                                    <option>no</option>
+                                </select>
+
                             </div>
                             <div class="form-group  col-md-6">
-                                <label for="exampleInputPassword1">Descuento %</label>
+                                <label for="exampleInputPassword1" class="txtHarinas">Descuento por compra(%)</label>
                                 <input type="text" class="form-control" v-model="harinas[0].ValorDescuento">
                             </div>
-                            <label for="exampleInputPassword1">Requisitos Descuento</label>
+                            <label for="exampleInputPassword1" class="txtHarinas">Requisitos Descuento</label>
                             <div class="form-group">
 
                                 <input type="text" class="form-control" v-model="harinas[0].RequisitosDescuento">
@@ -57,7 +62,7 @@
                                 <div v-for="(section, i) in service.ServiceDetailCollection">
 
                                     <div v-if="section.GroupName=='modal'">
-                                        <label for="exampleInputPassword1">Codificar</label>
+                                        <label for="exampleInputPassword1" class="txtHarinas">Requisitos Descuento(Edición)</label>
                                         <div v-for="(question, j) in section.QuestionCollection">
 
                                             <div v-bind:class="classlenght(question.Weight)" v-if="question.CodeTypePoll=='COMPLETE'">
@@ -86,8 +91,7 @@
                                                         <template v-else>
 
                                                             <v-list-tile-content>
-                                                                <v-list-tile-title v-html="data.item.Idconcept"></v-list-tile-title>
-                                                                <v-list-tile-sub-title v-html="data.item.Answer"></v-list-tile-sub-title>
+                                                                <v-list-tile-title v-html="data.item.Answer"></v-list-tile-title>
                                                             </v-list-tile-content>
                                                         </template>
                                                     </template>
@@ -103,9 +107,10 @@
 
                         </div>
                             </div>
-                            <div class="box-footer ">
-                                <button type="submit" class="btn btn-primary  pull-right" v-on:click="acceptDinamic">Guardar</button>
-                            </div>
+                    <div class="box-footer ">
+                      
+                        <button type="submit" id="btndinamic" class="btn bg-navy btn-flat margin  pull-right" v-on:click="acceptDinamic">Guardar</button>
+                    </div>
                         </div>
                
             </div>
