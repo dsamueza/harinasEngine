@@ -134,12 +134,19 @@ function SaveQuestionRepeat() {
             $("#btndinamic").prop("disabled", false);
 
             $('#idsavedinamic').hide();
+            if (data == "0") {
+                $.notify({
+                    title: '<strong>Información :</strong>',
+                    message: 'La información fue almacenada correctamente'
+                });
+                $('#IdQuestionDinamic').modal('hide');
+            }
             if (data == "1") {
                 $.notify({
                     title: '<strong>Información :</strong>',
                     message: 'La información fue almacenada correctamente'
                 });
-
+                vueVM.$data.poll.novelty = "CON FACTURA";
                 $('#IdQuestionDinamic').modal('hide');
             }
             if (data == "-1") {
@@ -150,8 +157,10 @@ function SaveQuestionRepeat() {
             if (data == "2") {
                 $.notify({
                     title: '<strong>Información :</strong>',
-                    message: 'La información no pudo se guarda. Intente de nuevo o contactese con el administrado'
+                    message: 'La información fue almacenada correctamente'
                 });
+                vueVM.$data.poll.novelty = null;
+                $('#IdQuestionDinamic').modal('hide');
             }
 
         },

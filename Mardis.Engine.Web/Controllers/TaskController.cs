@@ -392,9 +392,9 @@ namespace Mardis.Engine.Web.Controllers
             {
                 var modelAnswerSec = JSonConvertUtil.Deserialize<List<MytaskAnwerDetailSecondModel>>(dinamic);
                 if (modelAnswerSec == null) return Json("2"); 
-                _taskCampaignBusiness.saveDinamic(modelAnswerSec);
+               var _post= _taskCampaignBusiness.saveDinamic(modelAnswerSec);
 
-                return Json("1");
+                return Json(_post);
             }
             catch (Exception ex)
             {
@@ -687,15 +687,20 @@ namespace Mardis.Engine.Web.Controllers
                 worksheet.Column(3).Width = 20;
                 worksheet.Column(4).Width = 20;
                 worksheet.Column(5).Width = 32;
-                worksheet.Column(6).Width = 20;
+     
                 worksheet.Column(7).Width = 20;
                 worksheet.Column(8).Width = 20;
                 worksheet.Column(9).Width = 20;
                 worksheet.Column(10).Width = 20;
                 worksheet.Column(11).Width = 20;
                 worksheet.Column(12).Width = 40;
-                if(listado.First().IdAccount.Equals(Guid.Parse("85024910-FC12-4DD8-AE58-761BF972DEB7"))){
-                    worksheet.Column(13).Width = 20;
+
+                if (!listado.First().IdAccount.Equals(Guid.Parse("85024910-FC12-4DD8-AE58-761BF972DEB7")))
+                {
+                    worksheet.Column(6).Width = 20;
+                }
+                if (listado.First().IdAccount.Equals(Guid.Parse("85024910-FC12-4DD8-AE58-761BF972DEB7"))){
+                    worksheet.Column(6).Width = 20;
                 }
                 worksheet.Cells[1, 1].Value = "Ciudad";
 
@@ -734,12 +739,9 @@ namespace Mardis.Engine.Web.Controllers
                 worksheet.Cells[1, 5].Style.Fill.BackgroundColor.SetColor(colFromHex);
                 worksheet.Cells[1, 5].Style.Font.Color.SetColor(Color.White);
                 worksheet.Cells[1, 5].Style.Font.Bold = true;
-                worksheet.Cells[1, 6].Value = "Tipo de Negocio";
-                worksheet.Cells[1, 6].Style.Font.Size = 12;
-                worksheet.Cells[1, 6].Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
-                worksheet.Cells[1, 6].Style.Fill.BackgroundColor.SetColor(colFromHex);
-                worksheet.Cells[1, 6].Style.Font.Color.SetColor(Color.White);
-                worksheet.Cells[1, 6].Style.Font.Bold = true;
+
+
+
                 worksheet.Cells[1, 7].Value = "Telefono";
                 worksheet.Cells[1, 7].Style.Font.Size = 12;
                 worksheet.Cells[1, 7].Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
@@ -778,15 +780,23 @@ namespace Mardis.Engine.Web.Controllers
                 worksheet.Cells[1, 12].Style.Fill.BackgroundColor.SetColor(colFromHex);
                 worksheet.Cells[1, 12].Style.Font.Color.SetColor(Color.White);
                 worksheet.Cells[1, 12].Style.Font.Bold = true;
-
-                if (listado.First().IdAccount.Equals(Guid.Parse("85024910-FC12-4DD8-AE58-761BF972DEB7")))
+                if (!listado.First().IdAccount.Equals(Guid.Parse("85024910-FC12-4DD8-AE58-761BF972DEB7")))
                 {
-                    worksheet.Cells[1, 13].Value = "Factura";
-                    worksheet.Cells[1, 13].Style.Font.Size = 12;
-                    worksheet.Cells[1, 13].Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
-                    worksheet.Cells[1, 13].Style.Fill.BackgroundColor.SetColor(colFromHex);
-                    worksheet.Cells[1, 13].Style.Font.Color.SetColor(Color.White);
-                    worksheet.Cells[1, 13].Style.Font.Bold = true;
+                    worksheet.Cells[1, 6].Value = "Canal";
+                    worksheet.Cells[1, 6].Style.Font.Size = 12;
+                    worksheet.Cells[1, 6].Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
+                    worksheet.Cells[1, 6].Style.Fill.BackgroundColor.SetColor(colFromHex);
+                    worksheet.Cells[1, 6].Style.Font.Color.SetColor(Color.White);
+                    worksheet.Cells[1, 6].Style.Font.Bold = true;
+                }
+                    if (listado.First().IdAccount.Equals(Guid.Parse("85024910-FC12-4DD8-AE58-761BF972DEB7")))
+                {
+                    worksheet.Cells[1, 6].Value = "Factura";
+                    worksheet.Cells[1, 6].Style.Font.Size = 12;
+                    worksheet.Cells[1, 6].Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
+                    worksheet.Cells[1, 6].Style.Fill.BackgroundColor.SetColor(colFromHex);
+                    worksheet.Cells[1, 6].Style.Font.Color.SetColor(Color.White);
+                    worksheet.Cells[1, 6].Style.Font.Bold = true;
                 }
                 int rows = 2;
                 foreach (var t in listado)
@@ -796,7 +806,7 @@ namespace Mardis.Engine.Web.Controllers
                     worksheet.Cells[rows, 3].Value = t.Code;
                     worksheet.Cells[rows, 4].Value = t.ExternalCode;
                     worksheet.Cells[rows, 5].Value = t.Name;
-                    worksheet.Cells[rows, 6].Value = t.TypeBusiness;
+     
                     worksheet.Cells[rows, 7].Value = t.Phone;
                     worksheet.Cells[rows, 8].Value = t.Encuestador;
                     worksheet.Cells[rows, 9].Value = t.StartDate;
@@ -804,9 +814,13 @@ namespace Mardis.Engine.Web.Controllers
                     worksheet.Cells[rows, 10].Value = t.Estado_Tarea;
                     worksheet.Cells[rows, 11].Value = t.Estado_c;
                     worksheet.Cells[rows, 12].Value = t.Commentario;
+                    if (!listado.First().IdAccount.Equals(Guid.Parse("85024910-FC12-4DD8-AE58-761BF972DEB7")))
+                    {
+                        worksheet.Cells[rows, 6].Value = t.TypeBusiness;
+                    }
                     if (listado.First().IdAccount.Equals(Guid.Parse("85024910-FC12-4DD8-AE58-761BF972DEB7")))
                     {
-                        worksheet.Cells[rows, 13].Value = t.factura;
+                        worksheet.Cells[rows, 6].Value = t.factura;
                     }
                     rows++;
                 }

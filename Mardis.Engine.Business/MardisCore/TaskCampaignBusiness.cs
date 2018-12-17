@@ -738,12 +738,13 @@ namespace Mardis.Engine.Business.MardisCore
 
         #endregion
         #region Preguntas dinamicas Harinas
-        public  void saveDinamic(List<MytaskAnwerDetailSecondModel> _data)
+        public  int saveDinamic(List<MytaskAnwerDetailSecondModel> _data)
         {
             using (var transaction = Context.Database.BeginTransaction())
             {
                 try
                 {
+                    int _res = 0;
                     Mapper.Initialize(cfg =>
                     {
                         cfg.CreateMap<MytaskAnwerDetailSecondModel,  AnswerDetailSecondLevel> ();
@@ -778,6 +779,7 @@ namespace Mardis.Engine.Business.MardisCore
                             tasksmodel.novelty = null;
                             Context.PollTasks.Update(tasksmodel);
                             Context.SaveChanges();
+                            _res = 2;
                         }
                         else {
                             if (distintc.First().Factura.Equals("no"))
@@ -785,11 +787,13 @@ namespace Mardis.Engine.Business.MardisCore
                                 tasksmodel.novelty = null;
                                 Context.PollTasks.Update(tasksmodel);
                                 Context.SaveChanges();
+                                _res = 2;
                             }
                             else {
                                 tasksmodel.novelty = "CON FACTURA";
                                 Context.PollTasks.Update(tasksmodel);
                                 Context.SaveChanges();
+                                _res = 1;
                             }
 
 
@@ -826,12 +830,13 @@ namespace Mardis.Engine.Business.MardisCore
                     }
 
                     transaction.Commit();
-
+                    return _res;
                 }
                 catch (Exception)
                 {
-                    transaction.Rollback();
 
+                    transaction.Rollback();
+                    return -1;
                 }
             }
 
