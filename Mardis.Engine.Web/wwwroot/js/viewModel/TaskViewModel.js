@@ -5,7 +5,7 @@ var vueVMS;
 var idTask = "";
 var idTaskcampaing = ""
 var espera = 0;
-
+var numsec = 0;
 
 
 function LoadTaskById(idTask,campaign) {
@@ -25,7 +25,7 @@ function LoadTaskById(idTask,campaign) {
             if (data) {
                 store.clearAll();
                 ApplyBindingTaskService(data);
-               
+                imgvue();
             } else {
                 alert("Error! no se ha encontrado la tarea" + error);
                 window.location.href = "/Task/TasksCampaign?idCampaign="+idTaskcampaing;
@@ -260,6 +260,7 @@ function ApplyBindingTaskService(data) {
                 if (charCode > 31 && (charCode < 48 || charCode > 57)) {
                     return false;
                 }
+           
                 console.log(charCode);
                 return true;
             }, getLabel(item) {
@@ -268,6 +269,10 @@ function ApplyBindingTaskService(data) {
             remove(item) {
    
                 console.log(item)
+            },
+            secciondinamica: function (e){
+                numsec = numsec + 1;
+                return numsec;
             },
             changeHandler: function (event) {
                 // change of userinput, do something
@@ -974,4 +979,14 @@ function deleteBranchImg(id) {
             $.unblockUI();
         }
     });
+}
+
+function imgvue() {
+    var galley = document.getElementById('galley');
+    var viewer = new Viewer(galley, {
+        url: 'src',
+      
+    });
+
+
 }

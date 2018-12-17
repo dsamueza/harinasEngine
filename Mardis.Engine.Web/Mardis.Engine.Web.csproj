@@ -123,6 +123,8 @@
     <Content Include="wwwroot\bower_components\notify\composer.json" />
     <Content Include="wwwroot\bower_components\notify\jshintrc.json" />
     <Content Include="wwwroot\bower_components\notify\package.json" />
+    <Content Include="wwwroot\bower_components\viewer\viewer.css" />
+    <Content Include="wwwroot\bower_components\viewer\viewer.min.css" />
     <Content Include="wwwroot\bower_components\vuetify\vuetify.css" />
     <Content Include="wwwroot\bower_components\perfect-scrollbar\.bower.json" />
     <Content Include="wwwroot\bower_components\perfect-scrollbar\bower.json" />
@@ -2352,6 +2354,10 @@
     <None Include="wwwroot\bower_components\notify\package.js" />
     <None Include="wwwroot\bower_components\notify\README.md" />
     <None Include="wwwroot\bower_components\notify\test_meteor.js" />
+    <None Include="wwwroot\bower_components\viewer\viewer.common.js" />
+    <None Include="wwwroot\bower_components\viewer\viewer.esm.js" />
+    <None Include="wwwroot\bower_components\viewer\viewer.js" />
+    <None Include="wwwroot\bower_components\viewer\viewer.min.js" />
     <None Include="wwwroot\bower_components\vuetify\vuetify.js" />
     <None Include="wwwroot\bower_components\perfect-scrollbar\js\min\perfect-scrollbar.jquery.min.js" />
     <None Include="wwwroot\bower_components\perfect-scrollbar\js\min\perfect-scrollbar.min.js" />

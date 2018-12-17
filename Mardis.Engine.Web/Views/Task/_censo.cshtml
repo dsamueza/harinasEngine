@@ -2,7 +2,7 @@
     For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 *@
 
-<div class="col-sm-12"> @Html.Partial("PollImageViewerPartial")</div>
+@*<div class="col-sm-12"> @Html.Partial("_taskPhotoVue")</div>*@
 
 
 
@@ -26,11 +26,16 @@
 
                             <div class="panel panel-warning" v-for="(section, i) in service.ServiceDetailCollection">
                                 <div class="panel-heading center" v-bind:href="'#panel_'+section.Id" data-toggle="" v-if="section.GroupName!='modal'">
-                                    {{section.SectionTitle}}
+                                   
                                     <div v-if="section.IsDynamic==true">
+
+                                        {{section.SectionTitle}} {{secciondinamica(i)}}
                                         <button class="btn btn-default btn-xs" v-bind:data-IdSection="section.Id" v-bind:data-order="i" onclick="AddSection(false,false, this);" title="Insertar secci�n final">
                                             <i class="fa fa-level-up"></i>
                                         </button>
+                                    </div>
+                                    <div v-if="section.IsDynamic!=true">
+                                        {{section.SectionTitle}}
                                     </div>
                                 </div>
                                 <div v-bind:id="'panel_'+section.Id" class="panel panel-default collapse in"  v-if="section.GroupName!='modal'">

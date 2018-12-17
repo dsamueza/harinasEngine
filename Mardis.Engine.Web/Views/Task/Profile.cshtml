@@ -12,6 +12,27 @@
 <link href="~/bower_components/vuetify/vuetify.css" rel="stylesheet" />
 <link href="~/css/tools/input/css/set2.css" rel="stylesheet" />
 <link href="~/css/_formulario.css" rel="stylesheet" />
+<link rel="stylesheet" href="~/bower_components/viewer/viewer.css">
+<style>
+    .pictures {
+        list-style: none;
+    
+    }
+
+
+
+    .viewer-download {
+        color: #fff;
+        font-family: FontAwesome, serif;
+        font-size: 0.75rem;
+        line-height: 1.5rem;
+        text-align: center;
+    }
+
+        .viewer-download::before {
+            content: "\f019";
+        }
+</style>
 
 <div id="divPoll">
     @*<pre>{{json||_harinas}}</pre>*@
@@ -203,55 +224,66 @@
 
     <div id="divPollServices">
 
-
-        <div class="container">
-            <img width="75%" class="screen" id="IMGtt">
-        </div>
-
-
-        <div v-if="poll.ServiceCollection[0].Template=='Matrix'">
-
-
-            @Html.Partial("_Trade")
-
-        </div>
-        <div v-if="poll.ServiceCollection[0].Template!='Matrix'">
-
-            <div id="pruebas_id">
-                @Html.Partial("_censo")
+        <div class="panel-group">
+            <div class="panel panel-default">
+                <div class="panel-heading" style="text-align: center;">
+                    <h4 class="panel-title">
+                        <a data-toggle="collapse" href="#Imagecoll">MULTIMEDIA</a>
+                    </h4>
+                </div>
+                <div id="Imagecoll" class="panel-collapse collapse">
+                    <div class="panel-body">
+                        @Html.Partial("_taskPhotoVue")
+                    </div>
+                </div>
             </div>
         </div>
-
-        @Html.Partial("_assignCode")
-        @Html.Partial("_QuestionDinamic")
-    </div> @*Fin Sección de Encuestas*@
-</div>
-    @*<div id="Container">
-            <img alt="Click to zoom" src="https://magictoolbox.sirv.com/images/magiczoomplus/jeans-1-z.jpg?scale.height=400" class="zoom" />
-        </div>*@
+                        <div v-if="poll.ServiceCollection[0].Template=='Matrix'">
 
 
-    </div>
+                            @Html.Partial("_Trade")
 
-    @section scripts{
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js"></script>
-        <script src="~/js/dgIMG.js"></script>
-        <script src="~/js/viewModel/TaskViewModel.js"></script>
-        <script src="~/js/tools/classie.js"></script>
-        <script src="~/bower_components/vuetify/vuetify.js"></script>
-        <script src="~/bower_components/notify/bootstrap-notify.min.js"></script>
-        <script>
+                        </div>
+                        <div v-if="poll.ServiceCollection[0].Template!='Matrix'">
+                            @Html.Partial("_censo")
+                          
+                        </div>
+
+                        @Html.Partial("_assignCode")
+                        @Html.Partial("_QuestionDinamic")
+                    </div> @*Fin Sección de Encuestas*@
+                </div>
+                @*<div id="Container">
+                    <img alt="Click to zoom" src="https://magictoolbox.sirv.com/images/magiczoomplus/jeans-1-z.jpg?scale.height=400" class="zoom" />
+                </div>*@
+
+
+            </div>
+
+            @section scripts{
+                <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js"></script>
+                <script src="~/js/dgIMG.js"></script>
+                <script src="~/js/viewModel/TaskViewModel.js"></script>
+                <script src="~/js/tools/classie.js"></script>
+                <script src="~/bower_components/vuetify/vuetify.js"></script>
+                <script src="~/bower_components/notify/bootstrap-notify.min.js"></script>
+
+                <script src="~/bower_components/viewer/viewer.js"></script>
+                <script>
         $.blockUI({ message: "" });
             var IdTask = '@Html.Raw(IdRegister)';
             var Idcampaigns = '@Html.Raw(idcampaign)';
             var Permit = '@Html.Raw(Active)';
-        
+
         AccessTask()
-            $('[data-toggle="tooltip"]').tooltip();   
+            $('[data-toggle="tooltip"]').tooltip();
         function AccessTask() {
 
-            if (Permit == "") { LoadTaskById(IdTask, Idcampaigns); } else {
-              
+            if (Permit == "") {
+                LoadTaskById(IdTask, Idcampaigns);
+                imgvue()
+            } else {
+
                 bootbox.confirm({
                     title: "Bloqueo de encuesta",
                     message: "La encuesta se encuentra abierta por el  usuario : <b>" + Permit+"</b>",
@@ -266,7 +298,7 @@
                         window.location.href = "/Task/TasksCampaign?idCampaign="+Idcampaigns;
                     }
                 });
-                
+
             };
 
         }
@@ -432,7 +464,7 @@
         }
 
 
-        
+
 
             //$(window).unload(function () {
 
@@ -461,8 +493,8 @@
             //        }
             //    });
             //});
-           
-        
+
+
             $(window).on("beforeunload", function () {
                       $.ajax({
                     url: "/Task/CloseWindows",
@@ -475,15 +507,17 @@
 
                     },
                     complete: function (data) {
-                        
+
                     },
                     error: function (error) {
                         console.log(error);
-                  
+
                     }
                 });
-          
-         
-            })
-        </script>
-    }
+
+
+        })
+
+
+                </script>
+            }

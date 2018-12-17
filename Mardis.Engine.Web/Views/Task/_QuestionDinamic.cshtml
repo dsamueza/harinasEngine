@@ -1,8 +1,8 @@
-﻿<div id="IdQuestionDinamic" class="modal fade " role="dialog" style="padding-top:10%">
+﻿<div id="IdQuestionDinamic" class="modal fade " role="dialog" style="padding-top:10%"  >
     <div class="modal-dialog  modal-scrollable modal-lg">
         <div class="modal-content">
             @*<div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                   
 
                     <h4 class="modal-title">Encuestadores</h4>
                 </div>*@
@@ -10,88 +10,97 @@
             <div class="modal-body" style="background-color:#d2d6de">
                 <div class="box">
                     <div class="box-header with-border">
-                        <h4 class="box-title">Información Marcar</h4>
-
+                        <h4 class="box-title">Información Marca</h4>
+                        <button type="button" class="pull-right close" data-dismiss="modal" style="    color: black;    font-size: 20px;    font-weight: 700;">&times;</button>
                     </div>
                     <div class="box-body">
                         <div class="box-body">
-                            <div class="form-group">
+                            <div class="form-group col-md-6">
                                 <label for="exampleInputEmail1">Marca</label>
                                 <input type="text" class="form-control" v-model="harinas[0].Marca">
                             </div>
-                            <div class="form-group">
-                                <label for="exampleInputPassword1">Precio Sacos</label>
-                                <input type="text" class="form-control" v-model="harinas[0].PrecioSaco">
-                            </div>
-                            <div class="form-group">
-                                <label for="exampleInputPassword1">Precio Sacos</label>
-                                <input type="text" class="form-control" v-model="harinas[0].Descuento">
-                            </div>
-                            <div class="form-group">
-                                <label for="exampleInputPassword1">Descuento</label>
-                                <input type="text" class="form-control" v-model="harinas[0].ValorDescuento">
-                            </div>
-                            <div class="form-group">
-                                <label for="exampleInputPassword1">Requisitos Descuento</label>
-                                <input type="text" class="form-control" v-model="harinas[0].RequisitosDescuento">
-                            </div>
-                            <div class="form-group">
-                                <label for="exampleInputPassword1">Peso</label>
-                                <input type="text" class="form-control" v-model="harinas[0].Peso">
-                            </div>
-                            <div class="form-group">
+                            <div class="form-group  col-md-6">
                                 <label for="exampleInputPassword1">Tiene Factura</label>
-      
+
                                 <select v-model="harinas[0].Factura" class="form-control">
                                     <option>si</option>
                                     <option>no</option>
                                 </select>
                             </div>
-                            <div v-for="(service, index) in poll.ServiceCollection">
+                            <div class="form-group col-md-6">
+                                <label for="exampleInputPassword1">Precio Sacos</label>
+                                <input type="text" class="form-control" v-model="harinas[0].PrecioSaco">
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="exampleInputPassword1">Peso</label>
+                                <input type="text" class="form-control" v-model="harinas[0].Peso">
+                            </div>
+                            <div class="form-group  col-md-6">
+                              
+                                    <label for="exampleInputPassword1">Tiene descuento</label>
+                                    <select v-model="harinas[0].Descuento" class="form-control">
+                                        <option>si</option>
+                                        <option>no</option>
+                                    </select>
+             
+                            </div>
+                            <div class="form-group  col-md-6">
+                                <label for="exampleInputPassword1">Descuento %</label>
+                                <input type="text" class="form-control" v-model="harinas[0].ValorDescuento">
+                            </div>
+                            <label for="exampleInputPassword1">Requisitos Descuento</label>
+                            <div class="form-group">
+
+                                <input type="text" class="form-control" v-model="harinas[0].RequisitosDescuento">
+                            </div>
+                            <div v-for="(service, index) in poll.ServiceCollection" class="form-group">
                                 <div v-for="(section, i) in service.ServiceDetailCollection">
 
                                     <div v-if="section.GroupName=='modal'">
                                         <label for="exampleInputPassword1">Codificar</label>
                                         <div v-for="(question, j) in section.QuestionCollection">
-                                            <div class="form-group">
-                                                <div v-bind:class="classlenght(question.Weight)" v-if="question.CodeTypePoll=='COMPLETE'">
-                                                    <v-autocomplete v-model="harinas[0].QuestionComplete"
-                                                                    :disabled="isUpdating"
-                                                                    :items="question.QuestionDetailCollection"
-                                                                    box
-                                                                    chips
-                                                                    color="blue-grey lighten-2"
-                                                                    item-text="Answer"
-                                                                    item-value="Id"
-                                                                    multiple>
-                                                        <template slot="selection"
-                                                                  slot-scope="data">
-                                                            <v-chip :selected="data.selected"
-                                                                    class="chip--select-multi"
-                                                                    color="blue-grey_mardis">
-                                                                {{ data.item.Idconcept }}
-                                                            </v-chip>
-                                                        </template>
-                                                        <template slot="item"
-                                                                  slot-scope="data">
-                                                            <template v-if="typeof data.item !== 'object'">
-                                                                <v-list-tile-content v-text="data.item"></v-list-tile-content>
-                                                            </template>
-                                                            <template v-else>
 
-                                                                <v-list-tile-content>
-                                                                    <v-list-tile-title v-html="data.item.Idconcept"></v-list-tile-title>
-                                                                    <v-list-tile-sub-title v-html="data.item.Answer"></v-list-tile-sub-title>
-                                                                </v-list-tile-content>
-                                                            </template>
+                                            <div v-bind:class="classlenght(question.Weight)" v-if="question.CodeTypePoll=='COMPLETE'">
+                                                <v-autocomplete v-model="harinas[0].QuestionComplete"
+                                                                :disabled="isUpdating"
+                                                                :items="question.QuestionDetailCollection"
+                                                                box
+                                                                chips
+                                                                color="blue-grey lighten-2"
+                                                                item-text="Answer"
+                                                                item-value="Id"
+                                                                multiple>
+                                                    <template slot="selection"
+                                                              slot-scope="data">
+                                                        <v-chip :selected="data.selected"
+                                                                class="chip--select-multi"
+                                                                color="blue-grey_mardis">
+                                                            {{ data.item.Idconcept }}
+                                                        </v-chip>
+                                                    </template>
+                                                    <template slot="item"
+                                                              slot-scope="data">
+                                                        <template v-if="typeof data.item !== 'object'">
+                                                            <v-list-tile-content v-text="data.item"></v-list-tile-content>
                                                         </template>
-                                                    </v-autocomplete>
-                                                </div>
+                                                        <template v-else>
+
+                                                            <v-list-tile-content>
+                                                                <v-list-tile-title v-html="data.item.Idconcept"></v-list-tile-title>
+                                                                <v-list-tile-sub-title v-html="data.item.Answer"></v-list-tile-sub-title>
+                                                            </v-list-tile-content>
+                                                        </template>
+                                                    </template>
+                                                </v-autocomplete>
                                             </div>
                                         </div>
+
                                     </div>
                                 </div>
                             </div>
+
+
+
                         </div>
                             </div>
                             <div class="box-footer ">
