@@ -6,5 +6,6 @@ namespace Mardis.Engine.Framework.Resources
     {
         public const string Active = "A";
         public const string Delete = "D";
+        public const string Pause = "P";
     }
 }

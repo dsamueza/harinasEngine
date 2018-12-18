@@ -51,6 +51,7 @@ namespace Mardis.Engine.DataAccess.MardisCore
         public List<CampaignServices> CampaignServices { get; set; }
 
         public string StatusRegister { get; set; } = CStatusRegister.Active;
+        public string StatusAggregate { get; set; } = CStatusRegister.Delete;
 
         [ForeignKey("IdAccount")]
         public virtual Account Account { get; set; }

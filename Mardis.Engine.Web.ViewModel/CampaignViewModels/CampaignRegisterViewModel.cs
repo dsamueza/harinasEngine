@@ -24,6 +24,10 @@ namespace Mardis.Engine.Web.ViewModel.CampaignViewModels
         public Guid IdStatusCampaign { get; set; }
 
         [Required]
+        [Display(Name = "Estado Descarga Rutas")]
+        public string StatusAggregate { get; set; }
+
+        [Required]
         [Display(Name = "Cliente")]
         public Guid IdCustomer { get; set; }
 

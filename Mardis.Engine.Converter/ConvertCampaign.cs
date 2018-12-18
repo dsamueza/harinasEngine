@@ -16,6 +16,7 @@ namespace Mardis.Engine.Converter
                 IdChannel = model.IdChannel,
                 IdCustomer = model.IdCustomer,
                 IdStatusCampaign = model.IdStatusCampaign,
+                StatusAggregate = model.StatusAggregate,
                 IdSupervisor = model.IdSupervisor,
                 Name = model.Name,
                 Code = model.Code,
@@ -38,6 +39,7 @@ namespace Mardis.Engine.Converter
             model.RangeDate = campaign.RangeDate;
             model.Id = campaign.Id;
             model.IdStatusCampaign = campaign.IdStatusCampaign;
+            model.StatusAggregate = campaign.StatusAggregate;
             model.IdCustomer = campaign.IdCustomer;
             model.IdChannel = campaign.IdChannel;
             model.IdSupervisor = campaign.IdSupervisor;
