@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Linq.Dynamic.Core;
 using System.Threading.Tasks;
 using Mardis.Engine.DataObject.MardisCommon;
+using Mardis.Engine.DataAccess.MardisCore;
 
 namespace Mardis.Engine.DataObject.MardisSecurity
 {
@@ -162,5 +163,15 @@ namespace Mardis.Engine.DataObject.MardisSecurity
                             u.IdAccount == idAccount)
                 .ToList();
         }
+
+        #region validarPreguntasXProfile
+
+        public List<AnwerRequiredProfile> GetQuestionProfile(Guid Idprofile,Guid status)
+        {
+            return Context.AnwerRequiredProfiles
+                .Where(u => u.idProfile== Idprofile && u.Idstatustask==status)
+                .ToList();
+        }
+        #endregion
     }
 }

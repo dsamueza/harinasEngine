@@ -214,27 +214,6 @@ Vue.directive('complete', {
 });
 function onToggle(question) {
  
-    //$.ajax({
-    //    url: '/Task/SaveAnswerQuestionMultiple',
-    //    type: "POST",
-    //    content: "application/json; charset=utf-8",
-    //    data: {
-    //        id: question.id,
-    //        value: question.value,
-    //        idanswer: question.name
-    //        , Idtask: getParameterByName('idTask')
-    //    },
-    //    success: function (data) {
-
-    //    },
-
-    //    error: function () {
-
-
-    //    }
-    //    ,
-    //    async: true, // La petición es síncrona
-    //});
 }
 function ApplyBindingTaskService(data) {
     vueVM = new Vue({
@@ -455,6 +434,61 @@ function BuscarPregunta(servicio, idpregunta) {
         }
     }
 }
+function ValProfile() {
+
+    $.blockUI({ message: "Verificando respuestas obligatorias" });
+    var mensaje="";
+    $.ajax({
+        url: "/Task/ProfileQuestion",
+        type: "post",
+        data: {
+        task: ko.toJSON(vueVM.$data.poll)
+          
+        },
+        success: function (data) {
+    
+            var isval = data.length;
+            if (isval > 0)
+            {
+                for (var j = 0; j < data.length; j++)
+                {
+
+                    mensaje = mensaje + "<br> Falta información en la pregunta : " + "<b>" +data[j].name +"</b>";
+                }
+                $.unblockUI();
+                bootbox.confirm({
+                    title: "Pregunta Obligatorias",
+                    message:   mensaje ,
+                    buttons: {
+                        confirm: {
+                            label: 'Entendido',
+                            className: 'btn-danger'
+                        },
+
+                    },
+                    callback: function (result) {
+                      
+                    }
+                });
+                $.unblockUI();
+            }
+            else
+            {
+                $.unblockUI();
+                Save();
+
+            }
+          
+        },
+        error: function (xhr, ajaxOptions, thrownError) {
+            $.unblockUI();
+        }
+
+      
+    });
+ 
+ 
+}
 function ValidarPreguntas() {
     var mensaje = "";
     for (var i = 0; i <= vueVM.$data.poll.ServiceCollection.length - 1; i++) {
@@ -552,96 +586,92 @@ function ValidarPreguntas() {
 }
 
 function Save() {
-    var imgsrc = 'http://www.google.es/intl/en_com/images/logo_plain.png';
-    var img = new Image();
-    console.log()
-    img.onerror = function () {
-        alert("No hay conexion a internet.");
-    }
-    img.onload = function () {
-        //alert("Hay conexion a internet.");
-    }
-    img.src = imgsrc;
-    $.blockUI({ message: "" });
+ 
+    $.blockUI({ message: "Guardando la Información" });
     var resulvalidacionC = "";
     var resulvalidacion = "";
+
+
     resulvalidacionC = ValidarPreguntas();
-    if (resulvalidacionC != "") {
-        resulvalidacion = "Llenar Campos Obligatorios..!!" + "\n" + resulvalidacionC;
-    }
-    if (resulvalidacion == "") {
-        if (navigator.onLine) {
+    
+  
+        if (resulvalidacionC != "") {
+            resulvalidacion = "Llenar Campos Obligatorios..!!" + "\n" + resulvalidacionC;
+        }
+        if (resulvalidacion == "") {
+            if (navigator.onLine) {
 
-            let infoList = [];
-            let data = store.getAll();
-            for (var property in data) {
-                if (data.hasOwnProperty(property)) {
-                    if (data[property].estado == "P" || data[property].estado == "E")
+                let infoList = [];
+                let data = store.getAll();
+                for (var property in data) {
+                    if (data.hasOwnProperty(property)) {
+                        if (data[property].estado == "P" || data[property].estado == "E")
 
 
-                        infoList.push(data[property]);
-                }
-
-            }
-            var a = infoList;
-
-            $.ajax({
-                url: "/Task/SaveAnswerQuestion",
-                type: "post",
-                data: {
-                    AnswerQuestion: ko.toJSON(infoList),
-                    fintransaccion: "ok",
-                    Idtask: getParameterByName('idTask')
-                    , idstatus: vueVM.$data.poll.IdStatusTask
-                    , CodigoGemini: vueVM.$data.poll.CodeGemini
-                    , task: ko.toJSON(vueVM.$data.poll)
-                    , comment: vueVM.$data.poll.CommentTaskNotImplemented
-                },
-                success: function (data) {
-                    if (data) {
-                        store.clearAll();
-                        bootbox.alert("Registros Actualizados Satisfactoriamente");
-
-                        window.location.href = "/Task/TasksCampaign?idCampaign="+idTaskcampaing;
+                            infoList.push(data[property]);
                     }
-                },
-                error: function (xhr, ajaxOptions, thrownError) {
 
                 }
-            });
+                var a = infoList;
 
-            //$.ajax({
-            //    url: "/Task/Save",
-            //    type: "post",
-            //    data: {
-            //        task: ko.toJSON(vueVM.$data.poll)
-            //    },
-            //    success: function (data) {
-            //        if (data) {
-            //            bootbox.alert("Registros Actualizados Satisfactoriamente");
-            //            window.location.href = "/Task/TasksCampaign?idCampaign="+idTaskcampaing;
-            //            alert("Error! no se ha encontrado la tarea" + data);
-            //        } else {
-            //            bootbox.alert("Error al tratar de Grabar su encuesta");
-            //            window.location.href = "/Task/TasksCampaign?idCampaign="+idTaskcampaing;
-            //            alert("Error! no se ha encontrado la tarea" + data);
-            //        }
-            //    },
-            //    error: function (xhr, ajaxOptions, thrownError) {
-            //        bootbox.alert("Error al tratar de Grabar su encuesta " + thrownError);
-            //        window.location.href = "/Task/TasksCampaign?idCampaign="+idTaskcampaing;
-            //        $.unblockUI();
-            //    }
-            //});
-            //window.location.href = "/Task/TasksCampaign?idCampaign="+idTaskcampaing;
+                $.ajax({
+                    url: "/Task/SaveAnswerQuestion",
+                    type: "post",
+                    data: {
+                        AnswerQuestion: ko.toJSON(infoList),
+                        fintransaccion: "ok",
+                        Idtask: getParameterByName('idTask')
+                        , idstatus: vueVM.$data.poll.IdStatusTask
+                        , CodigoGemini: vueVM.$data.poll.CodeGemini
+                        , task: ko.toJSON(vueVM.$data.poll)
+                        , comment: vueVM.$data.poll.CommentTaskNotImplemented
+                    },
+                    success: function (data) {
+                        if (data) {
+                            store.clearAll();
+                            bootbox.alert("Registros Actualizados Satisfactoriamente");
+
+                            window.location.href = "/Task/TasksCampaign?idCampaign=" + idTaskcampaing;
+                        }
+                    },
+                    error: function (xhr, ajaxOptions, thrownError) {
+
+                    }
+                });
+
+                //$.ajax({
+                //    url: "/Task/Save",
+                //    type: "post",
+                //    data: {
+                //        task: ko.toJSON(vueVM.$data.poll)
+                //    },
+                //    success: function (data) {
+                //        if (data) {
+                //            bootbox.alert("Registros Actualizados Satisfactoriamente");
+                //            window.location.href = "/Task/TasksCampaign?idCampaign="+idTaskcampaing;
+                //            alert("Error! no se ha encontrado la tarea" + data);
+                //        } else {
+                //            bootbox.alert("Error al tratar de Grabar su encuesta");
+                //            window.location.href = "/Task/TasksCampaign?idCampaign="+idTaskcampaing;
+                //            alert("Error! no se ha encontrado la tarea" + data);
+                //        }
+                //    },
+                //    error: function (xhr, ajaxOptions, thrownError) {
+                //        bootbox.alert("Error al tratar de Grabar su encuesta " + thrownError);
+                //        window.location.href = "/Task/TasksCampaign?idCampaign="+idTaskcampaing;
+                //        $.unblockUI();
+                //    }
+                //});
+                //window.location.href = "/Task/TasksCampaign?idCampaign="+idTaskcampaing;
+            } else {
+                alert('Sin Conexión...Intente mas tarde.')
+                $.unblockUI();
+            }
         } else {
-            alert('Sin Conexión...Intente mas tarde.')
+            alert(resulvalidacion);
             $.unblockUI();
         }
-    } else {
-        alert(resulvalidacion);
-        $.unblockUI();
-    }
+   
 }
 
 function ChangeStatusNotImplemented(element) {

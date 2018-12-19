@@ -329,7 +329,7 @@ namespace Mardis.Engine.Web.Controllers
 
             }
 
-         catch (Exception e)
+          catch (Exception e)
             {
                 _logger.LogError(new EventId(0, "Error Index"), e.Message);
                 return null;
@@ -1078,5 +1078,28 @@ namespace Mardis.Engine.Web.Controllers
         }
         #endregion
 
+        #region validarPreguntasXProfile
+        [HttpPost]
+        public JsonResult ProfileQuestion(string task)
+        {
+
+            try
+            {
+                var _task = JSonConvertUtil.Deserialize<MyTaskViewModel>(task);
+
+                 var _model  = _taskCampaignBusiness.ControlQuestion(Guid.Parse(ApplicationUserCurrent.UserId), _task);
+                return Json(_model);
+
+            }
+            catch (Exception e)
+            {
+
+
+                return Json("0");
+
+            }
+        }
+        #endregion
+      
     }
 }

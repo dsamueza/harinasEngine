@@ -328,6 +328,7 @@
     <Compile Include="UserViewModels\UserIndexViewModel.cs" />
     <Compile Include="UserViewModels\UserVIewModel.cs" />
     <Compile Include="UserViewModels\ViewSecurityTasksModel.cs" />
+    <Compile Include="Utility\QuestionRequeredModel.cs" />
     <Compile Include="Utility\StructXmlModel.cs" />
     <Compile Include="Utility\StructXmlModelQuestion.cs" />
     <Compile Include="Utility\StructXmlModelQuestionDetail.cs" />

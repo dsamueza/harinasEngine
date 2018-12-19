@@ -36,6 +36,7 @@ using System.Text.RegularExpressions;
 using Mardis.Engine.Web.ViewModel.UserViewModels;
 using System.Text;
 using System.Linq.Dynamic.Core;
+using Mardis.Engine.Web.ViewModel.Utility;
 
 namespace Mardis.Engine.Business.MardisCore
 {
@@ -2231,6 +2232,65 @@ namespace Mardis.Engine.Business.MardisCore
             return true;
         }
         #endregion
+        #region validarPreguntasXProfile
+        public List<QuestionRequeredModel> ControlQuestion(Guid user, MyTaskViewModel _model)
+        {
+           var _user= _userDao.GetUserById(user);
+            IList<QuestionRequeredModel> _questionRequeredModel = new List<QuestionRequeredModel>();
+            var questionrequerid = _userDao.GetQuestionProfile(_user.IdProfile,_model.IdStatusTask);
+            if (questionrequerid.Count() > 0) { 
+            foreach (var _service in _model.ServiceCollection) {
 
+                foreach (var seccion in _service.ServiceDetailCollection) {
+                    foreach (var control in questionrequerid) {
+                        var _questionrequerid = seccion.QuestionCollection.Where(x => x.Id.Equals(control.IdQuestion)&& x.Answer == null && x.QuestionComplete.Count() < 1 && x.QuestionDetailCollection.Where(z => z.Checked.Equals(1)).Count() < 1 && x.IdQuestionDetail.Equals(Guid.Empty));
+
+                            //foreach (var aswers in _questionrequerid)
+                            //{
+                            //    if (aswers.Answer == null && aswers.QuestionComplete.Count()<1 && aswers.QuestionDetailCollection.Where(z=>z.Checked.Equals(1)).Count()<1&&aswers.IdQuestionDetail.Equals(Guid.Empty)) {
+
+
+                            //            _questionRequeredModel.Add(new QuestionRequeredModel { name = aswers.Title, status = "N", type = "R" });
+                            //    }
+
+                            //}
+                            if (_questionrequerid.Count() > 0)
+                            {
+                                foreach (var aswers in _questionrequerid)
+                                {
+                                    _questionRequeredModel.Add(new QuestionRequeredModel { name = aswers.Title, status = "N", type = "R" });
+                                }
+                            }
+                        }
+                    foreach (var subseccion in seccion.Sections) {
+
+                        foreach (var control in questionrequerid)
+                        {
+                            var _questionrequerid = subseccion.QuestionCollection.Where(x => x.Id.Equals(control.IdQuestion));
+                            foreach (var aswers in _questionrequerid)
+                            {
+                                if (aswers.Answer == null && aswers.QuestionComplete.Count() < 1 && aswers.QuestionDetailCollection.Where(z => z.Checked.Equals(1)).Count() < 1)
+                                {
+
+
+                                    _questionRequeredModel.Add(new QuestionRequeredModel { name = aswers.Title, status = "N", type = "R" });
+                                    }
+
+                            }
+                        }
+
+                    }
+                    
+                    
+
+
+                }
+
+
+            }
+            }
+            return _questionRequeredModel.ToList();
+        }
+        #endregion
     }
 }

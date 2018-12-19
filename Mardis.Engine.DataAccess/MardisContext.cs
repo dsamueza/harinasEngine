@@ -398,6 +398,12 @@ namespace Mardis.Engine.DataAccess
         /// Tabla de Modelo de preguntas Dinamicas con conceptos
         /// </summary>
         public DbSet<_AnswerDetailSecondLevelConcept> _AnswerDetailSecondLevelConcepts { get; set; }
+
+
+        /// <summary>
+        /// Tabla de Modelo de preguntas condicionales
+        /// </summary>
+        public DbSet<AnwerRequiredProfile> AnwerRequiredProfiles { get; set; }
         public IEnumerable<T> Query<T>(string query) where T : class
         {
             return connection.Query<T>(query);

@@ -215,6 +215,7 @@
     <Compile Include="MardisCore\Answer.cs" />
     <Compile Include="MardisCore\AnswerDetail.cs" />
     <Compile Include="MardisCore\AnswerDetailSecondLevel .cs" />
+    <Compile Include="MardisCore\AnwerRequiredProfile.cs" />
     <Compile Include="MardisCore\Branch.cs" />
     <Compile Include="MardisCore\BranchCustomer.cs" />
     <Compile Include="MardisCore\BranchImages.cs" />

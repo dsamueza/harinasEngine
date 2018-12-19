@@ -237,7 +237,7 @@ namespace Mardis.Engine.Business.MardisCore
 
                                 if (question != null)
                                 {
-
+                       
                                     switch (answer.Question.TypePoll.Code)
                                     {
                                         case CTypePoll.One:
