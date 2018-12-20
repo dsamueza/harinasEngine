@@ -91,20 +91,20 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                             
+
                                                 <!--Fin  Seccion de respuestas multiples diseño a lo largo-->
                                                 <!--Inicio Seccion de respuestas Dinamicas-->
                                                 <div v-bind:class="classlenght(question.Weight)" v-if="question.CodeTypePoll=='MANY' && question.HasPhoto=='D' " style="text-align:-webkit-center; margin-top:25PX;margin-bottom:25px">
-                                               
-                                                  
+
+
                                                     <span style="font-weight:600; font-size: 14px !important;color:#0040a0;">{{question.Title}}</span>
                                                     <div v-for="answer in question.QuestionDetailCollection">
-                                                
+
                                                         <div v-if="answer.Checked">
                                                             <div v-bind:class="classlenght(answer.Weight)">
                                                                 <div class="form-check">
                                                                     <label for="answer.Id" class="col-sm-6 mardis-check">
-                                                                        
+
                                                                         <span>{{ answer.Answer }}</span>
                                                                         <a href="#" v-on:click="OpenModalQuestionDinamic(answer.AnwerDetailSecondModel)" style="font-size-adjust: 0.4;" class="pull-right"><span class="fa fa-plus-square" style="font-size: 15px;  padding-left: 10px;"><span> </span></a>
                                                                     </label>
@@ -113,7 +113,7 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <!--Fin  Seccion de respuestas multiples diseño a lo largo-->
+                                                <!--Fin  Seccion de respuestas Dinamicas-->
                                                 <!--Inicio Seccion de preguntas de conceptos Individuales-->
                                                 <div v-bind:class="classlenght(question.Weight)" v-if="question.CodeTypePoll=='COMPLETE'" style="text-align:-webkit-center;">
                                                     @Html.Partial("_QuestionConcept_individual")

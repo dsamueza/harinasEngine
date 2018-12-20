@@ -52,7 +52,7 @@
             <div class="panel-heading">
                 <div class="col-sm-4">
                     <input type="checkbox" value="@campaign.Id" onclick="SelectItem('@campaign.Id')" />
-                    <strong>CAMPAÑA:</strong>
+                    <strong>Periodo:</strong>
                     <a href="@Url.Action("Register", "Campaign", new {idCampaign = campaign.Id})">@campaign.Name</a>
                 </div>
                 <div class="col-sm-4">
@@ -121,7 +121,7 @@
                         <a class="fa fa-pencil-square-o fa-4x" href="@Url.Action("Index", "Task", new {pidCampaign = campaign.Id, filterValues=""})"></a>
                     </div>
                     <div class="row">
-                        @("Administrar " + campaign.TotalTasks + " TAREAS")
+                        @("Administrar " + campaign.TotalTasks + " Encuestas")
                     </div>
                 </div>
                 <div class="col-sm-1" style="text-align: center">
@@ -129,7 +129,7 @@
                         <a class="fa fa-angle-double-right fa-4x" href="@Url.Action("TasksPerCampaign", "Campaign", new {idCampaign = campaign.Id})"></a>
                     </div>
                     <div class="row">
-                        @("Visualizar " + campaign.TotalTasks + " TAREAS")
+                        @( + campaign.TotalTasks + " Encuestas")
                     </div>
                 </div>
                 <div class="col-sm-1">

@@ -23,6 +23,7 @@ function LoadTaskById(idTask,idcamp) {
             if (data) {
                 store.clearAll();
                 ApplyBindingTaskService(data);
+                imgvue();
 
             } else {
                 alert("Error! no se ha encontrado la tarea" + error);
@@ -36,7 +37,65 @@ function LoadTaskById(idTask,idcamp) {
         }
     });
 }
+function SaveQuestionRepeat() {
+    $.blockUI({ message: "" });
+    $('#btndinamic').prop("disabled", true);
+    $('#idsavedinamic').show();
+    idsavedinamic
+    $.ajax({
+        url: '/Task/SaveQuestionDinamic',
+        type: "POST",
+        content: "application/json; charset=utf-8",
+        data: {
+            Idtask: getParameterByName('idTask')
+            , tasks: ko.toJSON(vueVM.$data.poll)
+            , dinamic: ko.toJSON(vueVM.$data.harinas)
+        },
+        success: function (data) {
+            $.unblockUI();
+            $("#btndinamic").prop("disabled", false);
 
+            $('#idsavedinamic').hide();
+            if (data == "0") {
+                $.notify({
+                    title: '<strong>Información :</strong>',
+                    message: 'La información fue almacenada correctamente'
+                });
+                $('#IdQuestionDinamic').modal('hide');
+            }
+            if (data == "1") {
+                $.notify({
+                    title: '<strong>Información :</strong>',
+                    message: 'La información fue almacenada correctamente'
+                });
+                vueVM.$data.poll.novelty = "CON FACTURA";
+                $('#IdQuestionDinamic').modal('hide');
+            }
+            if (data == "-1") {
+                $.notify({
+                    title: '<strong>Información :</strong>',
+                    message: 'La información no pudo se guarda. Intente de nuevo o contactese con el administrado'
+                });
+            }
+            if (data == "2") {
+                $.notify({
+                    title: '<strong>Información :</strong>',
+                    message: 'La información fue almacenada correctamente'
+                });
+                vueVM.$data.poll.novelty = null;
+                $('#IdQuestionDinamic').modal('hide');
+            }
+
+        },
+
+        error: function () {
+
+            $.unblockUI();
+        }
+        ,
+        async: true, // La petición es síncrona
+    });
+}
 function getParameterByName(name) {
     name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
     var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
@@ -177,7 +236,17 @@ function ApplyBindingTaskService(data) {
             status_engine: data.IdStatusTask,
             autoUpdate: true,
             isUpdating: false,
-
+            harinas: [{
+                Id: '',
+                AnswerDetailId: '',
+                Marca: '',
+                PrecioSaco: '',
+                Descuento: '',
+                ValorDescuento: '',
+                RequisitosDescuento: '',
+                Peso: '',
+                Factura: ''
+            }],
         },
 
         watch: {
@@ -205,6 +274,13 @@ function ApplyBindingTaskService(data) {
             remove(item) {
 
                 console.log(item)
+            },
+            OpenModalQuestionDinamic: function (_model) {
+                this.harinas.splice(0, 1);
+
+                this.harinas.push(_model[0])
+
+                $('#IdQuestionDinamic').modal('show');
             },
             changeHandler: function (event) {
                 // change of userinput, do something
@@ -887,5 +963,12 @@ function deleteBranchImg(id) {
             console.log(error);
             $.unblockUI();
         }
+    });
+}
+function imgvue() {
+    var galley = document.getElementById('galley');
+    var viewer = new Viewer(galley, {
+        url: 'src',
+
     });
 }
