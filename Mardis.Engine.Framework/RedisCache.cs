@@ -154,6 +154,7 @@ namespace Mardis.Engine.Framework
         }
         public T Get<T>(string key)
         {
+            ForceReconnect();
             IDatabase Cache = Connection.GetDatabase();
             RedisValue objJson = Cache.StringGet(key);
             T result = default(T);

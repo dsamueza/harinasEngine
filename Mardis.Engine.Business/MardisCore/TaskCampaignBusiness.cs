@@ -1353,7 +1353,9 @@ namespace Mardis.Engine.Business.MardisCore
                         clTituloSeccion.HorizontalAlignment = Element.ALIGN_CENTER;
                         tblTituloSeccion.AddCell(clTituloSeccion);
                         tblCuerpo.AddCell(tblTituloSeccion);
-                        PdfPTable tblPreguntas = new PdfPTable(3);
+                        var seccionnumber = section.QuestionCollection.Count();
+                        var tamtable = seccionnumber<=3?seccionnumber: Math.Abs(seccionnumber / 3);
+                            PdfPTable tblPreguntas = new PdfPTable(tamtable);
                         var clmarca = new PdfPCell(new Phrase());
                         var clTablaMarca = new PdfPCell(new Phrase());
                         var tblMarca = new PdfPTable(1);
@@ -1480,20 +1482,20 @@ namespace Mardis.Engine.Business.MardisCore
                                 clTablaMarca = new PdfPCell(tblMarca);
                                 banderaMarcas = true;
                             }
-                            if (preguntaCont == 3 || banderaMarcas) //|| j == section.QuestionCollection.Count())
+                            if (preguntaCont == tamtable || banderaMarcas) //|| j == section.QuestionCollection.Count())
                             {
                                 if (banderaMarcas)
                                 {
                                     tblCuerpo.AddCell(tblPreguntas);
                                     tblCuerpo.AddCell(clpregunta);
                                     tblCuerpo.AddCell(clTablaMarca);
-                                    tblPreguntas = new PdfPTable(3);
+                                    tblPreguntas = new PdfPTable(tamtable);
                                     preguntaCont = 0;
                                 }
                                 else //if(preguntaCont < 3 && j == section.QuestionCollection.Count())
                                 {
                                     tblCuerpo.AddCell(tblPreguntas);
-                                    tblPreguntas = new PdfPTable(3);
+                                    tblPreguntas = new PdfPTable(tamtable);
                                     preguntaCont = 0;
                                 }
                             }
