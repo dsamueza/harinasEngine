@@ -841,7 +841,7 @@ namespace Mardis.Engine.Web.Controllers
         #endregion
         #region Impresion
         [HttpPost]
-        public JsonResult UploadFile(String Idtask ,String imgs)
+        public JsonResult UploadFile(String Idtask ,String imgs,String task)
         {
             try
             {
@@ -849,7 +849,9 @@ namespace Mardis.Engine.Web.Controllers
                 var imgg = imgs;
                 var outs = "";
                 if (Idtask !=null)
-                    outs = _taskCampaignBusiness.PrintFile( Guid.Parse (Idtask), Filepath, ApplicationUserCurrent.AccountId, imgg);
+                    
+                    outs = _taskCampaignBusiness.PrintFile( Guid.Parse (Idtask), Filepath, ApplicationUserCurrent.AccountId, imgg, task);
+                
 
 
 

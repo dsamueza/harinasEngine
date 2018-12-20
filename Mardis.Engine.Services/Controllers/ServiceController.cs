@@ -22,7 +22,7 @@ namespace Mardis.Engine.Services.Controllers
       IMemoryCache distributedCache,
       ILoggerFactory _loggerFactory)
         {
-            _serviceBusiness = new ServiceBusiness(mardisContext);
+
             _logger = _loggerFactory.CreateLogger("Mardis.Engine.Services");
         }
         // GET: api/Service

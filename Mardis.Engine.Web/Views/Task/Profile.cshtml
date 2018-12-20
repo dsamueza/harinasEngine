@@ -453,7 +453,8 @@
                         type: 'post',
                         data: {
                             Idtask: getParameterByName('idTask'),
-                            imgs: pngUrl
+                            imgs: pngUrl,
+                            task: ko.toJSON(vueVM.$data.poll)
                         },
                         success: function (data) {
                             if (data != '' || data != null) {

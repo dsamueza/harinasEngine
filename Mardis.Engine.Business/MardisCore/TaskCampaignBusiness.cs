@@ -1277,7 +1277,7 @@ namespace Mardis.Engine.Business.MardisCore
             return questions.OrderBy(q => q.Order).ToList();
         }
         #region Impresion
-        public string PrintFile(Guid idtask, string path, Guid idaccount, string Img) {
+        public string PrintFile(Guid idtask, string path, Guid idaccount, string Img,String taskModel) {
             try
             {
                
@@ -1285,15 +1285,16 @@ namespace Mardis.Engine.Business.MardisCore
                 var branchImge = _branchImageBusiness.GetBranchesImagesList(task.IdBranch, idaccount,task.IdCampaign);
                 var branch = _branchDao.GetOne(task.IdBranch, idaccount);
                 var person = _branchDao.GetOnePerson(Guid.Parse(branch.IdPersonOwner.ToString()));
+                var model = JSonConvertUtil.Deserialize<MyTaskViewModel>(taskModel);
                 #region variable de estilo
 
                 var normalFont = FontFactory.GetFont(FontFactory.HELVETICA, 12);
                 var boldFont = FontFactory.GetFont(FontFactory.HELVETICA_BOLD, 12);
-
                 #endregion
                 if (!Directory.Exists(path)) Directory.CreateDirectory(path);
                 string pathFull = path + "\\form\\" + idtask.ToString() + ".pdf";
                 System.IO.FileStream fs = new FileStream(pathFull, FileMode.Create);
+
                 Document document = new Document(PageSize.A4, 10, 10, 10, 10);
 
                 PdfWriter writer = PdfWriter.GetInstance(document, fs);
@@ -1303,188 +1304,208 @@ namespace Mardis.Engine.Business.MardisCore
                 document.AddSubject("Documentacion Pruebas");
                 document.AddTitle("Documentacion Pruebas");
                 document.AddHeader("Header", "Header Text");
-                document.Open();
-                #region CuerpoPDF
 
-                var logo = iTextSharp.text.Image.GetInstance((path + "\\M_MARDIS.png"));
-                logo.Alignment = 1;
-                logo.ScaleAbsoluteHeight(55);
-                logo.ScaleAbsoluteWidth(55);
-                document.Add(logo);
+                #region CuerpoPDF
+                document.Open();
 
                 // Cabecera
-                PdfPTable table = new PdfPTable(2);
-                //actual width of table in points
-                table.TotalWidth = 216f;
-                table.LockedWidth = true;
-
-                float[] widths = new float[] { 1f, 2f };
-                table.SetWidths(widths);
-                table.HorizontalAlignment = 1;
-                //leave a gap before and after the table
-                table.SpacingBefore = 20f;
-                table.SpacingAfter = 30f;
-                PdfPCell cell = new PdfPCell(new Phrase("Mardis Research", FontFactory.GetFont("Arial", 10, 1)));
-                PdfPCell cell1 = new PdfPCell(new Phrase("Documentación Engine"));
-                cell.Colspan = 2;
-                cell.Border = 0;
-                cell.HorizontalAlignment = 1;
-                cell1.Colspan = 2;
-                cell1.Border = 0;
-                cell1.HorizontalAlignment = 1;
-                table.AddCell(cell);
-                table.AddCell(cell1);
-                table.HorizontalAlignment = 1;
-                document.Add(table);
-                float[] columnWidths = { 3, 5 , 3, 5 , 3, 5 };
-                //PdfPTable tbDatos = new PdfPTable(columnWidths);
-                //tbDatos.AddCell(new PdfPCell(new Phrase("Codigo :", FontFactory.GetFont("Arial", 10, 1)))
-                //{
-                //    Border = 0,
-                //    HorizontalAlignment = Element.ALIGN_LEFT,
-                //    PaddingBottom = 10f
-                //});
-                //tbDatos.AddCell(new PdfPCell(new Phrase( branch.ExternalCode, FontFactory.GetFont("Arial", 9, 0)))
-                //{
-                //    Border = 0,
-                //    HorizontalAlignment = Element.ALIGN_LEFT,
-                //    PaddingBottom = 10f
-                //});
-                ////   tbDatos.AddCell(new PdfPCell(new Phrase()) { Border = 0, HorizontalAlignment = Element.ALIGN_LEFT, PaddingBottom = 40f });
-                //tbDatos.AddCell(new PdfPCell(new Phrase("Local :", FontFactory.GetFont("Arial", 10, 1)))
-                //{
-                //    Border = 0,
-                //    HorizontalAlignment = Element.ALIGN_LEFT,
-                //    PaddingBottom = 10f
-                //});
-                //tbDatos.AddCell(new PdfPCell(new Phrase( branch.Name, FontFactory.GetFont("Arial", 9, 0)))
-                //{
-                //    Border = 0,
-                //    HorizontalAlignment = Element.ALIGN_LEFT,
-                //    PaddingBottom = 10f
-                //});
-                //tbDatos.AddCell(new PdfPCell(new Phrase("Dirección :", FontFactory.GetFont("Arial", 10, 1)))
-                //{
-                //    Border = 0,
-                //    HorizontalAlignment = Element.ALIGN_LEFT,
-                //    PaddingBottom = 10f
-                //});
-                //tbDatos.AddCell(new PdfPCell(new Phrase(branch.MainStreet, FontFactory.GetFont("Arial", 9, 0)))
-                //{
-                //    Border = 0,
-                //    HorizontalAlignment = Element.ALIGN_LEFT,
-                //    PaddingBottom = 10f
-                //});
-                //tbDatos.AddCell(new PdfPCell(new Phrase("Cliente :", FontFactory.GetFont("Arial", 10, 1)))
-                //{
-                //    Border = 0,
-                //    HorizontalAlignment = Element.ALIGN_LEFT,
-                //    PaddingBottom = 30f
-                //});
-                //tbDatos.AddCell(new PdfPCell(new Phrase(person.Name+" "+ person.SurName, FontFactory.GetFont("Arial", 9, 0)))
-                //{
-                //    Border = 0,
-                //    HorizontalAlignment = Element.ALIGN_LEFT,
-                //    PaddingBottom = 30f
-                //});
-                //tbDatos.AddCell(new PdfPCell(new Phrase("Ruc :", FontFactory.GetFont("Arial", 10, 1)))
-                //{
-                //    Border = 0,
-                //    HorizontalAlignment = Element.ALIGN_LEFT,
-                //    PaddingBottom = 30f
-                //});
-                //tbDatos.AddCell(new PdfPCell(new Phrase(person.Document, FontFactory.GetFont("Arial", 9, 0)))
-                //{
-                //    Border = 0,
-                //    HorizontalAlignment = Element.ALIGN_LEFT,
-                //    PaddingBottom = 30f
-                //});
-                //tbDatos.AddCell(new PdfPCell(new Phrase("", FontFactory.GetFont("Arial", 10, 0)))
-                //{
-                //    Border = 0,
-                //    HorizontalAlignment = Element.ALIGN_LEFT,
-                //    PaddingBottom = 30f
-                //});
-                //tbDatos.AddCell(new PdfPCell(new Phrase("" , FontFactory.GetFont("Arial", 10, 0)))
-                //{
-                //    Border = 0,
-                //    HorizontalAlignment = Element.ALIGN_LEFT,
-                //    PaddingBottom = 30f
-                //});
-                ////   tbDatos.AddCell(new PdfPCell(new Phrase()) { Border = 0, HorizontalAlignment = Element.ALIGN_LEFT, PaddingBottom = 40f });
-
-                //document.Add(tbDatos);
-
-                PdfPTable tbUB2 = new PdfPTable(1);
-                PdfPCell cell22 = new PdfPCell(new Phrase("Fotos", boldFont));
-                cell22.Colspan = 2;
-                cell22.Border = 0;
-                cell22.PaddingBottom = 15f;
-                cell22.HorizontalAlignment = Element.ALIGN_LEFT;
-                tbUB2.AddCell(cell22);
-                document.Add(tbUB2);
-                var base64Data = Regex.Match(Img, @"data:image/(?<type>.+?),(?<data>.+)").Groups["data"].Value;
-
-                byte[] imageBytes = Convert.FromBase64String(base64Data);
-           
-                var encuesta = iTextSharp.text.Image.GetInstance((imageBytes));
-                encuesta.Alignment = 1;
-                encuesta.ScaleAbsoluteHeight(850);
-                encuesta.ScaleAbsoluteWidth(600);
-                document.Add(encuesta);
-
-                PdfPTable tbImge = new PdfPTable(1);
-                PdfPTable tbImge1 = new PdfPTable(2);
-                if (branchImge.ToList().Count() > 0) { 
-                foreach (var item in branchImge.ToList().OrderBy(x => x.Order))
-                {
-                var    img = iTextSharp.text.Image.GetInstance((item.UrlImage));
-                    PdfPCell imageCell = new PdfPCell(img);
+                var logo = iTextSharp.text.Image.GetInstance((path + "\\M_MARDIS.png"));
+                logo.Alignment = Element.ALIGN_LEFT;
+                logo.ScaleAbsoluteHeight(35);
+                logo.ScaleAbsoluteWidth(35);
                 
-             
-                            img.Alignment = 1;
-                            img.ScaleAbsoluteHeight(180);
-                            img.ScaleAbsoluteWidth(220);
-                            imageCell.HorizontalAlignment = 1;
-                            imageCell.VerticalAlignment = 1;
-                            imageCell.PaddingBottom = 10f;
-                            imageCell.Border = 0;
-                              tbImge.AddCell(imageCell);
-                         
-                        
+                PdfPTable tblCuerpo = new PdfPTable(1);
+                PdfPCell clLogo = new PdfPCell(logo);
+                clLogo.Border = 0;
+                clLogo.HorizontalAlignment = Element.ALIGN_LEFT;
+                PdfPCell clPieLogo = new PdfPCell(new Phrase("Mardis Research", FontFactory.GetFont("Arial", 10, 1)));
+                clPieLogo.Border = 0;
+                clPieLogo.HorizontalAlignment = Element.ALIGN_LEFT;
+                tblCuerpo.AddCell(clLogo);
+                tblCuerpo.AddCell(clPieLogo);
 
+                // Escribimos el encabezamiento en el documento
+                PdfPCell cltitulo = new PdfPCell(new Paragraph("Encuesta"));
+                cltitulo.Colspan = 2;
+                cltitulo.Border = 0;
+                cltitulo.HorizontalAlignment = 1;
+                tblCuerpo.AddCell(cltitulo);
+                
+                iTextSharp.text.Font _standardFont = new iTextSharp.text.Font(iTextSharp.text.Font.FontFamily.HELVETICA, 8, iTextSharp.text.Font.NORMAL, BaseColor.BLACK);
+                int i = 1;
+                foreach (var section in model.ServiceCollection.First().ServiceDetailCollection) {
+                    if (section.GroupName!="modal")
+                    {
+                        PdfPTable tblTituloSeccion = new PdfPTable(1);
+                        tblTituloSeccion.WidthPercentage = 100;
+                        PdfPCell clTituloSeccion = null;
+                        if (section.IsDynamic)
+                        {
+                            clTituloSeccion = new PdfPCell(new Paragraph(section.SectionTitle + " #" + i));
+                            i++;
+                        }
+                        else
+                        {
+                            clTituloSeccion = new PdfPCell(new Paragraph(section.SectionTitle));
+                        }
+                        clTituloSeccion.Colspan = 2;
+                        clTituloSeccion.Border = 0;
+                        clTituloSeccion.HorizontalAlignment = Element.ALIGN_CENTER;
+                        tblTituloSeccion.AddCell(clTituloSeccion);
+                        tblCuerpo.AddCell(tblTituloSeccion);
+                        PdfPTable tblPreguntas = new PdfPTable(3);
+                        var clmarca = new PdfPCell(new Phrase());
+                        var clTablaMarca = new PdfPCell(new Phrase());
+                        var tblMarca = new PdfPTable(1);
+                        var tblrespuestaMarca = new PdfPTable(1);
+                        int preguntaCont = 0;
+                        int j = 0;
+                        int preguntaslista = section.QuestionCollection.Count();
+                        foreach (var question in section.QuestionCollection)
+                        {
+                            j++;
+                            bool banderaMarcas = false;
+                            PdfPCell clpregunta = null;
 
-                    
+                            // Configuramos el título de las columnas de la tabla
+                            if ((question.CodeTypePoll == "ONE" || question.CodeTypePoll == "OPEN") && question.Weight != -1)
+                            {
+                                if (question.CodeTypePoll == "OPEN")
+                                {
+                                    clpregunta = new PdfPCell(new Phrase(question.Title + ": " + question.Answer, _standardFont));
+                                    clpregunta.BorderWidth = 0;
+                                    clpregunta.BorderWidthBottom = 0.75f;
+                                }
+                                else
+                                {
+                                    var questiondetail = question.IdQuestionDetail.Equals(Guid.Empty) ? " " : question.QuestionDetailCollection.Where(x => x.Id.Equals(question.IdQuestionDetail)).ToList().First().Answer;
 
+                                    clpregunta = new PdfPCell(new Phrase(question.Title + ": " + questiondetail, _standardFont));
+                                    clpregunta.BorderWidth = 0;
+                                    clpregunta.BorderWidthBottom = 0.75f;
+                                }
+                                tblPreguntas.AddCell(clpregunta);
+                                preguntaCont++;
+                            }
+                            else if ((question.CodeTypePoll == "MANY") && (question.HasPhoto == "N" || question.HasPhoto == "L"))
+                            {
+                                var pregunta = question.Title;
+                                var respuestas = "";
+                                int cont = 0;
+                                foreach (var answer in question.QuestionDetailCollection)
+                                {
+                                    if (cont == 0)
+                                    {
+                                        respuestas = answer.Answer;
+                                    }
+                                    respuestas = respuestas + " " + answer.Answer;
+                                }
+                                clpregunta = new PdfPCell(new Phrase(question.Title + ": " + respuestas, _standardFont));
+                                clpregunta.BorderWidth = 0;
+                                clpregunta.BorderWidthBottom = 0.75f;
+                                tblPreguntas.AddCell(clpregunta);
+                                preguntaCont++;
+                            }
+                            else if (question.CodeTypePoll == "MANY" && question.HasPhoto == "D")
+                            {
+                                clpregunta = new PdfPCell(new Phrase("Marcas"));
+                                clpregunta.HorizontalAlignment = Element.ALIGN_CENTER;
+
+                                tblMarca = new PdfPTable(7);
+                                tblMarca.WidthPercentage = 100;
+
+                                PdfPCell clHarina = new PdfPCell(new Phrase("Harina", _standardFont));
+                                clHarina.BorderWidth = 0;
+                                clHarina.BorderWidthBottom = 0.75f;
+                                PdfPCell clPrecioFact = new PdfPCell(new Phrase("Fact?", _standardFont));
+                                clPrecioFact.BorderWidth = 0;
+                                clPrecioFact.BorderWidthBottom = 0.75f;
+                                PdfPCell clPeso = new PdfPCell(new Phrase("Peso(kg)", _standardFont));
+                                clPeso.BorderWidth = 0;
+                                clPeso.BorderWidthBottom = 0.75f;
+                                PdfPCell clPrecio = new PdfPCell(new Phrase("Precio($)", _standardFont));
+                                clPrecio.BorderWidth = 0;
+                                clPrecio.BorderWidthBottom = 0.75f;
+                                PdfPCell clDescuento = new PdfPCell(new Phrase("Desc?", _standardFont));
+                                clDescuento.BorderWidth = 0;
+                                clDescuento.BorderWidthBottom = 0.75f;
+                                PdfPCell clValorDescuento = new PdfPCell(new Phrase("Desc(%)", _standardFont));
+                                clValorDescuento.BorderWidth = 0;
+                                clValorDescuento.BorderWidthBottom = 0.75f;
+                                PdfPCell clReqDescuento = new PdfPCell(new Phrase("Req. Desc", _standardFont));
+                                clReqDescuento.BorderWidth = 0;
+                                clReqDescuento.BorderWidthBottom = 0.75f;
+
+                                tblMarca.AddCell(clHarina);
+                                tblMarca.AddCell(clPrecioFact);
+                                tblMarca.AddCell(clPeso);
+                                tblMarca.AddCell(clPrecio);
+                                tblMarca.AddCell(clDescuento);
+                                tblMarca.AddCell(clValorDescuento);
+                                tblMarca.AddCell(clReqDescuento);
+
+                                foreach (var answer in question.QuestionDetailCollection)
+                                {
+                                    if (answer.Checked)
+                                    {
+                                        var marcas = answer.AnwerDetailSecondModel;
+                                        foreach (var marca in marcas)
+                                        {
+                                            clHarina = new PdfPCell(new Phrase(marca.Marca, _standardFont));
+                                            clHarina.BorderWidth = 0;
+                                            clPrecioFact = new PdfPCell(new Phrase(marca.Factura, _standardFont));
+                                            clPrecioFact.BorderWidth = 0;
+                                            clPeso = new PdfPCell(new Phrase(marca.Peso == null ? "0" : marca.Peso.ToString(), _standardFont));
+                                            clPeso.BorderWidth = 0;
+                                            clPrecio = new PdfPCell(new Phrase(marca.PrecioSaco == null ? "0" : marca.PrecioSaco.ToString(), _standardFont));
+                                            clPrecio.BorderWidth = 0;
+                                            clDescuento = new PdfPCell(new Phrase(marca.Descuento, _standardFont));
+                                            clDescuento.BorderWidth = 0;
+                                            clValorDescuento = new PdfPCell(new Phrase(marca.ValorDescuento == null ? "0" : marca.ValorDescuento.ToString(), _standardFont));
+                                            clValorDescuento.BorderWidth = 0;
+                                            clReqDescuento = new PdfPCell(new Phrase(marca.RequisitosDescuento, _standardFont));
+                                            clReqDescuento.BorderWidth = 0;
+
+                                            tblMarca.AddCell(clHarina);
+                                            tblMarca.AddCell(clPrecioFact);
+                                            tblMarca.AddCell(clPeso);
+                                            tblMarca.AddCell(clPrecio);
+                                            tblMarca.AddCell(clDescuento);
+                                            tblMarca.AddCell(clValorDescuento);
+                                            tblMarca.AddCell(clReqDescuento);
+
+                                        }
+                                    }
+                                }
+                                clTablaMarca = new PdfPCell(tblMarca);
+                                banderaMarcas = true;
+                            }
+                            if (preguntaCont == 3 || banderaMarcas) //|| j == section.QuestionCollection.Count())
+                            {
+                                if (banderaMarcas)
+                                {
+                                    tblCuerpo.AddCell(tblPreguntas);
+                                    tblCuerpo.AddCell(clpregunta);
+                                    tblCuerpo.AddCell(clTablaMarca);
+                                    tblPreguntas = new PdfPTable(3);
+                                    preguntaCont = 0;
+                                }
+                                else //if(preguntaCont < 3 && j == section.QuestionCollection.Count())
+                                {
+                                    tblCuerpo.AddCell(tblPreguntas);
+                                    tblPreguntas = new PdfPTable(3);
+                                    preguntaCont = 0;
+                                }
+                            }
+                        }
+                        if (j > 0)
+                        {
+                            tblCuerpo.AddCell(tblPreguntas);
+                        }
+                    }
                 }
-                }
-                document.Add(tbImge);
-                //if (branchImge.Count() % 2 != 0)
-                //{
-                //    PdfPCell imageCell = new PdfPCell();
-                //    imageCell.HorizontalAlignment = 1;
-                //    imageCell.VerticalAlignment = 1;
-                //    imageCell.PaddingBottom = 10f;
-                //    imageCell.Border = 0;
-                //    tbImge.AddCell(imageCell);
-                //}
-
-                PdfPTable tbUB = new PdfPTable(1);
-                PdfPCell cell2 = new PdfPCell(new Phrase("UBICACIÓN", boldFont));
-                cell2.Colspan = 2;
-                cell2.Border = 0;
-                cell2.PaddingBottom = 15f;
-                cell2.HorizontalAlignment = Element.ALIGN_LEFT;
-                tbUB.AddCell(cell2);
-                document.Add(tbUB);
-                var logos = iTextSharp.text.Image.GetInstance(("https://maps.googleapis.com/maps/api/staticmap?zoom=16&size=800x700&maptype=roadmap&markers=color:red%7Clabel:C%7C" + branch.LatitudeBranch + "," + branch.LenghtBranch + "&key=AIzaSyDC0qg4xC1qSUey6eFuhzuA1fJ2ZPFkO84"));
-                logos.Alignment = 1;
-                logos.ScaleAbsoluteHeight(300);
-                logos.ScaleAbsoluteWidth(300);
-                document.Add(logos);
-                BaseColor grey = new BaseColor(128, 128, 128);
-                iTextSharp.text.Font font = FontFactory.GetFont("Arial", 9, iTextSharp.text.Font.NORMAL, grey);
-                //tbl footer
+                document.Add(tblCuerpo);
+                document.Add(Chunk.NEWLINE);
                 PdfPTable footerTbl = new PdfPTable(1);
                 footerTbl.TotalWidth = document.PageSize.Width;
 
