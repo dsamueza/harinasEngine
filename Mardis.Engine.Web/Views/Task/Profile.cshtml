@@ -440,35 +440,52 @@
         //}
         function report() {
             var region = document.querySelector("#capture_censo"); // whole screen
-
-            html2canvas(region, {
-                onrendered: function (canvas) {
-                    var pngUrl = canvas.toDataURL();
-                    var imgdata = pngUrl.replace(/^data:image\/(png|jpg);base64,/, "");
-                    console.log("data")
-                    console.log(imgdata)
-
-                    $.ajax({
-                        url: '/Task/UploadFile',
-                        type: 'post',
-                        data: {
-                            Idtask: getParameterByName('idTask'),
-                            imgs: pngUrl
-                        },
-                        success: function (data) {
-                            if (data != '' || data != null) {
+            $.ajax({
+                url: '/Task/UploadFile',
+                type: 'post',
+                data: {
+                    Idtask: getParameterByName('idTask'),
+                            task: ko.toJSON(vueVM.$data.poll)
+                },
+                success: function (data) {
+                    if (data != '' || data != null) {
 
                         location.href = data;
-                                $.unblockUI();
-                                } else {
-                                    bootbox.alert("Existió un problema, comuníquese con el administrador");
-                                $.unblockUI();
-                            }
-                                    }
-                    });
-                     }
+                        $.unblockUI();
+                    } else {
+                        bootbox.alert("Existió un problema, comuníquese con el administrador");
+                        $.unblockUI();
+                    }
+                }
+            });
+            //html2canvas(region, {
+            //    onrendered: function (canvas) {
+            //        var pngUrl = canvas.toDataURL();
+            //        var imgdata = pngUrl.replace(/^data:image\/(png|jpg);base64,/, "");
+            //        console.log("data")
+            //        console.log(imgdata)
 
-                });
+            //        $.ajax({
+            //            url: '/Task/UploadFile',
+            //            type: 'post',
+            //            data: {
+            //                Idtask: getParameterByName('idTask'),
+            //                imgs: pngUrl
+            //                task: ko.toJSON(vueVM.$data.poll)
+            //            },
+            //            success: function (data) {
+            //                if (data != '' || data != null) {
+
+            //            location.href = data;
+            //                    $.unblockUI();
+            //                    } else {
+            //                        bootbox.alert("Existió un problema, comuníquese con el administrador");
+            //                    $.unblockUI();
+            //                }
+            //                        }
+            //        });
+            //         }
+
 
         }
 

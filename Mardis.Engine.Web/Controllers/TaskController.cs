@@ -204,7 +204,7 @@ namespace Mardis.Engine.Web.Controllers
                 var tasks = _campaignBusiness.GetPaginatedTaskPerCampaignViewModelDinamic(id, pageIndex, pageSize, filters, ApplicationUserCurrent.AccountId);
                 ViewBag.CountTasks = _taskCampaignBusiness._CountAllTasCamping(id, filters).ToString();
                 var _MyTask = _taskCampaignBusiness._ModelTasks(tasks);
-           //     _taskCampaignBusiness.taskunBlock(Guid.Parse(ApplicationUserCurrent.UserId));
+                 _taskCampaignBusiness.taskunBlockAll(Guid.Parse(ApplicationUserCurrent.UserId));
                 if (view == "list")
                 {
                     return View("~/Views/Task/TaskList.cshtml", tasks);
@@ -841,16 +841,15 @@ namespace Mardis.Engine.Web.Controllers
         #endregion
         #region Impresion
         [HttpPost]
-        public JsonResult UploadFile(String Idtask ,String imgs)
+        public JsonResult UploadFile(String Idtask ,String task)
         {
             try
             {
                 var Filepath = _Env.WebRootPath ;
-                var imgg = imgs;
+                var imgg = "";
                 var outs = "";
                 if (Idtask !=null)
-                    outs = _taskCampaignBusiness.PrintFile( Guid.Parse (Idtask), Filepath, ApplicationUserCurrent.AccountId, imgg);
-
+                    outs = _taskCampaignBusiness.PrintFile(Guid.Parse(Idtask), Filepath, ApplicationUserCurrent.AccountId, imgg, task);
 
 
                 return Json(outs);
