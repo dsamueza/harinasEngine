@@ -17,6 +17,7 @@ namespace Mardis.Engine.DataAccess.MardisCore
           //  Campaign = new Campaign();
             Answers = new HashSet<Answer>();
           PollsTaskss = new HashSet<PollsTask>();
+            HistoryTask = new HashSet<historialTareas>();
         }
 
         [Key]
@@ -83,5 +84,6 @@ namespace Mardis.Engine.DataAccess.MardisCore
         public string StatusMigrate { get; set; }
         public ICollection<Answer> Answers { get; set; }
         public ICollection<PollsTask> PollsTaskss { get; set; }
+        public ICollection<historialTareas> HistoryTask { get; set; }
     }
 }

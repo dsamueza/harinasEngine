@@ -14,7 +14,7 @@ namespace Mardis.Engine.Web
                 .UseStartup<Startup>()
                 .Build();
 
-            host.Run();
+             host.Run();
         }
     }
 }

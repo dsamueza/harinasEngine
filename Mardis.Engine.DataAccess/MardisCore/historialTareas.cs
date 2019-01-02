@@ -34,5 +34,9 @@ namespace Mardis.Engine.DataAccess.MardisCore
         [ForeignKey("UserValidator")]
         public User Users { get; set; }
 
+        [ForeignKey("idtask")]
+        public TaskCampaign Tasks { get; set; }
+
+
     }
 }

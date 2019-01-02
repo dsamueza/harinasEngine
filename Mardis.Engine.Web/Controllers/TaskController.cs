@@ -663,6 +663,8 @@ namespace Mardis.Engine.Web.Controllers
                 ,Commentario=x.PollsTaskss.First().Comment
                 ,x.IdAccount,
                 factura=x.PollsTaskss.First().novelty!=null?"SI":"NO"
+                ,
+                id = x.Id
             }).ToList();
             var log = DateTime.Now;
             string LogFile = log.ToString("yyyyMMddHHmmss");
@@ -678,9 +680,45 @@ namespace Mardis.Engine.Web.Controllers
             {
                 // add a new worksheet to the empty workbook
                 ExcelWorksheet worksheet = package.Workbook.Worksheets.Add("Datos");
+
+                ExcelWorksheet worksheet2 = package.Workbook.Worksheets.Add("Observaciones");
+
                 //First add the headers
                 Color colFromHex = System.Drawing.ColorTranslator.FromHtml("#B7DEE8");
 
+
+                worksheet2.Column(1).Width = 20;
+                worksheet2.Column(2).Width = 20;
+                worksheet2.Column(3).Width = 20;
+                worksheet2.Column(4).Width = 50;
+
+                worksheet2.Cells[1, 1].Value = "Cod. Encuesta";
+                worksheet2.Cells[1, 1].Style.Font.Color.SetColor(Color.White);
+                worksheet2.Cells[1, 1].Style.Font.Bold = true;
+                worksheet2.Cells[1, 1].Style.Font.Size = 12;
+                worksheet2.Cells[1, 1].Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
+                worksheet2.Cells[1, 1].Style.Fill.BackgroundColor.SetColor(colFromHex);
+
+                worksheet2.Cells[1, 2].Value = "Estado";
+                worksheet2.Cells[1, 2].Style.Font.Size = 12;
+                worksheet2.Cells[1, 2].Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
+                worksheet2.Cells[1, 2].Style.Fill.BackgroundColor.SetColor(colFromHex);
+                worksheet2.Cells[1, 2].Style.Font.Color.SetColor(Color.White);
+                worksheet2.Cells[1, 2].Style.Font.Bold = true;
+
+                worksheet2.Cells[1, 3].Value = "Fecha";
+                worksheet2.Cells[1, 3].Style.Font.Size = 12;
+                worksheet2.Cells[1, 3].Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
+                worksheet2.Cells[1, 3].Style.Fill.BackgroundColor.SetColor(colFromHex);
+                worksheet2.Cells[1, 3].Style.Font.Color.SetColor(Color.White);
+                worksheet2.Cells[1, 3].Style.Font.Bold = true;
+
+                worksheet2.Cells[1, 4].Value = "Observaciones";
+                worksheet2.Cells[1, 4].Style.Font.Size = 12;
+                worksheet2.Cells[1, 4].Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
+                worksheet2.Cells[1, 4].Style.Fill.BackgroundColor.SetColor(colFromHex);
+                worksheet2.Cells[1, 4].Style.Font.Color.SetColor(Color.White);
+                worksheet2.Cells[1, 4].Style.Font.Bold = true;
 
                 worksheet.Column(1).Width = 20;
                 worksheet.Column(2).Width = 20;
@@ -799,6 +837,7 @@ namespace Mardis.Engine.Web.Controllers
                     worksheet.Cells[1, 6].Style.Font.Bold = true;
                 }
                 int rows = 2;
+                int rowsobs = 2;
                 foreach (var t in listado)
                 {
                     worksheet.Cells[rows, 1].Value = t.Canton;
@@ -823,11 +862,32 @@ namespace Mardis.Engine.Web.Controllers
                         worksheet.Cells[rows, 6].Value = t.factura;
                     }
                     rows++;
+                  
                 }
-                //Add values
+
+                var _model = from x in _taskCampaignBusiness.GetHistoryCampign(idCa)
+                             select new { date = x.DateModification, status = x.StatusTask.Name, user = x.Users.Email, comment = x.CommentTaskNoImplemented,code=x.Tasks.Code,x.idtask };
+          
+                if (_model != null)
+                {
+                    _model = _model.OrderByDescending(x => x.idtask).ToList();
+
+                }
+                foreach (var h in _model)
+                {
+
+                    worksheet2.Cells[rowsobs, 1].Value = h.code;
+                    worksheet2.Cells[rowsobs, 2].Value = h.status;
+                    worksheet2.Cells[rowsobs, 3].Value = h.date;
+                    worksheet2.Cells[rowsobs, 3].Style.Numberformat.Format = "yyyy-mm-dd HH:mm";
+                    worksheet2.Cells[rowsobs, 4].Value = h.comment;
+                    rowsobs++;
+                }
+
+                // add a new worksheet to the empty workbook
 
 
-                package.Save(); //Save the workbook.
+                package.Save();
             }
             var result = PhysicalFile(Path.Combine(sWebRootFolder, sFileName), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
 

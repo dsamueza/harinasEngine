@@ -492,6 +492,13 @@ namespace Mardis.Engine.DataObject.MardisCore
                 .Include(u=>u.Users)
                 .Where(x => x.idtask == Idtask && x.UserValidator!=null).ToList();
         }
+        public IList<historialTareas> GetDataHystoryall(Guid idcampaign)
+        {
+            return Context.HistoryTasks.Include(s => s.StatusTask)
+                .Include(u => u.Users)
+                .Include(t=>t.Tasks)
+                .Where(x => x.Tasks.IdCampaign== idcampaign && x.UserValidator != null && x.Tasks.StatusRegister== CStatusRegister.Active).ToList();
+        }
 
 
         #endregion
