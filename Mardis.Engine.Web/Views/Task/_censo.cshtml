@@ -51,19 +51,18 @@
                                                         <div class="panel-body" style="padding-bottom: 5px; padding-top: 5px;">
 
                                                             <input v-info-sender v-if="question.CodeTypePoll=='OPEN'" v-model="question.Answer" class="form-control inputmardis subsec" v-bind:id="question.Id" v-bind:name="question.IdAnswer" style="margin: 0 auto; float: none; background-color: #cccccc;" onchange="valorseleccion(this)" />
-                                                            @*<select v-info-sender v-if="question.CodeTypePoll=='ONE'" class="inputmardis subsec" v-model="question.IdQuestionDetail" v-bind:id="question.Id" v-bind:name="question.IdAnswer" style="margin: 0 auto; float: none;" onchange="valorseleccion(this)">
-            <option v-for="answer in question.QuestionDetailCollection" v-bind:value="answer.Id">{{answer.Answer}}</option>
-        </select>*@
-                                                            <v-autocomplete v-if="question.CodeTypePoll=='ONE'"
+                                                            <select v-info-sender v-if="question.CodeTypePoll=='ONE'" class="inputmardis subsec" v-model="question.IdQuestionDetail" v-bind:id="question.Id" v-bind:name="question.IdAnswer" style="margin: 0 auto; float: none;" onchange="valorseleccion(this)">
+                                                                <option v-for="answer in question.QuestionDetailCollection" v-bind:value="answer.Id">{{answer.Answer}}</option>
+                                                            </select>
+                                                            @*<v-autocomplete v-if="question.CodeTypePoll=='ONE'"
                                                                             v-model="question.IdQuestionDetail"
-                                                                            :disabled="isUpdating"
                                                                             :items="question.QuestionDetailCollection"
                                                                             box
                                                                             item-text="Answer"
                                                                             item-value="Id"
                                                                             class="form-control inputmardis subsec"
                                                                             style="margin: 0 auto; float: none; background-color: #cccccc;">
-                                                            </v-autocomplete>
+                                                            </v-autocomplete>*@
                                                         </div>
                                                     </div>
                                                 </div>
