@@ -881,6 +881,7 @@ namespace Mardis.Engine.Web.Controllers
                     worksheet2.Cells[rowsobs, 3].Value = h.date;
                     worksheet2.Cells[rowsobs, 3].Style.Numberformat.Format = "yyyy-mm-dd HH:mm";
                     worksheet2.Cells[rowsobs, 4].Value = h.comment;
+
                     rowsobs++;
                 }
 

@@ -2840,7 +2840,10 @@ namespace Mardis.Engine.Business.MardisCore
         public string _IstaskBlock(Guid user, Guid idtask,string email)
         {
 
-            
+            var profileuser = _userDao.GetUserById(user).IdProfile;
+
+
+            if (profileuser == Guid.Parse("69CA663D-42A3-45B9-8720-C58C3C24A0DA")) {
             var _securityModel = _redisCache.Get<List<ViewSecurityTasksModel>>("UsersbyTasks_pruebas");
             if (_securityModel == null)
             {
@@ -2885,7 +2888,8 @@ namespace Mardis.Engine.Business.MardisCore
                 }
 
             }
-           
+            }
+            return "";
         }
 
         public bool taskunBlock(Guid user,Guid idtask)

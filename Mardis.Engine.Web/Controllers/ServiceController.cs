@@ -262,13 +262,27 @@ namespace Mardis.Engine.Web.Controllers
         //public IActionResult Delete(string service)
         //{
         //    var idService = Guid.Parse(_protector.Unprotect(service));
-   
+
         //    _serviceBusiness.DeleteService(idService, ApplicationUserCurrent.AccountId);
         //    return RedirectToAction("Index");
         //}
 
         #endregion
 
+        #region Cambiar preguntas de conceptos
+
+
+        [HttpGet]
+        public IActionResult ConceptQuestion(string typeService, string customer)
+        {
+            var model = _serviceBusiness.GetIndexPageInformation(typeService, customer, _protector,
+                ApplicationUserCurrent.AccountId);
+
+            return View(model);
+        }
+
+
+        #endregion
         private void LoadViewData(string idCustomer, string idService)
         {
             ViewBag.Types = _typeServiceBusiness.GetTypeBusinessList();
