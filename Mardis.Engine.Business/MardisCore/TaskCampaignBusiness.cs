@@ -752,16 +752,12 @@ namespace Mardis.Engine.Business.MardisCore
                     var itemResult = new List<AnswerDetailSecondLevel>();
                     var Model = _data;
                     itemResult = Mapper.Map<List<AnswerDetailSecondLevel>>(Model);
-
-
                     Context.AnswerDetailSecondLevels.UpdateRange(itemResult);
                     Context.SaveChanges();
                     var _isfac = Context.AnswerDetails.Include(tb=>tb.Answer).Where(x => x.Id.Equals(Model.First().AnswerDetailId));
                     if (_isfac.Count() > 0) {
-
                         var idtask = _isfac.First().Answer.IdTask;
                         var idquestion = _isfac.First().Answer.IdQuestion;
-
                         var distintc = (from a in Context.Answers
                                         join b in Context.AnswerDetails on a.Id equals b.IdAnswer
                                         join c in Context.AnswerDetailSecondLevels on b.Id equals c.AnswerDetailId
@@ -770,12 +766,9 @@ namespace Mardis.Engine.Business.MardisCore
                                             c.Factura
                                         })
                            .Distinct()   ;
-
                         var tasksmodel = Context.PollTasks.Where(x => x.idtask.Equals(idtask)).First();
                         if (distintc.Count() > 1)
                         {
-
-                            
                             tasksmodel.novelty = null;
                             Context.PollTasks.Update(tasksmodel);
                             Context.SaveChanges();
@@ -795,23 +788,13 @@ namespace Mardis.Engine.Business.MardisCore
                                 Context.SaveChanges();
                                 _res = 1;
                             }
-
-
                         }
-                                     
-                    
                     }
-                  
-                       
-
                     foreach (var _item in _data)
                     {
-
-
                         Context._AnswerDetailSecondLevelConcepts.RemoveRange(Context._AnswerDetailSecondLevelConcepts.Where(a => a.AnswerDetailSecondLevelid == _item.Id));
                         Context.SaveChanges();
                         foreach (var concept in _item.QuestionComplete) {
-
                             _AnswerDetailSecondLevelConcept _modelInsert = new _AnswerDetailSecondLevelConcept();
                             var _questionDetail = Context.QuestionDetails.Where(x => x.Id.Equals(Guid.Parse(concept)));
                             if (_questionDetail.Count() > 0) {
@@ -821,26 +804,51 @@ namespace Mardis.Engine.Business.MardisCore
                                 _modelInsert.CodeConcept = _questionDetail.First().Idconcept;
                                 Context._AnswerDetailSecondLevelConcepts.Add(_modelInsert);
                                 Context.SaveChanges();
-
-
                             }
-
                         }
-
                     }
-
                     transaction.Commit();
                     return _res;
                 }
                 catch (Exception)
                 {
+                    transaction.Rollback();
+                    return -1;
+                }
+            }
+        }
 
+        public int saveDinamicCambioHarinas(List<MyTaskQuestionDetailsViewModel> _data)
+        {
+            using (var transaction = Context.Database.BeginTransaction())
+            {
+                try
+                {
+                    var marcaHarina = Context.QuestionDetails.Where(qd => qd.Id.ToString() == _data[0].AnwerDetailSecondModel.First().QuestionComplete.First()).First().Answer;
+                    var idAnswerDetail = _data[0].AnwerDetailSecondModel.First().AnswerDetailId;
+                    var idQuestionDetail = _data[0].AnwerDetailSecondModel.First().QuestionComplete.First();
+                    var idAnswerDetailSecondLevel = _data[0].AnwerDetailSecondModel.First().Id;
+
+                    var itemAnswerDetail = Context.AnswerDetails.Where(ad => ad.Id == idAnswerDetail).First();
+                    itemAnswerDetail.IdQuestionDetail = new Guid(idQuestionDetail);
+
+                    var itemAnswerDetailSecondLevel = Context.AnswerDetailSecondLevels.Where(adsl => adsl.Id == idAnswerDetailSecondLevel).First();
+                    itemAnswerDetailSecondLevel.Marca = marcaHarina;
+
+                    int _res = 0;
+                    Context.SaveChanges();
+                    transaction.Commit();
+                    return _res;
+                }
+                catch (Exception ex)
+                {
                     transaction.Rollback();
                     return -1;
                 }
             }
 
         }
+
         #endregion
         /*Crear Respuestas para gurdar informacion por seccion*/
         #region AnswerQuestion

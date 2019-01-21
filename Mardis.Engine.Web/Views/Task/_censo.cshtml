@@ -51,10 +51,19 @@
                                                         <div class="panel-body" style="padding-bottom: 5px; padding-top: 5px;">
 
                                                             <input v-info-sender v-if="question.CodeTypePoll=='OPEN'" v-model="question.Answer" class="form-control inputmardis subsec" v-bind:id="question.Id" v-bind:name="question.IdAnswer" style="margin: 0 auto; float: none; background-color: #cccccc;" onchange="valorseleccion(this)" />
-
-                                                            <select v-info-sender v-if="question.CodeTypePoll=='ONE'" class="inputmardis subsec" v-model="question.IdQuestionDetail" v-bind:id="question.Id" v-bind:name="question.IdAnswer" style="margin: 0 auto; float: none;" onchange="valorseleccion(this)">
-                                                                <option v-for="answer in question.QuestionDetailCollection" v-bind:value="answer.Id">{{answer.Answer}}</option>
-                                                            </select>
+                                                            @*<select v-info-sender v-if="question.CodeTypePoll=='ONE'" class="inputmardis subsec" v-model="question.IdQuestionDetail" v-bind:id="question.Id" v-bind:name="question.IdAnswer" style="margin: 0 auto; float: none;" onchange="valorseleccion(this)">
+            <option v-for="answer in question.QuestionDetailCollection" v-bind:value="answer.Id">{{answer.Answer}}</option>
+        </select>*@
+                                                            <v-autocomplete v-if="question.CodeTypePoll=='ONE'"
+                                                                            v-model="question.IdQuestionDetail"
+                                                                            :disabled="isUpdating"
+                                                                            :items="question.QuestionDetailCollection"
+                                                                            box
+                                                                            item-text="Answer"
+                                                                            item-value="Id"
+                                                                            class="form-control inputmardis subsec"
+                                                                            style="margin: 0 auto; float: none; background-color: #cccccc;">
+                                                            </v-autocomplete>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -104,9 +113,16 @@
                                                             <div v-bind:class="classlenght(answer.Weight)">
                                                                 <div class="form-check">
                                                                     <label for="answer.Id" class="col-sm-6 mardis-check">
-
                                                                         <span>{{ answer.Answer }}</span>
-                                                                        <a href="#" v-on:click="OpenModalQuestionDinamic(answer.AnwerDetailSecondModel)" style="font-size-adjust: 0.4;" class="pull-right"><span class="fa fa-plus-square" style="font-size: 15px;  padding-left: 10px;"><span> </span></a>
+                                                                        <a href="#" v-on:click="OpenModalQuestionDinamic(answer.AnwerDetailSecondModel)" style="font-size-adjust: 0.4;" class="pull-right">
+                                                                            <span class="fa fa-plus-square" style="font-size: 10px;  padding-left: 5px;">
+                                                                            </span>
+                                                                        </a>
+
+                                                                        <a href="#" v-on:click="OpenModalQuestionDinamicCambioHarina(answer)" style="font-size-adjust: 0.4;" class="pull-right">
+                                                                            <span class="fa fa-adjust" style="font-size: 10px;  padding-left: 5px;">
+                                                                            </span>
+                                                                        </a>
                                                                     </label>
                                                                 </div>
                                                             </div>

@@ -165,6 +165,8 @@ function SaveQuestionRepeat() {
 
         },
 
+
+
         error: function () {
 
             $.unblockUI();
@@ -172,7 +174,74 @@ function SaveQuestionRepeat() {
         ,
         async: true, // La petición es síncrona
     });
- }
+}
+
+function SaveQuestionRepeatCambioHarinas() {
+    $.blockUI({ message: "" });
+    $('#btndinamic').prop("disabled", true);
+    $('#idsavedinamic').show();
+    idsavedinamic
+    $.ajax({
+        url: '/Task/SaveCambioHarinas',
+        type: "POST",
+        content: "application/json; charset=utf-8",
+        data: {
+            Idtask: getParameterByName('idTask')
+            , tasks: ko.toJSON(vueVM.$data.poll)
+            , dinamic: ko.toJSON(vueVM.$data.harinas)
+            , idMarca: vueVM.$data.harinas[0].QuestionComplete
+        },
+        success: function (data) {
+            $.unblockUI();
+            $("#btndinamic").prop("disabled", false);
+
+            $('#idsavedinamic').hide();
+            if (data == "0") {
+                $.notify({
+                    title: '<strong>Información :</strong>',
+                    message: 'La información fue almacenada correctamente'
+                });
+                $('#IdQuestionDinamicCambioHarina').modal('hide');
+                location.reload();
+            }
+            if (data == "1") {
+                $.notify({
+                    title: '<strong>Información :</strong>',
+                    message: 'La información fue almacenada correctamente'
+                });
+                vueVM.$data.poll.novelty = "CON FACTURA";
+                $('#IdQuestionDinamicCambioHarina').modal('hide');
+                location.reload();
+            }
+            if (data == "-1") {
+                $.notify({
+                    title: '<strong>Información :</strong>',
+                    message: 'La información no pudo se guarda. Intente de nuevo o contactese con el administrador'
+                });
+            }
+            if (data == "2") {
+                $.notify({
+                    title: '<strong>Información :</strong>',
+                    message: 'La información fue almacenada correctamente'
+                });
+                vueVM.$data.poll.novelty = null;
+                $('#IdQuestionDinamicCambioHarina').modal('hide');
+                location.reload();
+            }
+
+        },
+
+
+
+        error: function () {
+
+            $.unblockUI();
+        }
+        ,
+        async: true, // La petición es síncrona
+    });
+}
+
 Vue.directive('for-events', {
     bind: function (el, binding, vnode) {
         el.addEventListener("change", function () {
@@ -305,16 +374,23 @@ function ApplyBindingTaskService(data) {
                 SaveQuestionRepeat();
 
             },
-            OpenModalEncuesta: function (e) {
+            acceptDinamicCambioHarina: function () {
+                SaveQuestionRepeatCambioHarinas();
 
+            },
+            OpenModalEncuesta: function (e) {
                 $('#responsive').modal('show');
             },
             OpenModalQuestionDinamic: function (_model) {
                 this.harinas.splice(0, 1);
-              
                 this.harinas.push(_model[0])
-             
                 $('#IdQuestionDinamic').modal('show');
+            },
+            OpenModalQuestionDinamicCambioHarina: function (_model) {
+                this.harinas.splice(0, 1);
+                this.harinas.push(_model)
+
+                $('#IdQuestionDinamicCambioHarina').modal('show');
             },
             classlenght: function (length) {
                 var bindclass = "col-sm-3";
