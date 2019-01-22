@@ -203,8 +203,9 @@ namespace Mardis.Engine.Web.Controllers
                 var filters = GetFilters(filterValues, deleteFilter);
                 var tasks = _campaignBusiness.GetPaginatedTaskPerCampaignViewModelDinamic(id, pageIndex, pageSize, filters, ApplicationUserCurrent.AccountId);
                 ViewBag.CountTasks = _taskCampaignBusiness._CountAllTasCamping(id, filters).ToString();
+                ViewBag.idcampaign = idCampaign;
                 var _MyTask = _taskCampaignBusiness._ModelTasks(tasks);
-                 _taskCampaignBusiness.taskunBlockAll(Guid.Parse(ApplicationUserCurrent.UserId));
+                _taskCampaignBusiness.taskunBlockAll(Guid.Parse(ApplicationUserCurrent.UserId));
                 if (view == "list")
                 {
                     return View("~/Views/Task/TaskList.cshtml", tasks);
@@ -218,7 +219,7 @@ namespace Mardis.Engine.Web.Controllers
                 return RedirectToAction("Index", "StatusCode", new { statusCode = 1 });
             }
         }
-       
+
 
         private void GetMerchants()
         {
@@ -299,13 +300,13 @@ namespace Mardis.Engine.Web.Controllers
         }
 
         [HttpGet]
-        public IActionResult Profile(Guid idTask)
+        public IActionResult Profile(Guid idTask, string campaign = null)
         {
             try
             {
                 ViewData[CTask.IdRegister] = idTask.ToString();
-                ViewData[CTask.IsUse] =  _taskCampaignBusiness._IstaskBlock(Guid.Parse(ApplicationUserCurrent.UserId), idTask,ApplicationUserCurrent.UserName);
-                ViewData["taskcampaign"] = GetSessionVariable("idCampaign");
+                ViewData[CTask.IsUse] = _taskCampaignBusiness._IstaskBlock(Guid.Parse(ApplicationUserCurrent.UserId), idTask, ApplicationUserCurrent.UserName);
+                ViewData["taskcampaign"] = campaign;
                 LoadSelectItems();
 
                 return View();
@@ -406,6 +407,7 @@ namespace Mardis.Engine.Web.Controllers
         [HttpPost]
         public JsonResult SaveCambioHarinas(String Idtask, String tasks, String dinamic, List<String> idMarca)
         {
+            List<String> result = new List<String>();
             try
             {
                 if (idMarca.Count() > 0)
@@ -420,13 +422,17 @@ namespace Mardis.Engine.Web.Controllers
                 else
                 {
                     _logger.LogError(new EventId(0, "Error Index"), "EL Campo de la Harina Actual es Obligatorio");
-                    return Json("-1");
+                    result.Add("-1");
+                    result.Add((new List<MytaskAnwerDetailSecondModel>()).ToString());
+                    return Json(result);
                 }
             }
             catch (Exception ex)
             {
                 _logger.LogError(new EventId(0, "Error Index"), ex.Message);
-                return Json("-1");
+                result.Add("-1");
+                result.Add((new List<MytaskAnwerDetailSecondModel>()).ToString());
+                return Json(result);
             }
         }
 

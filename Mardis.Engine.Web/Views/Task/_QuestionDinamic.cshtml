@@ -135,7 +135,7 @@
                         <div class="box-body">
                             <div class="form-group col-md-12">
                                 <label for="exampleInputEmail1" class="txtHarinas">Harina Actual</label>
-                                <input type="text" class="form-control" v-model="harinas[0].Answer">
+                                <input type="text" class="form-control" v-model="harinas[0].Answer" disabled>
                             </div>
 
                             <label for="exampleInputPassword1" class="txtHarinas">Harina Nueva</label>
@@ -143,44 +143,47 @@
                                 <div v-for="(section, i) in service.ServiceDetailCollection">
                                     <div v-if="section.GroupName=='modalCambioHarinas'">
                                         <div v-for="(question, j) in section.QuestionCollection">
-                                            <div v-bind:class="classlenght(question.Weight)" v-if="question.CodeTypePoll=='MANY' &&  question.IdQuestionDetail==harinas[0].Id">
-                                                <v-autocomplete v-model="harinas[0].QuestionComplete"
-                                                                :disabled="isUpdating"
-                                                                :items="question.QuestionDetailCollection"
-                                                                box
-                                                                chips
-                                                                color="blue-grey lighten-2"
-                                                                item-text="Answer"
-                                                                item-value="Id"
-                                                                required>
-                                                    <template slot="selection" slot-scope="data">
-                                                        <v-chip :selected="data.selected">
-                                                            {{ data.item.Answer }}
-                                                        </v-chip>
-                                                    </template>
-                                                    <template slot="item" slot-scope="data">
-                                                        <template v-if="typeof data.item !== 'object'">
-                                                            <v-list-tile-content v-text="data.item"></v-list-tile-content>
-                                                        </template>
-                                                        <template v-else>
-                                                            <v-list-tile-content>
-                                                                <v-list-tile-title v-html="data.item.Answer"></v-list-tile-title>
-                                                            </v-list-tile-content>
-                                                        </template>
-                                                    </template>
-                                                </v-autocomplete>
+                                            <div v-bind:class="classlenght(question.Weight)" v-if="question.CodeTypePoll=='MANY'">
+                                                <div v-for="(detail, k) in question.QuestionDetailCollection">
+                                                    <div v-bind:class="classlenght(question.Weight)"
+                                                         v-if="detail.Checked==true && detail.Id==harinas[0].Id">
+                                                        <v-autocomplete v-model="harinas[0].QuestionComplete"
+                                                                        :disabled="isUpdating"
+                                                                        :items="question.QuestionDetailCollection"
+                                                                        box
+                                                                        chips
+                                                                        color="blue-grey lighten-2"
+                                                                        item-text="Answer"
+                                                                        item-value="Id"
+                                                                        required>
+                                                            <template slot="selection" slot-scope="data">
+                                                                <v-chip :selected="data.selected">
+                                                                    {{ data.item.Answer }}
+                                                                </v-chip>
+                                                            </template>
+                                                            <template slot="item" slot-scope="data">
+                                                                <template v-if="typeof data.item !== 'object'">
+                                                                    <v-list-tile-content v-text="data.item"></v-list-tile-content>
+                                                                </template>
+                                                                <template v-else>
+                                                                    <v-list-tile-content>
+                                                                        <v-list-tile-title v-html="data.item.Answer"></v-list-tile-title>
+                                                                    </v-list-tile-content>
+                                                                </template>
+                                                            </template>
+                                                        </v-autocomplete>
+                                                    </div>
+                                                </div>
+
                                             </div>
                                         </div>
-
                                     </div>
                                 </div>
                             </div>
+                            <div class="box-footer ">
+                                <button type="submit" id="btndinamic" class="btn bg-navy btn-flat margin  pull-right" v-on:click="acceptDinamicCambioHarina(i,j,k)">Guardar</button>
+                            </div>
                         </div>
-                    </div>
-                    <div class="box-footer ">
-                        <button type="submit" id="btndinamic" class="btn bg-navy btn-flat margin  pull-right" v-on:click="acceptDinamicCambioHarina">Guardar</button>
                     </div>
                 </div>
             </div>
-        </div>
-    </div>

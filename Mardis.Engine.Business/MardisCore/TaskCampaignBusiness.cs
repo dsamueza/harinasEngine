@@ -818,10 +818,11 @@ namespace Mardis.Engine.Business.MardisCore
             }
         }
 
-        public int saveDinamicCambioHarinas(List<MyTaskQuestionDetailsViewModel> _data)
+        public List<String> saveDinamicCambioHarinas(List<MyTaskQuestionDetailsViewModel> _data)
         {
             using (var transaction = Context.Database.BeginTransaction())
             {
+                List<String> result = new List<String>();
                 try
                 {
                     var marcaHarina = Context.QuestionDetails.Where(qd => qd.Id.ToString() == _data[0].AnwerDetailSecondModel.First().QuestionComplete.First()).First().Answer;
@@ -835,15 +836,22 @@ namespace Mardis.Engine.Business.MardisCore
                     var itemAnswerDetailSecondLevel = Context.AnswerDetailSecondLevels.Where(adsl => adsl.Id == idAnswerDetailSecondLevel).First();
                     itemAnswerDetailSecondLevel.Marca = marcaHarina;
 
+                    var _model = _answerDetailDao.GetAnswerDetailSecond(idAnswerDetail);
                     int _res = 0;
+
                     Context.SaveChanges();
                     transaction.Commit();
-                    return _res;
+
+                    result.Add(_res.ToString());
+                    result.Add(JSonConvertUtil.Convert(_model));
+                    return result;
                 }
                 catch (Exception ex)
                 {
                     transaction.Rollback();
-                    return -1;
+                    result.Add("-1");
+                    result.Add((new List<MytaskAnwerDetailSecondModel>()).ToString());
+                    return result;
                 }
             }
 
