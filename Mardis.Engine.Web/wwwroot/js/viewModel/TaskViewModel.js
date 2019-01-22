@@ -341,8 +341,8 @@ function ApplyBindingTaskService(data) {
                 // change of userinput, do something
                 alert(event.id);
             },
-            moment: function () {
-                return moment();
+            moment: function (e) {
+                return moment(e);
             },
             openModal: function () {
                 return openModal();

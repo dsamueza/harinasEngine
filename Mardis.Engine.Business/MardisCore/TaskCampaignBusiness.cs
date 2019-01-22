@@ -1346,6 +1346,29 @@ namespace Mardis.Engine.Business.MardisCore
                 tblCuerpo.AddCell(cltitulo);
                 tblCuerpo.WidthPercentage = 100;
                 iTextSharp.text.Font _standardFont = new iTextSharp.text.Font(iTextSharp.text.Font.FontFamily.HELVETICA, 9, iTextSharp.text.Font.NORMAL, BaseColor.BLACK);
+                //  Datos de la encuestas
+
+                PdfPTable tblInformación = new PdfPTable(2);
+                PdfPCell clfecha = null;
+                var phraseFecha = new Phrase();
+                var phraseEncuestador = new Phrase();
+                phraseFecha.Add(new Chunk("FECHA : ", boldFont));
+                phraseFecha.Add(new Chunk(model.StartDate.ToString(), _standardFont));
+                clfecha = new PdfPCell(phraseFecha);
+                clfecha.BorderWidth = 0;
+                clfecha.PaddingTop = 10;
+                clfecha.PaddingBottom = 10;
+                tblInformación.AddCell(clfecha);
+                 clfecha = null;
+                phraseFecha = new Phrase();
+                phraseFecha.Add(new Chunk("ENCUESTADOR : ", boldFont));
+                phraseFecha.Add(new Chunk(model.pollster, _standardFont));
+                clfecha = new PdfPCell(phraseFecha);
+                clfecha.BorderWidth = 0;
+                clfecha.PaddingTop = 10;
+                clfecha.PaddingBottom = 10;
+                tblInformación.AddCell(clfecha);
+                tblCuerpo.AddCell(tblInformación);
                 int i = 1;
                 foreach (var section in model.ServiceCollection.First().ServiceDetailCollection)
                 {
@@ -1886,11 +1909,44 @@ namespace Mardis.Engine.Business.MardisCore
                 logos.ScaleAbsoluteHeight(300);
                 logos.ScaleAbsoluteWidth(300);
                 document.Add(logos);
+                document.Add(Chunk.NEWLINE);
+                Phrase titulo = new Phrase("OBSERVACIONES", boldFont2);
+
+                PdfPTable tbUBO = new PdfPTable(1);
+                PdfPCell cellOB = new PdfPCell(titulo);
+                cellOB.Colspan = 2;
+                cellOB.Border = 0;
+                cellOB.PaddingBottom = 15f;
+                cellOB.HorizontalAlignment = Element.ALIGN_LEFT;
+                tbUBO.AddCell(cellOB);
+                document.Add(tbUBO);
+
+
+
+                var observaciones = _taskCampaignDao.GetDataHystory(model.IdTask);
+                if (observaciones.Count > 0)
+                {
+
+ 
+                    var data = from obs in observaciones
+                               orderby obs.DateModification descending
+                               select obs.CommentTaskNoImplemented;
+
+                    PdfPTable tbUBOV = new PdfPTable(1);
+                    PdfPCell cellOBV = new PdfPCell(new Phrase(data.First().ToString(), _standardFont));
+                    cellOBV.Colspan = 2;
+                    cellOBV.Border = 0;
+                    cellOBV.PaddingBottom = 15f;
+                    cellOBV.HorizontalAlignment = Element.ALIGN_LEFT;
+                    tbUBOV.AddCell(cellOBV);
+                    document.Add(tbUBOV);
+            
+                }
+
                 PdfPTable footerTbl = new PdfPTable(1);
                 footerTbl.TotalWidth = document.PageSize.Width;
 
-
-
+                
                 //numero de la page
 
                 //Chunk myFooter = new Chunk("Página " + (document.PageNumber), FontFactory.GetFont(FontFactory.HELVETICA_OBLIQUE, 8, grey));
