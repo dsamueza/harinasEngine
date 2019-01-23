@@ -783,7 +783,7 @@ namespace Mardis.Engine.Business.MardisCore
 
             return true;
         }
-     
+
         public void Save(ServiceRegisterViewModel model, Guid idAccount)
         {
             var service = ConvertService.FromServiceRegisterViewModel(model);
@@ -808,8 +808,8 @@ namespace Mardis.Engine.Business.MardisCore
                 //_serviceDao.Context.SaveChanges();
                 //_serviceDao.InsertOrUpdate(exService);
                 UpdateEntireService(exService, idAccount);
-                foreach(var item in _serviceDao.Getcampaign(exService.Id)) { 
-                _redisCache.flush("CampaignServices:" + item.IdCampaign.ToString());
+                foreach (var item in _serviceDao.Getcampaign(exService.Id)) {
+                    _redisCache.flush("CampaignServices:" + item.IdCampaign.ToString());
                 }
             }
 
@@ -817,7 +817,7 @@ namespace Mardis.Engine.Business.MardisCore
         }
 
         #region xml
-        public int GenerateXml(string urlXml,Guid idaccount , string name)
+        public int GenerateXml(string urlXml, Guid idaccount, string name)
 
         {
 
@@ -826,99 +826,99 @@ namespace Mardis.Engine.Business.MardisCore
             try
             {
 
-           
-            using (SpreadsheetDocument doc = SpreadsheetDocument.Open(path, false))
-            {
-                Sheet sheet = (Sheet)doc.WorkbookPart.Workbook.Sheets.ChildElements.GetItem(0);
-                Sheet sheets2 = (Sheet)doc.WorkbookPart.Workbook.Sheets.ChildElements.GetItem(1);
-                string comienzo = "";
-                string nomenglatura = "";
-               string comienzoseccion = "";
-               string nomenglatursubseccion = "";
+
+                using (SpreadsheetDocument doc = SpreadsheetDocument.Open(path, false))
+                {
+                    Sheet sheet = (Sheet)doc.WorkbookPart.Workbook.Sheets.ChildElements.GetItem(0);
+                    Sheet sheets2 = (Sheet)doc.WorkbookPart.Workbook.Sheets.ChildElements.GetItem(1);
+                    string comienzo = "";
+                    string nomenglatura = "";
+                    string comienzoseccion = "";
+                    string nomenglatursubseccion = "";
                     string finseccion = "";
 
                     bool Dynamic = false;
-                Boolean save = false;
-                Worksheet worksheet = (doc.WorkbookPart.GetPartById(sheet.Id) as WorksheetPart).Worksheet;
-                IEnumerable<Row> rows = worksheet.GetFirstChild<SheetData>().Descendants<Row>();
-                int j = 0;
-                foreach (Row row in rows)
-                {
-                    j++;
-                    if (row.RowIndex.Value != 1)
+                    Boolean save = false;
+                    Worksheet worksheet = (doc.WorkbookPart.GetPartById(sheet.Id) as WorksheetPart).Worksheet;
+                    IEnumerable<Row> rows = worksheet.GetFirstChild<SheetData>().Descendants<Row>();
+                    int j = 0;
+                    foreach (Row row in rows)
                     {
-
-                        StructXmlModel structXmlModel = new StructXmlModel();
-                        StructXmlModelQuestion structXmlModelQ = new StructXmlModelQuestion();
-                        StructXmlSectionModel _section = new StructXmlSectionModel();
-                        structXmlModel.Question = new List<StructXmlModelQuestion>();
-          
-                        int i = 0;
-                        if (comienzo != "begin group")
+                        j++;
+                        if (row.RowIndex.Value != 1)
                         {
-                            //Detalles Servicios
-                            foreach (Cell cell in row.Descendants<Cell>())
-                            {
-                                i++;
-                                switch (i)
-                                {
-                                      
-                                    case 1:
-                                        if (GetCellValue(doc, cell) == "begin repeat")
-                                        {
 
-                                            Dynamic = true;
-                                        }
+                            StructXmlModel structXmlModel = new StructXmlModel();
+                            StructXmlModelQuestion structXmlModelQ = new StructXmlModelQuestion();
+                            StructXmlSectionModel _section = new StructXmlSectionModel();
+                            structXmlModel.Question = new List<StructXmlModelQuestion>();
+
+                            int i = 0;
+                            if (comienzo != "begin group")
+                            {
+                                //Detalles Servicios
+                                foreach (Cell cell in row.Descendants<Cell>())
+                                {
+                                    i++;
+                                    switch (i)
+                                    {
+
+                                        case 1:
+                                            if (GetCellValue(doc, cell) == "begin repeat")
+                                            {
+
+                                                Dynamic = true;
+                                            }
                                             if (GetCellValue(doc, cell) == "begin group")
                                             {
-                                               
-                                                    save = true;
-                                                    comienzo = "begin group";
-                                                    structXmlModel.IsDynamic = Dynamic;
-                                                    structXmlModel.id = GetCellValue(doc, cell);
-                                              
-                                               
-                                                
-                                        }
-                                            break;
-                                    case 2:
-                                        if (structXmlModel.id == "begin group")
-                                        {
-                                             
-                                                    structXmlModel.valueText = GetCellValue(doc, cell);
-                                                    nomenglatura = structXmlModel.valueText;
-                                                    structXmlModel.Question.Add(structXmlModelQ);
-                                               
-                                                
 
-                                             
-                                        }
-                                        break;
-                                    case 3:
-                                        if (structXmlModel.id == "begin group")
-                                          structXmlModel.QuestionText = GetCellValue(doc, cell);
-                                        break;
-                                 
+                                                save = true;
+                                                comienzo = "begin group";
+                                                structXmlModel.IsDynamic = Dynamic;
+                                                structXmlModel.id = GetCellValue(doc, cell);
+
+
+
+                                            }
+                                            break;
+                                        case 2:
+                                            if (structXmlModel.id == "begin group")
+                                            {
+
+                                                structXmlModel.valueText = GetCellValue(doc, cell);
+                                                nomenglatura = structXmlModel.valueText;
+                                                structXmlModel.Question.Add(structXmlModelQ);
+
+
+
+
+                                            }
+                                            break;
+                                        case 3:
+                                            if (structXmlModel.id == "begin group")
+                                                structXmlModel.QuestionText = GetCellValue(doc, cell);
+                                            break;
+
 
                                     }
-                                    if(i>4) break;
+                                    if (i > 4) break;
                                 }
-                            if (comienzo == "begin group" && save)
-                            {
-                                save = false;
-                                Dynamic = false;
-                                slStructXmlModel.Add(structXmlModel);
-                            }
-                        }
-                        else
-                        {
-                            //Preguntas
-                            StructXmlModelQuestion questionList = new StructXmlModelQuestion();
-                            foreach (Cell cell in row.Descendants<Cell>())
-                            {
-                                i++;
-                                if (nomenglatura != "")
+                                if (comienzo == "begin group" && save)
                                 {
+                                    save = false;
+                                    Dynamic = false;
+                                    slStructXmlModel.Add(structXmlModel);
+                                }
+                            }
+                            else
+                            {
+                                //Preguntas
+                                StructXmlModelQuestion questionList = new StructXmlModelQuestion();
+                                foreach (Cell cell in row.Descendants<Cell>())
+                                {
+                                    i++;
+                                    if (nomenglatura != "")
+                                    {
                                         switch (i)
                                         {
                                             case 1:
@@ -938,16 +938,16 @@ namespace Mardis.Engine.Business.MardisCore
                                                     finseccion = "end group";
                                                 }
                                                 if (comienzo == "begin group" && GetCellValue(doc, cell) == "begin group")
-                                                    if (comienzoseccion =="") {
+                                                    if (comienzoseccion == "") {
 
                                                         _section.id = GetCellValue(doc, cell);
                                                     }
                                                     else {
                                                         questionList.QuestionTipo = GetCellValue(doc, cell);
                                                     }
-                                                    
+
                                                 break;
-                                        case 2:
+                                            case 2:
                                                 if (comienzo == "begin group")
                                                 {
                                                     if (_section.id != "begin group")
@@ -955,116 +955,116 @@ namespace Mardis.Engine.Business.MardisCore
                                                         questionList.valueText = GetCellValue(doc, cell);
                                                     }
                                                     else {
-                                                        _section.valueText = nomenglatura+"_"+GetCellValue(doc, cell);
+                                                        _section.valueText = nomenglatura + "_" + GetCellValue(doc, cell);
                                                         nomenglatursubseccion = _section.valueText;
-                                                      
+
                                                     }
                                                 }
-                                            break;
-                                        case 3:
+                                                break;
+                                            case 3:
                                                 if (comienzo == "begin group" && comienzoseccion == "")
                                                 {
 
                                                     if (nomenglatursubseccion != "") {
                                                         comienzoseccion = "Begin";
                                                         finseccion = "";
-                                                        _section.QuestionText =  GetCellValue(doc, cell);
+                                                        _section.QuestionText = GetCellValue(doc, cell);
                                                         if (slStructXmlModel.Where(q => q.valueText == nomenglatura).FirstOrDefault().Sections == null) {
                                                             slStructXmlModel.Where(q => q.valueText == nomenglatura).FirstOrDefault().Sections = new List<StructXmlSectionModel>();
                                                         }
-                                                           
+
                                                         slStructXmlModel.Where(q => q.valueText == nomenglatura).FirstOrDefault().Sections.Add(_section);
                                                     }
                                                     else {
-                                                        if (GetCellValue(doc, cell) != "NA") { 
-                                                    questionList.id = nomenglatura;
-                                                    questionList.QuestionText = GetCellValue(doc, cell);
-                                                    if (questionList.QuestionTipo != "image" && questionList.QuestionTipo != "geopoint")
-                                                    {
-                                                        slStructXmlModel.Where(q => q.valueText == nomenglatura).FirstOrDefault().Question.Add(questionList);
-                                                        if (questionList.QuestionTipo.Contains("select_one") || questionList.QuestionTipo.Contains("select_multiple"))
-                                                        {
-                                                            // Respuesta 
-                                                            slStructXmlModel.Where(q => q.valueText == nomenglatura)
-                                                                .FirstOrDefault()
-                                                                .Question.Where(d => d.valueText == questionList.valueText).First().Detail = new List<StructXmlModelQuestionDetail>();
-                                                            worksheet = (doc.WorkbookPart.GetPartById(sheets2.Id) as WorksheetPart).Worksheet;
-                                                            var rows2 = worksheet.GetFirstChild<SheetData>().Descendants<Row>();
-
-                                                            Char delimiter = ' ';
-                                                            String[] tipo = questionList.QuestionTipo.Split(delimiter);
-                                                            foreach (Row rowchosse in rows2)
+                                                        if (GetCellValue(doc, cell) != "NA") {
+                                                            questionList.id = nomenglatura;
+                                                            questionList.QuestionText = GetCellValue(doc, cell);
+                                                            if (questionList.QuestionTipo != "image" && questionList.QuestionTipo != "geopoint")
                                                             {
-                                                                if (row.RowIndex.Value != 1)
+                                                                slStructXmlModel.Where(q => q.valueText == nomenglatura).FirstOrDefault().Question.Add(questionList);
+                                                                if (questionList.QuestionTipo.Contains("select_one") || questionList.QuestionTipo.Contains("select_multiple"))
                                                                 {
-                                                                    int xi = 0;
-                                                                    StructXmlModelQuestionDetail structXmlModelD = new StructXmlModelQuestionDetail();
-                                                                    foreach (Cell chosse in rowchosse.Descendants<Cell>())
+                                                                    // Respuesta 
+                                                                    slStructXmlModel.Where(q => q.valueText == nomenglatura)
+                                                                        .FirstOrDefault()
+                                                                        .Question.Where(d => d.valueText == questionList.valueText).First().Detail = new List<StructXmlModelQuestionDetail>();
+                                                                    worksheet = (doc.WorkbookPart.GetPartById(sheets2.Id) as WorksheetPart).Worksheet;
+                                                                    var rows2 = worksheet.GetFirstChild<SheetData>().Descendants<Row>();
+
+                                                                    Char delimiter = ' ';
+                                                                    String[] tipo = questionList.QuestionTipo.Split(delimiter);
+                                                                    foreach (Row rowchosse in rows2)
                                                                     {
-                                                                        xi++;
-                                                                        switch (xi)
+                                                                        if (row.RowIndex.Value != 1)
                                                                         {
-                                                                            case 1:
-                                                                                if (GetCellValue(doc, chosse).Trim() == tipo[1])
-                                                                                    structXmlModelD.id = GetCellValue(doc, chosse).Trim();
-                                                                                break;
-                                                                            case 2:
-                                                                                if (structXmlModelD.id == tipo[1])
-                                                                                    structXmlModelD.valueText = GetCellValue(doc, chosse);
-                                                                                break;
-                                                                            case 3:
-                                                                                if (structXmlModelD.id == tipo[1])
+                                                                            int xi = 0;
+                                                                            StructXmlModelQuestionDetail structXmlModelD = new StructXmlModelQuestionDetail();
+                                                                            foreach (Cell chosse in rowchosse.Descendants<Cell>())
+                                                                            {
+                                                                                xi++;
+                                                                                switch (xi)
                                                                                 {
-                                                                                    structXmlModelD.QuestionText = GetCellValue(doc, chosse);
-                                                                                    slStructXmlModel.Where(q => q.valueText == nomenglatura)
-                                                                                    .FirstOrDefault()
-                                                                                       .Question.Where(d => d.valueText == questionList.valueText).First().Detail.Add(structXmlModelD);
+                                                                                    case 1:
+                                                                                        if (GetCellValue(doc, chosse).Trim() == tipo[1])
+                                                                                            structXmlModelD.id = GetCellValue(doc, chosse).Trim();
+                                                                                        break;
+                                                                                    case 2:
+                                                                                        if (structXmlModelD.id == tipo[1])
+                                                                                            structXmlModelD.valueText = GetCellValue(doc, chosse);
+                                                                                        break;
+                                                                                    case 3:
+                                                                                        if (structXmlModelD.id == tipo[1])
+                                                                                        {
+                                                                                            structXmlModelD.QuestionText = GetCellValue(doc, chosse);
+                                                                                            slStructXmlModel.Where(q => q.valueText == nomenglatura)
+                                                                                            .FirstOrDefault()
+                                                                                               .Question.Where(d => d.valueText == questionList.valueText).First().Detail.Add(structXmlModelD);
+                                                                                        }
+                                                                                        break;
+
                                                                                 }
-                                                                                break;
+                                                                            }
 
                                                                         }
+
+
                                                                     }
+                                                                }
+                                                            }
+                                                            else
+                                                            {
+
+                                                                if (questionList.QuestionTipo == "geopoint")
+                                                                {
+                                                                    string coordenas = questionList.valueText;
+                                                                    string IdStruct = questionList.id;
+                                                                    questionList.QuestionTipo = "text";
+                                                                    questionList.valueText = coordenas + "_" + "LNG";
+                                                                    questionList.QuestionText = "Logitud";
+                                                                    questionList.id = IdStruct;
+                                                                    slStructXmlModel.Where(q => q.valueText == nomenglatura).FirstOrDefault().Question.Add(questionList);
+
+                                                                    questionList = new StructXmlModelQuestion();
+                                                                    questionList.id = IdStruct;
+                                                                    questionList.QuestionTipo = "text";
+                                                                    questionList.valueText = coordenas + "_" + "LAT";
+                                                                    questionList.QuestionText = "Latitud";
+                                                                    slStructXmlModel.Where(q => q.valueText == nomenglatura).FirstOrDefault().Question.Add(questionList);
+                                                                }
+                                                                if (questionList.QuestionTipo == "image")
+                                                                {
+                                                                    string IdStructIMG = questionList.id;
+                                                                    _addiccionalTable.Add(new _FormTable { _table = IdStructIMG + "_" + questionList.valueText, typeoftable = "IG", createDate = DateTime.Now });
 
                                                                 }
-
-
                                                             }
-                                                        }
-                                                    }
-                                                    else
-                                                    {
-
-                                                        if (questionList.QuestionTipo == "geopoint")
-                                                        {
-                                                            string coordenas = questionList.valueText;
-                                                            string IdStruct = questionList.id;
-                                                            questionList.QuestionTipo = "text";
-                                                            questionList.valueText = coordenas + "_" + "LNG";
-                                                            questionList.QuestionText = "Logitud";
-                                                            questionList.id = IdStruct;
-                                                            slStructXmlModel.Where(q => q.valueText == nomenglatura).FirstOrDefault().Question.Add(questionList);
-
-                                                            questionList = new StructXmlModelQuestion();
-                                                            questionList.id = IdStruct;
-                                                            questionList.QuestionTipo = "text";
-                                                            questionList.valueText = coordenas + "_" + "LAT";
-                                                            questionList.QuestionText = "Latitud";
-                                                            slStructXmlModel.Where(q => q.valueText == nomenglatura).FirstOrDefault().Question.Add(questionList);
-                                                        }
-                                                        if (questionList.QuestionTipo == "image")
-                                                        {
-                                                            string IdStructIMG = questionList.id;
-                                                            _addiccionalTable.Add(new _FormTable { _table = IdStructIMG + "_" + questionList.valueText, typeoftable = "IG", createDate = DateTime.Now });
-
-                                                        }
-                                                    }
                                                         }
                                                     }
                                                 }
                                                 else {
 
                                                     {
-                                                        questionList.id = nomenglatura+"_"+nomenglatursubseccion;
+                                                        questionList.id = nomenglatura + "_" + nomenglatursubseccion;
                                                         questionList.QuestionText = GetCellValue(doc, cell);
                                                         if (questionList.QuestionTipo != "image" && questionList.QuestionTipo != "geopoint")
                                                         {
@@ -1072,16 +1072,16 @@ namespace Mardis.Engine.Business.MardisCore
 
                                                             if (slStructXmlModel.Where(q => q.valueText == nomenglatura)
                                                                 .First().Sections.Where(z => z.valueText == nomenglatursubseccion)
-                                                                .FirstOrDefault().Question==null) {
+                                                                .FirstOrDefault().Question == null) {
 
                                                                 slStructXmlModel.Where(q => q.valueText == nomenglatura)
                                                                     .First().Sections.Where(z => z.valueText == nomenglatursubseccion)
                                                                     .FirstOrDefault().Question = new List<StructXmlModelQuestion>();
-                                                                
+
 
                                                             }
 
-                                                            slStructXmlModel.Where(q => q.valueText == nomenglatura).First().Sections.Where(z=>z.valueText== nomenglatursubseccion)
+                                                            slStructXmlModel.Where(q => q.valueText == nomenglatura).First().Sections.Where(z => z.valueText == nomenglatursubseccion)
                                                                 .FirstOrDefault().Question.Add(questionList);
                                                             if (questionList.QuestionTipo.Contains("select_one") || questionList.QuestionTipo.Contains("select_multiple"))
                                                             {
@@ -1166,22 +1166,22 @@ namespace Mardis.Engine.Business.MardisCore
 
 
                                                 }
-                                            break;
-                                           
+                                                break;
+
                                         }
                                         if (i > 4) break;
                                     }
-                            };
+                                };
+                            }
+
                         }
 
+
                     }
 
 
+                    return _serviceDao.SaveFormAggregate(slStructXmlModel, idaccount, name, _addiccionalTable);
                 }
-
-              
-                    return      _serviceDao.SaveFormAggregate(slStructXmlModel, idaccount,name,_addiccionalTable);
-                    }
             }
             catch (Exception e)
             {
@@ -1194,7 +1194,7 @@ namespace Mardis.Engine.Business.MardisCore
                 return 0;
             }
         }
-      
+
         private string GetCellValue(SpreadsheetDocument doc, Cell cell)
         {
             string value = "";
@@ -1213,6 +1213,124 @@ namespace Mardis.Engine.Business.MardisCore
 
             }
             return value;
+
+        }
+        #endregion
+
+        #region EditarPreguntasXCampaña
+        public ServiceCampaignViewModel GetCampaignPageInformation(string Campaign, IDataProtector protector, Guid idAccount)
+        {
+
+            var idCampaign = Guid.Empty;
+
+
+            if (!string.IsNullOrEmpty(Campaign))
+            {
+                idCampaign = Guid.Parse(protector.Unprotect(Campaign));
+            }
+
+            var model = new ServiceCampaignViewModel
+            {
+
+                Campaings =
+                    _serviceDao.GetCampaignAccount(idAccount)
+                        .Select(
+                            c =>
+                                new AccountCampaignViewModel()
+                                {
+                                    Id = protector.Protect(c.Id.ToString()),
+                                    Name = c.Name,
+                                    IdAccount = c.IdAccount.ToString()
+                                })
+                        .ToList(),
+                Services =
+                    _serviceDao.GetServicesByCampaignId(idAccount, idCampaign)
+                        .Select(
+                            s =>
+                                new ServiceCampaingItemViewModel()
+                                {
+                                    Id = protector.Protect(s.Id.ToString()),
+                                    Name = s.Name,
+                                    Idcampaign = Campaign,
+                                    Icon = s.Icon,
+                                    IconColor = s.IconColor
+                                })
+                        .ToList()
+            };
+
+
+            return model;
+        }
+
+
+        public string SaveQuestion(QuestionRegisterViewModel _model)
+        {
+
+
+            try
+            {
+                // falta llenar respuesta con saltos y requeridas.
+                var _modelQuestion = _serviceDao.GetQUestioneOne(Guid.Parse(_model.Id));
+                _modelQuestion.Title = _model.Title;
+                Context.Questions.UpdateRange(_modelQuestion);
+                _modelQuestion.QuestionDetails = null;
+                Context.Questions.Add(_modelQuestion);
+                Context.Entry(_modelQuestion).State = EntityState.Modified;
+                Context.SaveChanges();
+                _modelQuestion.QuestionDetails = _model.QuestionDetails.Where(x => x.Id != null).Select(
+                    c => new QuestionDetail()
+                    {
+                        Id = Guid.Parse(c.Id)
+                        ,
+                        IdQuestion = Guid.Parse(_model.Id)
+                        ,
+                        Order = c.Order
+                        ,
+                        Weight = c.Weight
+                        ,
+                        Answer = c.Answer
+                        ,
+                        StatusRegister = c.StatusRegister
+                        ,
+                        IsNext = "N"
+                        ,
+                        Aggregatefield = c.Aggregatefield
+                        ,
+                        Idconcept = c.Idconcept
+
+                    }
+                    ).ToList();
+
+                Context.QuestionDetails.UpdateRange(_modelQuestion.QuestionDetails);
+                Context.SaveChanges();
+                foreach (var detail in _model.QuestionDetails.Where(x => x.Id == null))
+                {
+                    var questionDetail = Context.Query<QuestionDetail>($@"EXEC dbo.sp_createQuestionDetail @idquestion='{_model.Id}' , @answer='{detail.Answer}' ,@code='{detail.Idconcept}' ").FirstOrDefault();
+
+                }
+                return "1";
+            }
+            catch (Exception e)
+            {
+
+                return "0";
+            }
+
+
+
+
+        }
+        public string RemoveFlushService(Guid idservice)
+        {
+
+            foreach (var item in _serviceDao.Getcampaign(idservice))
+            {
+                _redisCache.flush("CampaignServices:" + item.IdCampaign.ToString());
+            }
+
+            return "1";
+           
+
 
         }
         #endregion

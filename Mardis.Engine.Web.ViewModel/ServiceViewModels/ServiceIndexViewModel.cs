@@ -9,5 +9,9 @@ namespace Mardis.Engine.Web.ViewModel.ServiceViewModels
         public List<ServiceCustomerViewModel> Customers { get; set; } = new List<ServiceCustomerViewModel>();
 
         public List<ServiceItemViewModel> Services { get; set; } = new List<ServiceItemViewModel>();
+
+
+
+
     }
 }

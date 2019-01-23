@@ -67,7 +67,53 @@ namespace Mardis.Engine.DataObject.MardisCore
                         && srv.StatusRegister == CStatusRegister.Active)
                 .ToList();
         }
+        #region EditarPreguntasXCampaña
+        public List<Campaign> GetCampaignAccount(Guid idAccount)
+        {
+            return Context.Campaigns
+                .Where(srv => srv.IdAccount == idAccount
+                        && srv.StatusRegister == CStatusRegister.Active)
+                .ToList();
+        }
+        public List<Service> GetServicesByCampaignId(Guid idAccount, Guid Idcamping)
+        {
 
+            try
+            {
+                var _data = from s in Context.Services
+                            join cs in Context.CampaignsServices on s.Id equals cs.IdService
+                            where cs.IdCampaign.Equals(Idcamping) && s.StatusRegister == CStatusRegister.Active &&s.IdAccount.Equals(idAccount)
+                            select s;
+
+                return _data.ToList();
+            }
+            catch (Exception e)
+            {
+                var _serviceModel = new List<Service> ();
+                return _serviceModel;
+            }
+            
+        }
+
+
+
+        public Question GetQUestioneOne(Guid idquestion)
+        {
+
+            try
+            {
+                var _data = Context.Questions.Where(x => x.Id.Equals(idquestion));
+
+                return _data.First();
+            }
+            catch (Exception e)
+            {
+                var _serviceModel = new Question();
+                return _serviceModel;
+            }
+
+        }
+        #endregion
         public List<CampaignServices> Getcampaign(Guid Idservice)
         {
             return Context.CampaignsServices.Where(x => x.IdService == Idservice).ToList();

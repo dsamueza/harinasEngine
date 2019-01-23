@@ -301,8 +301,11 @@
     <Compile Include="QuestionServiceViewModel.cs" />
     <Compile Include="QuestionViewModel.cs" />
     <Compile Include="SelectViewModel.cs" />
+    <Compile Include="ServiceViewModels\AccountCampaignViewModel.cs" />
     <Compile Include="ServiceViewModels\QuestionDetailRegisterVIewModel.cs" />
     <Compile Include="ServiceViewModels\QuestionRegisterViewModel.cs" />
+    <Compile Include="ServiceViewModels\ServiceCampaignViewModel.cs" />
+    <Compile Include="ServiceViewModels\ServiceCampaingItemViewModel.cs" />
     <Compile Include="ServiceViewModels\ServiceCustomerViewModel.cs" />
     <Compile Include="ServiceViewModels\ServiceDetailRegisterViewModel.cs" />
     <Compile Include="ServiceViewModels\ServiceIndexViewModel.cs" />

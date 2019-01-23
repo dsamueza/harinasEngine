@@ -273,19 +273,67 @@ namespace Mardis.Engine.Web.Controllers
 
 
         [HttpGet]
-        public IActionResult ConceptQuestion(string typeService, string customer)
+        public IActionResult ConceptQuestion( string campaing)
         {
-            var model = _serviceBusiness.GetIndexPageInformation(typeService, customer, _protector,
-                ApplicationUserCurrent.AccountId);
+            var model = _serviceBusiness.GetCampaignPageInformation(campaing, _protector,  ApplicationUserCurrent.AccountId);
 
             return View(model);
-        }
 
+      
+        }
+        [HttpGet]
+        public IActionResult ModifyQuestion(string service)
+        {
+
+            Service model = new Service();
+
+            if (!string.IsNullOrEmpty(service))
+            {
+                model = _serviceBusiness.GetOne(Guid.Parse(_protector.Unprotect(service)),
+                    ApplicationUserCurrent.AccountId);
+
+            }
+
+            LoadViewData(model.IdCustomer.ToString(), model.Id.ToString());
+
+            ViewData[CService.IdRegister] = service;
+
+            return View();
+        }
+        [HttpPost]
+        public JsonResult SaveQuestion(string question)
+        {
+
+            var model = JSonConvertUtil.Deserialize<QuestionRegisterViewModel>(question);
+
+            TryValidateModel(model);
+
+            if (!ModelState.IsValid)
+            {
+                return null;
+            }
+           var result= _serviceBusiness.SaveQuestion(model);
+            return Json(result);
+        }
+        public JsonResult SaverefreshRedis(string idservice)
+        {
+
+
+            if (!ModelState.IsValid)
+            {
+                return null;
+            }
+            var result = idservice;
+
+            _serviceBusiness.RemoveFlushService(Guid.Parse(idservice));
+            return Json(result);
+        }
 
         #endregion
         private void LoadViewData(string idCustomer, string idService)
         {
             ViewBag.Types = _typeServiceBusiness.GetTypeBusinessList();
+
             ViewBag.Customers = _customerBusiness.GetCustomerList(ApplicationUserCurrent.AccountId);
             ViewBag.TypePollList = _typePollBusiness.GetTypePollList();
 

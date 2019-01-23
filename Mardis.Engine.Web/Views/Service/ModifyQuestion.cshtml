@@ -1,0 +1,376 @@
+@{
+    ViewData["Title"] = "Gestión de Servicios";
+    ViewData["Description"] = "Agregar/Editar Servicios";
+    var IdRegister = (string)ViewData[CService.IdRegister];
+}
+
+@section buttons{}
+@section filters{}
+
+<style>
+    .input-xs {
+        height: 22px;
+        padding: 2px 5px;
+        font-size: 12px;
+        line-height: 1.5; /* If Placeholder of the input is moved up, rem/modify this. */
+        -ms-border-radius: 3px;
+        border-radius: 3px;
+    }
+
+
+    .animated-input {
+        color: #666;
+        position: relative;
+        display: inline-block;
+    }
+
+    .span-input {
+        position: absolute;
+        left: 50%;
+        content: '';
+        height: 40px;
+        height: 5px;
+        background: #f00;
+        transition: all 0.5s linear;
+        width: 0;
+        bottom: -5px;
+    }
+
+    .animated-input:focus ~ span {
+        width: 200px;
+        margin-left: -105px;
+    }
+</style>
+
+
+
+<div id="divService">
+    <div id="divServiceHeader">
+        <div class="row">
+            <div class="col-sm-4">
+                <strong>
+                    Información General del Servicio
+                </strong>
+            </div>
+            <div class="col-sm-4">
+                <strong>Fecha de Creación:</strong> {{moment(service.DateCreation).format('L')}}
+            </div>
+            <div class="col-sm-2">
+
+            </div>
+            <div class="col-sm-4">
+                <strong>Código:</strong> <input type="text" v-model="service.Code" id="txtCodeService" class="form-control input-xs"
+                                                placeholder="Código" />
+            </div>
+        </div>
+        <hr style="border-color: #ff0000; margin-top: 0;" />
+
+        <div class="row">
+
+            <div class="col-sm-2">
+                <label class="control-label">Nombre de la Encuesta</label>
+            </div>
+            <div class="col-sm-4">
+                <input type="text" v-model="service.Name" id="txtNameService" class="form-control input-xs"
+                       placeholder="Ingrese el nombre del Servicio" />
+            </div>
+
+
+
+        </div>
+
+
+
+        <br />
+    </div>
+
+    <div class="panel panel-default">
+        <div class="panel-heading" style="background-color: #4d4d4d">
+            <i class="fa fa-newspaper-o" style="color: white;"></i><a href="#"></a>
+
+           
+            @*<div class="row">
+                    <div class="col-sm-10">
+
+                    </div>
+                </div>*@
+            <br />
+        </div>
+        <div class="panel-body" id="divPollTitle" style="background-color: #cccccc">
+            <div class="row" style="background-color: #CCCCCC;">
+                <div class="col-sm-8">
+
+                </div>
+                <div class="col-sm-4">
+
+                </div>
+            </div>
+
+            <div v-for="(section, i) in service.ServiceDetailList">
+                @*--For Secciones--*@
+                <div style="margin-top: 7px;"></div>
+
+                <div v-bind:id="'pnl_' + section.Id" class="panel panel-default" style="padding-left: 5px; padding-right: 5px;" v-if="(section.StatusRegister=='A' && section.Id != '00000000-0000-0000-0000-000000000000')|| section.Id == '00000000-0000-0000-0000-000000000000'">
+                    <div class="panel-heading">
+                        <div>
+                            <div class="col-sm-1">
+                                <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" v-bind:href="'body_'+section.Id">
+                                    <i class="fa fa-list-alt"></i>
+                                </a>
+                            </div>
+                            <div class="col-sm-3">
+                                <input class="form-control input-xs" v-bind:id="'inti_'+section.Id" v-model="section.SectionTitle" type="text" placeholder="Ingrese la Sección" required>
+                            </div>
+
+
+
+                        </div>
+                        <div class="panel-tools">
+
+                        </div>
+                    </div>
+                    <div class="panel-body" style="padding-top: 2px; padding-left: 5px; padding-bottom: 2px; padding-right: 5px;">
+                        <div v-bind:id="'body_'+section.Id" class="panel-collapse collapse in">
+                            <div class="row">
+                                <div class="col-sm-4">
+
+                                </div>
+
+                                <div class="col-sm-4">
+
+                                </div>
+
+                            </div>
+                            <div style="margin-top: 7px;"></div>
+
+                            <div v-bind:id="section.Id" v-for="(question, j) in section.Questions">
+
+                                <div v-if="question.IdTypePoll!='92d03aa2-6085-4bc2-9ff2-18ee3ce41582' " class="panel panel-info">
+                                    @*--For Preguntas--*@
+                                    <div class="panel-heading">
+                                        <div class="col-sm-1">
+                                            <b>Pregunta</b>
+                                        </div>
+                                        <div class="col-sm-4">
+                                            <input type="text" v-bind:id="'txtQuestion_'+question.Id" v-model="question.Title" class="form-control input-xs" placeholder="Ingrese la Pregunta" required />
+                                        </div>
+
+
+
+                                   
+                                    </div>
+
+                                    <div class="panel-body">
+                                        <div class="row">
+                                            <div class="col-sm-4">
+                                                Tipo de Encuesta
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <select v-model="question.IdTypePoll" v-bind:id="'selTypePoll_'+question.Id" asp-items="@ViewBag.TypePollList" class="form-control input-xs"></select>
+                                            </div>
+                                            <div class="col-sm-2"></div>
+                                            <div class="col-sm-2"></div>
+                                        </div>
+
+                                        <div>
+                                            <div style="margin-top: 4px;"></div>
+
+                                            <div class="row">
+                                                <div class="col-sm-9">
+                                                    <b>Opciones de Respuetas: </b>
+                                                    <a class="btn btn-default btn-xs" title="Nueva Respuesta" v-bind:data-ordersection="i" v-bind:data-order="j" onclick="AddAnswer(this);">
+                                                        <i class="fa fa-plus"></i>
+                                                    </a>
+                                                </div>
+                                            </div>
+
+                                            <div v-bind:id="'pnas_'+question.Id">
+
+                                                <br />
+
+                                                <div class="row" v-bind:id="'pnasr_'+question.Id" v-for="(answer, k) in question.QuestionDetails">
+                                                    @*--For Respuestas--*@
+                                                    <div class="col-sm-4">
+                                                        <input type="text" class="form-control input-xs pull-right" v-model="answer.Answer" v-bind:id="'txtAnswer_'+answer.Id" placeholder="Ingrese la Respuesta" style="    min-width: 70% !important;">
+                                                    </div>
+                                                    <div class="col-sm-1" style="text-align: left">
+                                                        <a class="btn btn-default btn-xs" title="Nueva Respuesta" v-bind:data-idanswer="answer.Id" v-bind:data-ordersection="i" v-bind:data-order="j" v-bind:data-orderdetail="k" onclick="AddAnswer(this);">
+                                                            <i class="fa fa-plus"></i>
+                                                        </a>
+                                                        <a class="btn btn-default btn-xs" title="Borrar Respuesta" v-bind:data-idanswer="answer.Id" v-bind:data-ordersection="i" v-bind:data-order="j" v-bind:data-orderdetail="k" onclick="DeleteAnswer(this);">
+                                                            <i class="clip-close-2"></i>
+                                                        </a>
+                                                    </div>
+
+
+
+                                                    <div class="col-sm-1">
+
+                                                        <b>Código Concepto:</b>
+                                                    </div>
+                                                    <div class="col-sm-1">
+                                                        <input type="text" class="form-control input-xs pull-right" v-model="answer.Idconcept" v-bind:id="'txtAnswer_'+answer.Id" placeholder="Ingrese Codigo">
+                                                    </div>
+
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+                                        <div style="margin-top: 5px;"></div>
+                                        <div class="col-sm-4 pull-right">
+                                            <button type="submit" class="btn btn-link btn-orange" v-bind:data-ordersection="i" v-bind:data-ordersubsection="j" v-on:click="SaveQuestionIndividual(question.Id,question)">
+                                                Guardar <i class="fa fa-save"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div v-for="(subSection, j) in section.Sections" v-bind:id="'pnl_'+subSection.Id" class="panel panel-default" style="padding-left: 5px; padding-right: 5px;">
+                        @*--For SubSecciones--*@
+                        <div class="panel-heading">
+                            <div>
+                                <div class="col-sm-1">
+                                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" v-bind:href="'#body_'+subSection.Id">
+                                        <i class="fa fa-list-alt"></i>
+                                    </a>
+                                </div>
+                                <div class="col-sm-3">
+                                    <input class="form-control input-xs" v-bind:id="'inti_'+subSection.Id" v-model="subSection.SectionTitle" type="text" placeholder="Ingrese la Sección">
+                                </div>
+
+
+
+
+                            </div>
+
+                        </div>
+                        <div class="panel-body">
+                            <div v-bind:id="'body_'+subSection.Id" class="panel-collapse collapse in">
+                                <div class="row">
+                                    <div class="col-sm-4">
+                                        <button type="submit" class="btn btn-link btn-sm" v-bind:data-ordersection="i" v-bind:data-ordersubsection="j" onclick="AddSubQuestion(false,false,this);">
+                                            Agregar Pregunta <i class="fa fa-plus"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div style="margin-top: 7px;"></div>
+
+                                <div v-for="(question, k) in subSection.Questions" v-bind:id="'plq_'+question.Id">
+                                    @*--For SubPreguntas--*@
+                                    <div v-if="question.IdTypePoll!='92d03aa2-6085-4bc2-9ff2-18ee3ce41582' " class="panel panel-info">
+                                        <div class="panel-heading">
+                                            <div class="col-sm-1">
+                                                <b>Pregunta</b>
+                                            </div>
+                                            <div class="col-sm-2">
+                                                <input type="text" v-bind:id="'txtQuestion_'+question.Id" v-model="question.Title" class="form-control input-xs" placeholder="Ingrese la Pregunta" />
+                                            </div>
+
+
+
+
+
+                                        </div>
+
+                                        <div class="panel-body">
+                                            <div class="row">
+                                                <div class="col-sm-2">
+                                                    Tipo de Encuesta
+                                                </div>
+                                                <div class="col-sm-3">
+                                                    <select v-bind:id="'selTypePoll_'+question.Id" v-model="question.IdTypePoll"
+                                                            class="form-control input-sm" asp-items="@ViewBag.TypePollList"></select>
+                                                </div>
+                                                <div class="col-sm-2"></div>
+                                                <div class="col-sm-2"></div>
+                                            </div>
+                                            <div style="margin-top: 7px;"></div>
+                                            <div class="row">
+                                                <div class="col-sm-12">
+                                                    <b>Opciones de Respuetas: </b>
+                                                    <a class="btn btn-default btn-xs" title="Nueva Respuesta" v-bind:data-ordersection="i" v-bind:data-ordersubsection="j" v-bind:data-orderquestion="k" onclick="AddSubAnswer(this);">
+                                                        <i class="fa fa-plus"></i>
+                                                    </a>
+                                                </div>
+                                            </div>
+
+                                            <div v-bind:id="'pnas_'+question.Id">
+
+                                                <div class="row" v-for="(answer, l) in question.QuestionDetails" v-bind:id="'pnasr_'+answer.Id">
+                                                    @*--For SubRespuestas--*@
+                                                   
+                                                    <div class="col-sm-4">
+                                                        @*<input type="text" class="form-control input-sm" v-bind:id="'txtAnswer_'+answer.Id" v-model="answer.Answer" placeholder="Ingrese la Respuesta">*@
+                                                        <input type="text" class="form-control input-xs pull-right" v-model="answer.Answer" v-bind:id="'txtAnswer_'+answer.Id" placeholder="Ingrese la Respuesta" style="    min-width: 70% !important;">
+                                                    </div>
+                                                    <div class="col-sm-1" style="text-align: left">
+                                                        <a class="btn btn-default btn-xs" title="Nueva Respuesta" v-bind:data-ordersection="i" v-bind:data-ordersubsection="j" v-bind:data-orderquestion="k" v-bind:data-order="l" onclick="AddSubAnswer(this);">
+                                                            <i class="fa fa-plus"></i>
+                                                        </a>
+                                                        <a class="btn btn-default btn-xs" title="Borrar Respuesta" v-bind:data-idanswer="answer.Id" v-bind:data-ordersection="i" v-bind:data-ordersubsection="j" v-bind:data-orderquestion="k" v-bind:data-order="l" onclick="DeleteSubAnswer(this);">
+                                                            <i class="clip-close-2"></i>
+                                                        </a>
+                                                    </div>
+
+                                                    <div class="col-sm-2">
+                                                        <b>Código Concepto:</b>
+                                                    </div>
+                                                    <div class="col-sm-1">
+                                                        <input type="text" class="form-control input-xs pull-right" v-model="answer.Idconcept" v-bind:id="'txtAnswer_'+answer.Id" placeholder="Ingrese Codigo">
+                                                    </div>
+                                                </div>
+                                                <div style="margin-top: 5px;"></div>
+                                            </div>
+                                            <div class="col-sm-4 pull-right">
+                                                <button type="submit" class="btn btn-link btn-orange" v-bind:data-ordersection="i" v-bind:data-ordersubsection="j" v-on:click="SaveQuestionIndividual(question.Id,question);">
+                                                    Guardar <i class="fa fa-save"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+    </div>
+
+<div class="row">
+    <div class="col-sm-12" style="text-align: center">
+        <button class="btn btn-primary" id="btnGuardar" type="submit" onclick="SaveRedis();">Actualizar Encuesta</button>
+        <a class="btn btn-default btn-sm" id="btnCancelar" href="@Url.Action("Index", "Service")">Salir</a>
+    </div>
+</div>
+</div>
+
+
+
+@section scripts{
+    <script src="~/js/Helpers/ServiceHelper.js"></script>
+    <script src="~/js/viewModel/ServicesModifyViewModel.js"></script>
+    <script src="~/js/Helpers/ChannelHelper.js"></script>
+    <script src="~/js/viewModel/CommonScript.js"></script>
+    <script src="~/bower_components/notify/bootstrap-notify.min.js"></script>
+    <script>
+        $.blockUI({ message: "" });
+        var IdService = '@Html.Raw(IdRegister)';
+
+        LoadServiceById(IdService);
+
+    </script>
+}
