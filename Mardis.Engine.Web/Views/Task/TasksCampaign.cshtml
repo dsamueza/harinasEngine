@@ -137,7 +137,7 @@
                                 <div class="row">
                                     <div class="col-sm-7">
                                         <strong>CAMPAÑA:</strong>
-                                        <a href="@Url.Action("Profile", "Task", new { idTask = task.Id })">@task.CampaignName</a>
+                                        <a href="@Url.Action("Profile", "Task", new { idTask = task.Id,campaign=@ViewBag.idcampaign  })">@task.CampaignName</a>
                                     </div>
                                     <div class="col-sm-3">
                                         <label style="font-size-adjust: 0.4;">@task.Route</label>
