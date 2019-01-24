@@ -1,6 +1,6 @@
 @{
-    ViewData["Title"] = "Gestión de Servicios";
-    ViewData["Description"] = "Agregar/Editar Servicios";
+    ViewData["Title"] = "Gestión de Formulario";
+    ViewData["Description"] = "Editar Formulario";
     var IdRegister = (string)ViewData[CService.IdRegister];
 }
 
@@ -49,7 +49,7 @@
         <div class="row">
             <div class="col-sm-4">
                 <strong>
-                    Información General del Servicio
+                    Información General del Formulario
                 </strong>
             </div>
             <div class="col-sm-4">
@@ -197,7 +197,7 @@
                                                         <a class="btn btn-default btn-xs" title="Nueva Respuesta" v-bind:data-idanswer="answer.Id" v-bind:data-ordersection="i" v-bind:data-order="j" v-bind:data-orderdetail="k" onclick="AddAnswer(this);">
                                                             <i class="fa fa-plus"></i>
                                                         </a>
-                                                        <a class="btn btn-default btn-xs" title="Borrar Respuesta" v-bind:data-idanswer="answer.Id" v-bind:data-ordersection="i" v-bind:data-order="j" v-bind:data-orderdetail="k" onclick="DeleteAnswer(this);">
+                                                        <a v-if="answer.Id==null" class="btn btn-default btn-xs" title="Borrar Respuesta" v-bind:data-idanswer="answer.Id" v-bind:data-ordersection="i" v-bind:data-order="j" v-bind:data-orderdetail="k" onclick="DeleteAnswer(this);">
                                                             <i class="clip-close-2"></i>
                                                         </a>
                                                     </div>
@@ -209,7 +209,7 @@
                                                         <b>Código Concepto:</b>
                                                     </div>
                                                     <div class="col-sm-1">
-                                                        <input type="text" class="form-control input-xs pull-right" v-model="answer.Idconcept" v-bind:id="'txtAnswer_'+answer.Id" placeholder="Ingrese Codigo">
+                                                        <input type="number" class="form-control input-xs pull-right" v-model="answer.Idconcept" v-bind:id="'txtAnswer_'+answer.Id" placeholder="Ingrese Codigo">
                                                     </div>
 
                                                 </div>
@@ -313,7 +313,7 @@
                                                         <a class="btn btn-default btn-xs" title="Nueva Respuesta" v-bind:data-ordersection="i" v-bind:data-ordersubsection="j" v-bind:data-orderquestion="k" v-bind:data-order="l" onclick="AddSubAnswer(this);">
                                                             <i class="fa fa-plus"></i>
                                                         </a>
-                                                        <a class="btn btn-default btn-xs" title="Borrar Respuesta" v-bind:data-idanswer="answer.Id" v-bind:data-ordersection="i" v-bind:data-ordersubsection="j" v-bind:data-orderquestion="k" v-bind:data-order="l" onclick="DeleteSubAnswer(this);">
+                                                        <a v-if="answer.Id==null" class="btn btn-default btn-xs" title="Borrar Respuesta" v-bind:data-idanswer="answer.Id" v-bind:data-ordersection="i" v-bind:data-ordersubsection="j" v-bind:data-orderquestion="k" v-bind:data-order="l" onclick="DeleteSubAnswer(this);">
                                                             <i class="clip-close-2"></i>
                                                         </a>
                                                     </div>
@@ -322,7 +322,7 @@
                                                         <b>Código Concepto:</b>
                                                     </div>
                                                     <div class="col-sm-1">
-                                                        <input type="text" class="form-control input-xs pull-right" v-model="answer.Idconcept" v-bind:id="'txtAnswer_'+answer.Id" placeholder="Ingrese Codigo">
+                                                        <input type="number" class="form-control input-xs pull-right" v-model="answer.Idconcept" v-bind:id="'txtAnswer_'+answer.Id" placeholder="Ingrese Codigo">
                                                     </div>
                                                 </div>
                                                 <div style="margin-top: 5px;"></div>
@@ -352,8 +352,8 @@
 
 <div class="row">
     <div class="col-sm-12" style="text-align: center">
-        <button class="btn btn-primary" id="btnGuardar" type="submit" onclick="SaveRedis();">Actualizar Encuesta</button>
-        <a class="btn btn-default btn-sm" id="btnCancelar" href="@Url.Action("Index", "Service")">Salir</a>
+        <button class="btn btn-primary btn-sm" id="btnGuardar" type="submit" onclick="SaveRedis();">Visualizar información en la Encuesta</button>
+        <a class="btn btn-default btn-sm" id="btnCancelar" href="@Url.Action("ConceptQuestion", "Service")">Salir</a>
     </div>
 </div>
 </div>

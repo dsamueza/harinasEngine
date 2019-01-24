@@ -760,13 +760,13 @@ function SaveRedis() {
                 $.unblockUI();
                 $.notify({
                     title: '<strong>Información :</strong>',
-                    message: 'La información fue almacenada correctamente'
+                    message: ' Actualización correcta. Favor cerrar y volver a ingresar a las encuestas en Uso. '
                 });
             } else {
                 $.unblockUI();
                 $.notify({
                     title: '<strong>Información :</strong>',
-                    message: 'La información fue almacenada correctamente'
+                    message: ' Actualización correcta. Favor cerrar y volver a ingresar a las encuestas en Uso. '
                 });
             }
         },
@@ -1056,7 +1056,7 @@ function DeleteSubAnswer(element) {
             var answer = $(element).data("idanswer");
 
                 vueVM.$data.service.ServiceDetailList[curr].Sections[subSection].Questions[question].QuestionDetails.splice(questionDetail, 1);
-            }
+            
         }
     });
 }

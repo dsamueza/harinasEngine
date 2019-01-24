@@ -3,40 +3,12 @@
 @model ServiceCampaignViewModel
 
 @{
-    ViewData["Title"] = "Servicios";
-    ViewData["Description"] = "Gesti�n de Servicios";
+    ViewData["Title"] = "Formularios";
+    ViewData["Description"] = "Gestión de Codigos";
 }
 
 @section buttons{
-    <div class="row">
-        <div class="col-sm-2 pull-right">
 
-        </div>
-        <div class="col-sm-2 pull-right" style="vertical-align:middle;text-align:center">
-
-        </div>
-        <div class="col-sm-2 pull-right">
-            <div class="btn-group">
-                <button data-toggle="dropdown" class="btn btn-primary dropdown-toggle">
-                    <i class="clip-list-5"></i>
-                    Opciones
-                    <span class="caret"></span>
-                </button>
-                <ul class="dropdown-menu" role="menu">
-                    <li>
-                        <a href="@Url.Action("Register","Service")">
-                            <i class="clip-plus-circle-2"></i> Nuevo
-                        </a>
-                    </li>
-                    <li>
-                        <a href="@Url.Action("XML","Service")">
-                            <i class="clip-upload-2"></i> Importar
-                        </a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </div>
 }
 
 @section filters{
@@ -54,14 +26,14 @@
             <div class="core-box">
                 <div class="heading">
                     <i class="clip-picassa circle-icon circle-bricky"></i>
-                    <h2>Tipos de Servicios</h2>
+                  
                 </div>
             </div>
         </div>
         <div class="col-sm-8">
             <p>
-                Seleccione un Tipo de Servicio, despues escoja <br />
-                su cliente y puede mirar los servicios asociados a ellos.<br />
+                Seleccione la medición que desea actualizar códigos <br />
+                 , se visualizaran  las encuestas asociados a ellos.<br />
             </p>
         </div>
     </div>
@@ -112,9 +84,7 @@
                                         <a href="@Url.Action("ModifyQuestion","Service",new {service=service.Id})" title="Editar Servicio">
                                             <i class="clip-pencil-3 "></i>
                                         </a>
-                                        <a href="@Url.Action("Delete","Service",new {service = service.Id})" title="Eliminar Servicio">
-                                            <i class="clip-close-2"></i>
-                                        </a>
+                                       
                                     </div>
                                     <label>@service.Name</label>
                                 </div>

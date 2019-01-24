@@ -1,13 +1,23 @@
 
         <div id="galley">
             <div class="row">
-                <ul class="pictures">
+                
+                    <ul class="pictures">
+                        <li v-for="(image, index) in poll.BranchImages">
 
-                    <li class="col-sm-2 center" v-for="(image, index) in poll.BranchImages">
-                        <img v-bind:src="image.UrlImage" v-bind:alt="image.NameFile" style="width: 200px; border-radius: 5px; max-height:110px !important" class="hover-shadow cursor imagenClase">{{image.NameFile}} </img>
-                    </li>
+                            <div class="col-sm-2 center" v-if="image.idtask==poll.IdTask && poll.ImageSource=='T'">
 
+                                <img v-bind:src="image.UrlImage" v-bind:alt="image.NameFile" style="width: 200px; border-radius: 5px; max-height:110px !important" class="hover-shadow cursor imagenClase">{{image.NameFile}} </img>
+                            </div>
 
-                </ul>   
+                            <div class="col-sm-2 center" v-if="poll.ImageSource=='B'">
+
+                                <img v-bind:src="image.UrlImage" v-bind:alt="image.NameFile" style="width: 200px; border-radius: 5px; max-height:110px !important" class="hover-shadow cursor imagenClase">{{image.NameFile}} </img>
+                            </div>
+
+                        </li>
+                    </ul>
+           
+                
             </div>
         </div>

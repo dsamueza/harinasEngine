@@ -45,6 +45,8 @@ namespace Mardis.Engine.Web.ViewModel.TaskViewModels
         public Guid IdCampaign { get; set; }
 
         public string CampaignName { get; set; }
+        public string ImageSource { get; set; }
+        
 
         //Información de Local
 

@@ -1888,7 +1888,7 @@ namespace Mardis.Engine.Business.MardisCore
 
 
                         img.Alignment = 1;
-                        img.ScaleAbsoluteHeight(400);
+                        img.ScaleAbsoluteHeight(300);
                         img.ScaleAbsoluteWidth(500);
                         imageCell.HorizontalAlignment = 1;
                         imageCell.VerticalAlignment = 1;
@@ -1914,8 +1914,8 @@ namespace Mardis.Engine.Business.MardisCore
                 document.Add(tbUB);
                 var logos = iTextSharp.text.Image.GetInstance(("https://maps.googleapis.com/maps/api/staticmap?zoom=16&size=800x700&maptype=roadmap&markers=color:red%7Clabel:C%7C" + branch.LatitudeBranch + "," + branch.LenghtBranch + "&key=AIzaSyDC0qg4xC1qSUey6eFuhzuA1fJ2ZPFkO84"));
                 logos.Alignment = 1;
-                logos.ScaleAbsoluteHeight(300);
-                logos.ScaleAbsoluteWidth(300);
+                logos.ScaleAbsoluteHeight(260);
+                logos.ScaleAbsoluteWidth(260);
                 document.Add(logos);
                 document.Add(Chunk.NEWLINE);
                 Phrase titulo = new Phrase("OBSERVACIONES", boldFont2);
