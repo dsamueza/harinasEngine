@@ -6,16 +6,53 @@
                         <li v-for="(image, index) in poll.BranchImages">
 
                             <div class="col-sm-2 center" v-if="image.idtask==poll.IdTask && poll.ImageSource=='T'">
+                                <div class="wrap-image">
 
-                                <img v-bind:src="image.UrlImage" v-bind:alt="image.NameFile" style="width: 200px; border-radius: 5px; max-height:110px !important" class="hover-shadow cursor imagenClase">{{image.NameFile}} </img>
-                            </div>
 
-                            <div class="col-sm-2 center" v-if="poll.ImageSource=='B'">
+                                    <img v-bind:src="image.UrlImage" v-bind:alt="image.NameFile" style="width: 200px; border-radius: 5px; max-height:110px !important" class="hover-shadow cursor imagenClase">{{image.NameFile}}
+                                    </img>
+                                    <div class="tools tools-bottom">
+                                        <div class="tools tools-bottom">
+                                            <a href="#" title="Eliminar foto" style="    color:  rgb(175, 3, 3)  !important;    font-size: 18px !important;" v-on:click="addRemoveIndex(index,image.Id)">
+                                                <i class="fa fa-trash"></i>
+                                            </a>
 
-                                <img v-bind:src="image.UrlImage" v-bind:alt="image.NameFile" style="width: 200px; border-radius: 5px; max-height:110px !important" class="hover-shadow cursor imagenClase">{{image.NameFile}} </img>
-                            </div>
+                                            <label>
+                                                <i class="fa fa-edit" title="Cambiar foto" style="    color:  rgb(175, 3, 3)  !important;    font-size: 18px !important;"> </i>    <input type="file" style="display: none;" v-on:change="onFileChange($event,index)">
 
-                        </li>
+                                            </label>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                </div>
+
+                                <div class="col-sm-2 center" v-if="poll.ImageSource=='B'">
+
+                                    <div class="wrap-image">
+                                        <img v-bind:src="image.UrlImage" v-bind:alt="image.NameFile" style="width: 200px; border-radius: 5px; max-height:110px !important" class="hover-shadow cursor imagenClase">{{image.NameFile}}
+                                        </img>
+                                        <div class="tools tools-bottom">
+                                            <div class="tools tools-bottom">
+                                                @*<a href="#" title="Cambiar foto" style="    color:  rgb(175, 3, 3)  !important;    font-size: 18px !important;">
+                                                    <i class="fa fa-edit"></i>
+                                                </a>*@
+                                                <a href="#" title="Eliminar foto" style="    color:  rgb(175, 3, 3)  !important;    font-size: 18px !important;" v-on:click="addRemoveIndex(index,image.Id)">
+                                                    <i class="fa fa-trash"></i>
+                                                </a>
+
+                                                <label>
+                                                    <i class="fa fa-edit" title="Cambiar foto" style="    color:  rgb(175, 3, 3)  !important;    font-size: 18px !important;"> </i>    <input type="file" style="display: none;" v-on:change="onFileChange($event,index)">
+
+                                                </label>
+
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+</li>
                     </ul>
            
                 

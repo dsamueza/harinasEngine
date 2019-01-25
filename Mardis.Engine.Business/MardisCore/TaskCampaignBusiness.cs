@@ -2758,12 +2758,51 @@ namespace Mardis.Engine.Business.MardisCore
             
 
         }
-        #endregion
+        public BranchImages AddBranch(string id, string imagen ,  Guid idbranch, Guid idcampaign)
+        {
+            MemoryStream stream = new MemoryStream();
+            StreamWriter writer = new StreamWriter(stream);
+            string[] separadas;
+            var order = 0;
+            var contenedor = "";
+            var name = "";
+            var _img = Context.BranchImageses.Where(x => x.IdBranch == idbranch && x.IdCampaign == idcampaign);
+            if (_img.Count() > 0)
+            {
+                order = _img.Count() + 1;
+                contenedor = _img.First().NameContainer;
+            }
+            else
+            {
+                var _imgca = Context.BranchImageses.Where(x => x.IdCampaign == idcampaign).First();
+                order = 1;
+                contenedor = _imgca.NameContainer;
+            }
+             name = id + "_"+ order;
+            separadas = imagen.Split(',');
+            byte[] bytes = Convert.FromBase64String(separadas[1]);
+            MemoryStream imageStream = new MemoryStream(bytes);
+            AzureStorageUtil.UploadFromStream(imageStream, contenedor, name + ".jpg").Wait();
+            var uri = AzureStorageUtil.GetUriFromBlob(contenedor, name + ".jpg");
+            return _branchDao.AddDataImage(Guid.Parse(id), uri, idbranch,idcampaign,name,contenedor,order);
 
-        #region Historia Estados
+
+        }
+
+        public int DeleteBranch(string id)
+        {
 
 
-        public IList<historialTareas> GetHistory(Guid IdTask)
+
+            return _branchDao.DeleteDataImage(Guid.Parse(id));
+
+        }
+            #endregion
+
+            #region Historia Estados
+
+
+            public IList<historialTareas> GetHistory(Guid IdTask)
         {
 
            var _model= _taskCampaignDao.GetDataHystory(IdTask);

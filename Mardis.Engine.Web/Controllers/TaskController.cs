@@ -1062,7 +1062,6 @@ namespace Mardis.Engine.Web.Controllers
         #endregion
 
         #region Update BranchImage
-
         [HttpPost]
         public JsonResult ChangeImage(string idIdimg, string imgdata)
         {
@@ -1070,7 +1069,7 @@ namespace Mardis.Engine.Web.Controllers
             try
             {
 
-      
+
 
                 return Json(_taskCampaignBusiness.UpdateBranch(idIdimg, imgdata).ToString());
 
@@ -1078,7 +1077,48 @@ namespace Mardis.Engine.Web.Controllers
             catch (Exception e)
             {
 
+
+                return Json("0");
+
+            }
+        }
+        [HttpPost]
+        public JsonResult SaveImage(string Idtask, string imgdata,string idbranch ,string idcampaign)
+        {
+
+            try
+            {
+
+
+
+                return Json(_taskCampaignBusiness.AddBranch(Idtask, imgdata, Guid.Parse(idbranch), Guid.Parse(idcampaign)));
+
+            }
+            catch (Exception e)
+            {
+
               
+                return Json("0");
+
+            }
+        }
+
+        [HttpPost]
+        public JsonResult DeleteImage( string imgdata)
+        {
+
+            try
+            {
+
+
+
+                return Json(_taskCampaignBusiness.DeleteBranch(imgdata));
+
+            }
+            catch (Exception e)
+            {
+
+
                 return Json("0");
 
             }

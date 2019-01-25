@@ -238,10 +238,18 @@
                 <div class="panel-heading" style="text-align: center;">
                     <h4 class="panel-title">
                         <a data-toggle="collapse" href="#Imagecoll">MULTIMEDIA</a>
+                        <label class=" pull-right ">
+                            <i class="fa fa-upload"> </i>    <input type="file" style="display: none;" v-on:change="onFileAdd($event,poll.IdBranch,poll.IdCampaign,poll.IdTask)" />                                                             
+                                                              
+
+                        </label>
                     </h4>
+                    
                 </div>
                 <div id="Imagecoll" class="panel-collapse collapse">
                     <div class="panel-body">
+                      
+
                         @Html.Partial("_taskPhotoVue")
                     </div>
                 </div>

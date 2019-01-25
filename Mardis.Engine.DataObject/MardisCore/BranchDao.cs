@@ -295,6 +295,56 @@ namespace Mardis.Engine.DataObject.MardisCore
          
    
         }
+        public BranchImages AddDataImage(Guid id, string url,Guid idbranch,Guid idcampaign,string name, string  contenedor, int order)
+        {
+            try
+            {
+   
+                var stateRegister = EntityState.Added;
+            
+
+                var _model = new BranchImages();
+                _model.NameFile = name;
+                _model.Order = order;
+                _model.NameContainer = contenedor;
+                _model.UrlImage = url;
+                _model.idtask = id;
+                _model.IdBranch = idbranch;
+                _model.IdCampaign = idcampaign;
+                Context.BranchImageses.Add(_model);
+                Context.Entry(_model).State = stateRegister;
+                Context.SaveChanges();
+                return _model;
+
+            }
+            catch (Exception e)
+            {
+
+                return null;
+            }
+
+
+        }
+
+        public int DeleteDataImage(Guid id)
+        {
+            try
+            {
+             
+                var _model = Context.BranchImageses.Where(x => x.Id.Equals(id)).First();
+                Context.BranchImageses.Remove(_model);
+                Context.SaveChanges();
+                return 1;
+
+            }
+            catch (Exception)
+            {
+
+                return 0;
+            }
+
+
+        }
 
         #region Generador de codigos nuevos
 

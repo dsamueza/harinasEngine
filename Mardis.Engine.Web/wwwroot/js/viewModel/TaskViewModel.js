@@ -348,9 +348,11 @@ function ApplyBindingTaskService(data) {
             Save: function () {
                 return Save();
             },
-            addRemoveIndex: function (index) {
-                this.poll.BranchImages[index].UrlImage="";
+            addRemoveIndex: function (index,Id) {
 
+             
+                this.poll.BranchImages.splice(index, 1);
+                deleteBranchImg(Id)
             },
             loadImg: function (index) {
         
@@ -402,14 +404,37 @@ function ApplyBindingTaskService(data) {
                 return bindclass;
 
             },
-        onFileChange(e, index) {
-            console.log(e.target.files)
+
+            onFileAdd(e, idb, idc, idt) {
+       
+                var files = e.target.files || e.dataTransfer.files;
+                if (!files.length)
+                    return;
+                this.createImageADD(files[0], idb, idc, idt);
+            },
+
+            onFileChange(e, index) {
+
             var files = e.target.files || e.dataTransfer.files;
             if (!files.length)
                 return;
-            this.createImage(files[0], index);
-        },
-        createImage(file, index) {
+                this.createImage(files[0], index);
+            },
+
+            createImageADD(file, idb, idc,idt) {
+                var image = new Image();
+                var reader = new FileReader();
+
+                reader.onload = (e) => {
+ 
+                    AddBranchImg(e.target.result, idb, idc, idt);
+                };
+                reader.readAsDataURL(file);
+                resetImgVue();
+
+            },
+
+           createImage(file, index) {
             var image = new Image();
             var reader = new FileReader();
          
@@ -418,7 +443,7 @@ function ApplyBindingTaskService(data) {
                 updateBranchImg(this.poll.BranchImages[index].Id, this.poll.BranchImages[index].UrlImage)
             };
             reader.readAsDataURL(file);
-            console.log(this.poll.BranchImages[index])
+          
          
         }
         }
@@ -1051,7 +1076,10 @@ function updateBranchImg(id, img) {
         success: function (data) {
 
             if (data=="1") {
-                bootbox.alert("Registro Actualizado Satisfactoriamente");
+                $.notify({
+                    title: '<strong>Información :</strong>',
+                    message: 'La foto se actualizo correctamente'
+                });
           
             } else {
                 bootbox.alert("Existío un error, Vuelva a intentarlo");
@@ -1067,7 +1095,38 @@ function updateBranchImg(id, img) {
         }
     });
 }
+function AddBranchImg(img, idb, idc, idt) {
+    $.blockUI({ message: "Actualizando Imagen.." });
+  
+    $.ajax({
+        url: "/Task/SaveImage",
+        type: "POST",
+        data: {
+            Idtask: idt,
+            imgdata: img,
+            idbranch: idb,
+            idcampaign: idc
+        },
+        success: function (data) {
+        
+          
+            vueVM.$data.poll.BranchImages.push(data);
 
+            $.notify({
+                title: '<strong>Información :</strong>',
+                message: 'La foto  se cargo de forma exitosa'
+            });
+           
+        },
+        complete: function (data) {
+            $.unblockUI();
+        },
+        error: function (error) {
+            console.log(error);
+            $.unblockUI();
+        }
+    });
+}
 
 function deleteBranchImg(id) {
     $.blockUI({ message: "Actualizando Imagen.." });
@@ -1076,12 +1135,15 @@ function deleteBranchImg(id) {
         url: "/Task/DeleteImage",
         type: "POST",
         data: {
-            idIdimg: id
+            imgdata: id
         },
         success: function (data) {
 
             if (data == "1") {
-                bootbox.alert("Foto ha sido eliminada");
+                $.notify({
+                    title: '<strong>Información :</strong>',
+                    message: 'La foto fue eliminada'
+                });
 
             } else {
                 bootbox.alert("Existío un error, Vuelva a intentarlo");
@@ -1097,13 +1159,19 @@ function deleteBranchImg(id) {
         }
     });
 }
-
+var viewer
 function imgvue() {
     var galley = document.getElementById('galley');
-    var viewer = new Viewer(galley, {
+     viewer = new Viewer(galley, {
         url: 'src',
       
     });
 
 
+}
+function resetImgVue() {
+    viewer = null;
+    console.log(viewer)
+    imgvue()
+    console.log(viewer)
 }
