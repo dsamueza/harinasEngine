@@ -161,8 +161,7 @@ namespace Mardis.Engine.Web.Controllers
             }
         }
 
-
-
+        #region Exportar
         [HttpGet]
 
         public IActionResult Export(string id)
@@ -188,6 +187,15 @@ namespace Mardis.Engine.Web.Controllers
                 Canton = x.Branch.District.Name,
                 Estado_Tarea = x.StatusTask.Name,
                 Encuestador = x.Pollster == null ? "Sin Indentificar" : x.Pollster.Name
+                ,
+                Estado_c = x.PollsTaskss.First().pollsstatus
+                ,
+                Commentario = x.PollsTaskss.First().Comment
+                ,
+                x.IdAccount,
+                factura = x.PollsTaskss.First().novelty != null ? "SI" : "NO"
+                ,
+                id = x.Id
             }).ToList();
             var log = DateTime.Now;
             string LogFile = log.ToString("yyyyMMddHHmmss");
@@ -203,27 +211,73 @@ namespace Mardis.Engine.Web.Controllers
             {
                 // add a new worksheet to the empty workbook
                 ExcelWorksheet worksheet = package.Workbook.Worksheets.Add("Datos");
+
+                ExcelWorksheet worksheet2 = package.Workbook.Worksheets.Add("Observaciones");
+
                 //First add the headers
                 Color colFromHex = System.Drawing.ColorTranslator.FromHtml("#B7DEE8");
 
-         
+
+                worksheet2.Column(1).Width = 20;
+                worksheet2.Column(2).Width = 20;
+                worksheet2.Column(3).Width = 20;
+                worksheet2.Column(4).Width = 50;
+
+                worksheet2.Cells[1, 1].Value = "Cod. Encuesta";
+                worksheet2.Cells[1, 1].Style.Font.Color.SetColor(Color.White);
+                worksheet2.Cells[1, 1].Style.Font.Bold = true;
+                worksheet2.Cells[1, 1].Style.Font.Size = 12;
+                worksheet2.Cells[1, 1].Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
+                worksheet2.Cells[1, 1].Style.Fill.BackgroundColor.SetColor(colFromHex);
+
+                worksheet2.Cells[1, 2].Value = "Estado";
+                worksheet2.Cells[1, 2].Style.Font.Size = 12;
+                worksheet2.Cells[1, 2].Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
+                worksheet2.Cells[1, 2].Style.Fill.BackgroundColor.SetColor(colFromHex);
+                worksheet2.Cells[1, 2].Style.Font.Color.SetColor(Color.White);
+                worksheet2.Cells[1, 2].Style.Font.Bold = true;
+
+                worksheet2.Cells[1, 3].Value = "Fecha";
+                worksheet2.Cells[1, 3].Style.Font.Size = 12;
+                worksheet2.Cells[1, 3].Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
+                worksheet2.Cells[1, 3].Style.Fill.BackgroundColor.SetColor(colFromHex);
+                worksheet2.Cells[1, 3].Style.Font.Color.SetColor(Color.White);
+                worksheet2.Cells[1, 3].Style.Font.Bold = true;
+
+                worksheet2.Cells[1, 4].Value = "Observaciones";
+                worksheet2.Cells[1, 4].Style.Font.Size = 12;
+                worksheet2.Cells[1, 4].Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
+                worksheet2.Cells[1, 4].Style.Fill.BackgroundColor.SetColor(colFromHex);
+                worksheet2.Cells[1, 4].Style.Font.Color.SetColor(Color.White);
+                worksheet2.Cells[1, 4].Style.Font.Bold = true;
+
                 worksheet.Column(1).Width = 20;
                 worksheet.Column(2).Width = 20;
                 worksheet.Column(3).Width = 20;
                 worksheet.Column(4).Width = 20;
                 worksheet.Column(5).Width = 32;
-                worksheet.Column(6).Width = 20;
+
                 worksheet.Column(7).Width = 20;
                 worksheet.Column(8).Width = 20;
                 worksheet.Column(9).Width = 20;
                 worksheet.Column(10).Width = 20;
+                worksheet.Column(11).Width = 20;
+                worksheet.Column(12).Width = 40;
 
+                if (!listado.First().IdAccount.Equals(Guid.Parse("85024910-FC12-4DD8-AE58-761BF972DEB7")))
+                {
+                    worksheet.Column(6).Width = 20;
+                }
+                if (listado.First().IdAccount.Equals(Guid.Parse("85024910-FC12-4DD8-AE58-761BF972DEB7")))
+                {
+                    worksheet.Column(6).Width = 20;
+                }
                 worksheet.Cells[1, 1].Value = "Ciudad";
-      
+
                 worksheet.Cells[1, 1].Style.Font.Color.SetColor(Color.White);
-                worksheet.Cells[1, 1].Style.Font.Bold=true;
+                worksheet.Cells[1, 1].Style.Font.Bold = true;
                 worksheet.Cells[1, 1].Style.Font.Size = 12;
-              
+
                 worksheet.Cells[1, 1].Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
                 worksheet.Cells[1, 1].Style.Fill.BackgroundColor.SetColor(colFromHex);
 
@@ -255,12 +309,14 @@ namespace Mardis.Engine.Web.Controllers
                 worksheet.Cells[1, 5].Style.Fill.BackgroundColor.SetColor(colFromHex);
                 worksheet.Cells[1, 5].Style.Font.Color.SetColor(Color.White);
                 worksheet.Cells[1, 5].Style.Font.Bold = true;
-                worksheet.Cells[1, 6].Value = "Tipo de Negocio";
+
+                worksheet.Cells[1, 6].Value = "Estado Campo";
                 worksheet.Cells[1, 6].Style.Font.Size = 12;
                 worksheet.Cells[1, 6].Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
                 worksheet.Cells[1, 6].Style.Fill.BackgroundColor.SetColor(colFromHex);
                 worksheet.Cells[1, 6].Style.Font.Color.SetColor(Color.White);
                 worksheet.Cells[1, 6].Style.Font.Bold = true;
+
                 worksheet.Cells[1, 7].Value = "Telefono";
                 worksheet.Cells[1, 7].Style.Font.Size = 12;
                 worksheet.Cells[1, 7].Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
@@ -283,10 +339,35 @@ namespace Mardis.Engine.Web.Controllers
                 worksheet.Cells[1, 10].Style.Font.Size = 12;
                 worksheet.Cells[1, 10].Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
                 worksheet.Cells[1, 10].Style.Fill.BackgroundColor.SetColor(colFromHex);
-                worksheet.Cells[1,10].Style.Font.Color.SetColor(Color.White);
+                worksheet.Cells[1, 10].Style.Font.Color.SetColor(Color.White);
                 worksheet.Cells[1, 10].Style.Font.Bold = true;
 
+                worksheet.Cells[1, 12].Value = "Observaciones Encuesta";
+                worksheet.Cells[1, 12].Style.Font.Size = 12;
+                worksheet.Cells[1, 12].Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
+                worksheet.Cells[1, 12].Style.Fill.BackgroundColor.SetColor(colFromHex);
+                worksheet.Cells[1, 12].Style.Font.Color.SetColor(Color.White);
+                worksheet.Cells[1, 12].Style.Font.Bold = true;
+                if (!listado.First().IdAccount.Equals(Guid.Parse("85024910-FC12-4DD8-AE58-761BF972DEB7")))
+                {
+                    worksheet.Cells[1, 11].Value = "Canal";
+                    worksheet.Cells[1, 11].Style.Font.Size = 12;
+                    worksheet.Cells[1, 11].Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
+                    worksheet.Cells[1, 11].Style.Fill.BackgroundColor.SetColor(colFromHex);
+                    worksheet.Cells[1, 11].Style.Font.Color.SetColor(Color.White);
+                    worksheet.Cells[1, 11].Style.Font.Bold = true;
+                }
+                if (listado.First().IdAccount.Equals(Guid.Parse("85024910-FC12-4DD8-AE58-761BF972DEB7")))
+                {
+                    worksheet.Cells[1, 11].Value = "Factura";
+                    worksheet.Cells[1, 11].Style.Font.Size = 12;
+                    worksheet.Cells[1, 11].Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
+                    worksheet.Cells[1, 11].Style.Fill.BackgroundColor.SetColor(colFromHex);
+                    worksheet.Cells[1, 11].Style.Font.Color.SetColor(Color.White);
+                    worksheet.Cells[1, 11].Style.Font.Bold = true;
+                }
                 int rows = 2;
+                int rowsobs = 2;
                 foreach (var t in listado)
                 {
                     worksheet.Cells[rows, 1].Value = t.Canton;
@@ -294,19 +375,50 @@ namespace Mardis.Engine.Web.Controllers
                     worksheet.Cells[rows, 3].Value = t.Code;
                     worksheet.Cells[rows, 4].Value = t.ExternalCode;
                     worksheet.Cells[rows, 5].Value = t.Name;
-                    worksheet.Cells[rows, 6].Value = t.TypeBusiness;
+                    worksheet.Cells[rows, 6].Value = t.Estado_c;
                     worksheet.Cells[rows, 7].Value = t.Phone;
                     worksheet.Cells[rows, 8].Value = t.Encuestador;
                     worksheet.Cells[rows, 9].Value = t.StartDate;
                     worksheet.Cells[rows, 9].Style.Numberformat.Format = "yyyy-mm-dd";
                     worksheet.Cells[rows, 10].Value = t.Estado_Tarea;
-    
-                    rows++;
-                }
-                //Add values
-               
 
-                package.Save(); //Save the workbook.
+                    worksheet.Cells[rows, 12].Value = t.Commentario;
+                    if (!listado.First().IdAccount.Equals(Guid.Parse("85024910-FC12-4DD8-AE58-761BF972DEB7")))
+                    {
+                        worksheet.Cells[rows, 11].Value = t.TypeBusiness;
+                    }
+                    if (listado.First().IdAccount.Equals(Guid.Parse("85024910-FC12-4DD8-AE58-761BF972DEB7")))
+                    {
+                        worksheet.Cells[rows, 11].Value = t.factura;
+                    }
+                    rows++;
+
+                }
+
+                var _model = from x in _taskCampaignBusiness.GetHistoryCampign(idCa)
+                             select new { date = x.DateModification, status = x.StatusTask.Name, user = x.Users.Email, comment = x.CommentTaskNoImplemented, code = x.Tasks.Code, x.idtask };
+
+                if (_model != null)
+                {
+                    _model = _model.OrderByDescending(x => x.idtask).ToList();
+
+                }
+                foreach (var h in _model)
+                {
+
+                    worksheet2.Cells[rowsobs, 1].Value = h.code;
+                    worksheet2.Cells[rowsobs, 2].Value = h.status;
+                    worksheet2.Cells[rowsobs, 3].Value = h.date;
+                    worksheet2.Cells[rowsobs, 3].Style.Numberformat.Format = "yyyy-mm-dd HH:mm";
+                    worksheet2.Cells[rowsobs, 4].Value = h.comment;
+
+                    rowsobs++;
+                }
+
+                // add a new worksheet to the empty workbook
+
+
+                package.Save();
             }
             var result = PhysicalFile(Path.Combine(sWebRootFolder, sFileName), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
 
@@ -318,7 +430,162 @@ namespace Mardis.Engine.Web.Controllers
             return result;
         }
 
-      
+        //[HttpGet]
+
+        //public IActionResult Export(string id)
+        //{
+        //    var idCa = Guid.Empty;
+        //    if (!string.IsNullOrEmpty(id))
+        //    {
+        //        idCa = Guid.Parse(Protector.Unprotect(id));
+        //    }
+        //    string sWebRootFolder = _hostingEnv.WebRootPath;
+
+        //    var listado = _taskCampaignBusiness.ListTask(idCa).Select(x => new
+        //    {
+        //        x.StartDate,
+        //        x.Branch.Code,
+        //        x.Branch.ExternalCode,
+        //        x.Branch.TypeBusiness,
+        //        x.Branch.Name,
+        //        x.Branch.Cluster,
+        //        Propietario = x.Branch.PersonOwner.Name,
+        //        x.Branch.PersonOwner.Mobile,
+        //        x.Branch.PersonOwner.Phone,
+        //        Canton = x.Branch.District.Name,
+        //        Estado_Tarea = x.StatusTask.Name,
+        //        Encuestador = x.Pollster == null ? "Sin Indentificar" : x.Pollster.Name
+        //    }).ToList();
+        //    var log = DateTime.Now;
+        //    string LogFile = log.ToString("yyyyMMddHHmmss");
+        //    string sFileName = @"Listado.xlsx";
+        //    string URL = string.Format("{0}://{1}/{2}", Request.Scheme, Request.Host, sFileName);
+        //    FileInfo file = new FileInfo(Path.Combine(sWebRootFolder, sFileName));
+        //    if (file.Exists)
+        //    {
+        //        file.Delete();
+        //        file = new FileInfo(Path.Combine(sWebRootFolder, sFileName));
+        //    }
+        //    using (ExcelPackage package = new ExcelPackage(file))
+        //    {
+        //        // add a new worksheet to the empty workbook
+        //        ExcelWorksheet worksheet = package.Workbook.Worksheets.Add("Datos");
+        //        //First add the headers
+        //        Color colFromHex = System.Drawing.ColorTranslator.FromHtml("#B7DEE8");
+
+
+        //        worksheet.Column(1).Width = 20;
+        //        worksheet.Column(2).Width = 20;
+        //        worksheet.Column(3).Width = 20;
+        //        worksheet.Column(4).Width = 20;
+        //        worksheet.Column(5).Width = 32;
+        //        worksheet.Column(6).Width = 20;
+        //        worksheet.Column(7).Width = 20;
+        //        worksheet.Column(8).Width = 20;
+        //        worksheet.Column(9).Width = 20;
+        //        worksheet.Column(10).Width = 20;
+
+        //        worksheet.Cells[1, 1].Value = "Ciudad";
+
+        //        worksheet.Cells[1, 1].Style.Font.Color.SetColor(Color.White);
+        //        worksheet.Cells[1, 1].Style.Font.Bold=true;
+        //        worksheet.Cells[1, 1].Style.Font.Size = 12;
+
+        //        worksheet.Cells[1, 1].Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
+        //        worksheet.Cells[1, 1].Style.Fill.BackgroundColor.SetColor(colFromHex);
+
+        //        worksheet.Cells[1, 2].Value = "Cluster";
+        //        worksheet.Cells[1, 2].Style.Font.Size = 12;
+        //        worksheet.Cells[1, 2].Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
+        //        worksheet.Cells[1, 2].Style.Fill.BackgroundColor.SetColor(colFromHex);
+        //        worksheet.Cells[1, 2].Style.Font.Color.SetColor(Color.White);
+        //        worksheet.Cells[1, 2].Style.Font.Bold = true;
+
+        //        worksheet.Cells[1, 3].Value = "Cod. Encuesta";
+        //        worksheet.Cells[1, 3].Style.Font.Size = 12;
+        //        worksheet.Cells[1, 3].Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
+        //        worksheet.Cells[1, 3].Style.Fill.BackgroundColor.SetColor(colFromHex);
+        //        worksheet.Cells[1, 3].Style.Font.Color.SetColor(Color.White);
+        //        worksheet.Cells[1, 3].Style.Font.Bold = true;
+
+
+        //        worksheet.Cells[1, 4].Value = "PT_INDICE";
+        //        worksheet.Cells[1, 4].Style.Font.Size = 12;
+        //        worksheet.Cells[1, 4].Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
+        //        worksheet.Cells[1, 4].Style.Fill.BackgroundColor.SetColor(colFromHex);
+        //        worksheet.Cells[1, 4].Style.Font.Color.SetColor(Color.White);
+        //        worksheet.Cells[1, 4].Style.Font.Bold = true;
+
+        //        worksheet.Cells[1, 5].Value = "Nombre local";
+        //        worksheet.Cells[1, 5].Style.Font.Size = 12;
+        //        worksheet.Cells[1, 5].Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
+        //        worksheet.Cells[1, 5].Style.Fill.BackgroundColor.SetColor(colFromHex);
+        //        worksheet.Cells[1, 5].Style.Font.Color.SetColor(Color.White);
+        //        worksheet.Cells[1, 5].Style.Font.Bold = true;
+        //        worksheet.Cells[1, 6].Value = "Tipo de Negocio";
+        //        worksheet.Cells[1, 6].Style.Font.Size = 12;
+        //        worksheet.Cells[1, 6].Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
+        //        worksheet.Cells[1, 6].Style.Fill.BackgroundColor.SetColor(colFromHex);
+        //        worksheet.Cells[1, 6].Style.Font.Color.SetColor(Color.White);
+        //        worksheet.Cells[1, 6].Style.Font.Bold = true;
+        //        worksheet.Cells[1, 7].Value = "Telefono";
+        //        worksheet.Cells[1, 7].Style.Font.Size = 12;
+        //        worksheet.Cells[1, 7].Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
+        //        worksheet.Cells[1, 7].Style.Fill.BackgroundColor.SetColor(colFromHex);
+        //        worksheet.Cells[1, 7].Style.Font.Color.SetColor(Color.White);
+        //        worksheet.Cells[1, 7].Style.Font.Bold = true;
+        //        worksheet.Cells[1, 8].Value = "Encuestador";
+        //        worksheet.Cells[1, 8].Style.Font.Size = 12;
+        //        worksheet.Cells[1, 8].Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
+        //        worksheet.Cells[1, 8].Style.Fill.BackgroundColor.SetColor(colFromHex);
+        //        worksheet.Cells[1, 8].Style.Font.Color.SetColor(Color.White);
+        //        worksheet.Cells[1, 8].Style.Font.Bold = true;
+        //        worksheet.Cells[1, 9].Value = "Fecha";
+        //        worksheet.Cells[1, 9].Style.Font.Size = 12;
+        //        worksheet.Cells[1, 9].Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
+        //        worksheet.Cells[1, 9].Style.Fill.BackgroundColor.SetColor(colFromHex);
+        //        worksheet.Cells[1, 9].Style.Font.Color.SetColor(Color.White);
+        //        worksheet.Cells[1, 9].Style.Font.Bold = true;
+        //        worksheet.Cells[1, 10].Value = "Estado";
+        //        worksheet.Cells[1, 10].Style.Font.Size = 12;
+        //        worksheet.Cells[1, 10].Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
+        //        worksheet.Cells[1, 10].Style.Fill.BackgroundColor.SetColor(colFromHex);
+        //        worksheet.Cells[1,10].Style.Font.Color.SetColor(Color.White);
+        //        worksheet.Cells[1, 10].Style.Font.Bold = true;
+
+        //        int rows = 2;
+        //        foreach (var t in listado)
+        //        {
+        //            worksheet.Cells[rows, 1].Value = t.Canton;
+        //            worksheet.Cells[rows, 2].Value = t.Cluster;
+        //            worksheet.Cells[rows, 3].Value = t.Code;
+        //            worksheet.Cells[rows, 4].Value = t.ExternalCode;
+        //            worksheet.Cells[rows, 5].Value = t.Name;
+        //            worksheet.Cells[rows, 6].Value = t.TypeBusiness;
+        //            worksheet.Cells[rows, 7].Value = t.Phone;
+        //            worksheet.Cells[rows, 8].Value = t.Encuestador;
+        //            worksheet.Cells[rows, 9].Value = t.StartDate;
+        //            worksheet.Cells[rows, 9].Style.Numberformat.Format = "yyyy-mm-dd";
+        //            worksheet.Cells[rows, 10].Value = t.Estado_Tarea;
+
+        //            rows++;
+        //        }
+        //        //Add values
+
+
+        //        package.Save(); //Save the workbook.
+        //    }
+        //    var result = PhysicalFile(Path.Combine(sWebRootFolder, sFileName), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+
+        //    Response.Headers["Content-Disposition"] = new ContentDispositionHeaderValue("attachment")
+        //    {
+        //        FileName = file.Name
+        //    }.ToString();
+
+        //    return result;
+        //}
+
+        #endregion
 
         [HttpGet]
         public IActionResult Register(string idCampaign)
