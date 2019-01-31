@@ -161,6 +161,232 @@ namespace Mardis.Engine.Web.Controllers
             }
         }
 
+        [HttpGet]
+        public IActionResult ExportInforme(string id)
+        {
+            string sWebRootFolder = _hostingEnv.WebRootPath;
+
+            var locales = _taskCampaignBusiness.ListBranch(id).Select(b => new
+            {
+                b.Id,
+                b.Code,
+                b.ExternalCode,
+                NameBranch = b.Name,
+                NameOwner = b.PersonOwner.Name,
+                b.MainStreet,
+                b.Reference,
+                b.PersonOwner.Phone,
+                b.TypeBusiness,
+                b.LatitudeBranch,
+                b.LenghtBranch,
+                NameCity = b.District.Name,
+                b.Cluster
+            }).ToList();
+
+            var fotos = _taskCampaignBusiness.ListBranchImages(id).Select(bi => new
+            {
+                bi.IdBranch,
+                bi.Branch.Code,
+                bi.Branch.ExternalCode,
+                bi.UrlImage
+            }).ToList();
+
+            string sFileName = @"Listado.xlsx";
+            string URL = string.Format("{0}://{1}/{2}", Request.Scheme, Request.Host, sFileName);
+            FileInfo file = new FileInfo(Path.Combine(sWebRootFolder, sFileName));
+            if (file.Exists)
+            {
+                file.Delete();
+                file = new FileInfo(Path.Combine(sWebRootFolder, sFileName));
+            }
+            using (ExcelPackage package = new ExcelPackage(file))
+            {
+                // add a new worksheet to the empty workbook
+                ExcelWorksheet worksheet = package.Workbook.Worksheets.Add("Locales");
+                ExcelWorksheet worksheet2 = package.Workbook.Worksheets.Add("Fotos");
+
+                //First add the headers
+                Color colFromHex = System.Drawing.ColorTranslator.FromHtml("#B7DEE8");
+
+                worksheet.Column(1).Width = 20;
+                worksheet.Column(2).Width = 10;
+                worksheet.Column(3).Width = 12;
+                worksheet.Column(4).Width = 30;
+                worksheet.Column(5).Width = 30;
+                worksheet.Column(6).Width = 40;
+                worksheet.Column(7).Width = 30;
+                worksheet.Column(8).Width = 15;
+                worksheet.Column(9).Width = 15;
+                worksheet.Column(10).Width = 16;
+                worksheet.Column(11).Width = 16;
+                worksheet.Column(12).Width = 20;
+                worksheet.Column(13).Width = 10;
+
+                worksheet2.Column(1).Width = 30;
+                worksheet2.Column(2).Width = 10;
+                worksheet2.Column(3).Width = 100;
+
+                worksheet.Cells[1, 1].Value = "ID";
+                worksheet.Cells[1, 1].Style.Font.Size = 12;
+                worksheet.Cells[1, 1].Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
+                worksheet.Cells[1, 1].Style.Fill.BackgroundColor.SetColor(colFromHex);
+                worksheet.Cells[1, 1].Style.Font.Color.SetColor(Color.White);
+                worksheet.Cells[1, 1].Style.Font.Bold = true;
+
+                worksheet.Cells[1, 2].Value = "Cod. Encuesta";
+                worksheet.Cells[1, 2].Style.Font.Color.SetColor(Color.White);
+                worksheet.Cells[1, 2].Style.Font.Bold = true;
+                worksheet.Cells[1, 2].Style.Font.Size = 12;
+                worksheet.Cells[1, 2].Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
+                worksheet.Cells[1, 2].Style.Fill.BackgroundColor.SetColor(colFromHex);
+
+                worksheet.Cells[1, 3].Value = "PT_INDICE";
+                worksheet.Cells[1, 3].Style.Font.Size = 12;
+                worksheet.Cells[1, 3].Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
+                worksheet.Cells[1, 3].Style.Fill.BackgroundColor.SetColor(colFromHex);
+                worksheet.Cells[1, 3].Style.Font.Color.SetColor(Color.White);
+                worksheet.Cells[1, 3].Style.Font.Bold = true;
+
+                worksheet.Cells[1, 4].Value = "Nombre Local";
+                worksheet.Cells[1, 4].Style.Font.Size = 12;
+                worksheet.Cells[1, 4].Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
+                worksheet.Cells[1, 4].Style.Fill.BackgroundColor.SetColor(colFromHex);
+                worksheet.Cells[1, 4].Style.Font.Color.SetColor(Color.White);
+                worksheet.Cells[1, 4].Style.Font.Bold = true;
+
+
+                worksheet.Cells[1, 5].Value = "Nombre Propietario";
+                worksheet.Cells[1, 5].Style.Font.Size = 12;
+                worksheet.Cells[1, 5].Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
+                worksheet.Cells[1, 5].Style.Fill.BackgroundColor.SetColor(colFromHex);
+                worksheet.Cells[1, 5].Style.Font.Color.SetColor(Color.White);
+                worksheet.Cells[1, 5].Style.Font.Bold = true;
+
+                worksheet.Cells[1, 6].Value = "Dirección";
+                worksheet.Cells[1, 6].Style.Font.Size = 12;
+                worksheet.Cells[1, 6].Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
+                worksheet.Cells[1, 6].Style.Fill.BackgroundColor.SetColor(colFromHex);
+                worksheet.Cells[1, 6].Style.Font.Color.SetColor(Color.White);
+                worksheet.Cells[1, 6].Style.Font.Bold = true;
+
+                worksheet.Cells[1, 7].Value = "Referencia";
+                worksheet.Cells[1, 7].Style.Font.Size = 12;
+                worksheet.Cells[1, 7].Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
+                worksheet.Cells[1, 7].Style.Fill.BackgroundColor.SetColor(colFromHex);
+                worksheet.Cells[1, 7].Style.Font.Color.SetColor(Color.White);
+                worksheet.Cells[1, 7].Style.Font.Bold = true;
+
+                worksheet.Cells[1, 8].Value = "Teléfono";
+                worksheet.Cells[1, 8].Style.Font.Size = 12;
+                worksheet.Cells[1, 8].Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
+                worksheet.Cells[1, 8].Style.Fill.BackgroundColor.SetColor(colFromHex);
+                worksheet.Cells[1, 8].Style.Font.Color.SetColor(Color.White);
+                worksheet.Cells[1, 8].Style.Font.Bold = true;
+
+                worksheet.Cells[1, 9].Value = "Tipo Negocio";
+                worksheet.Cells[1, 9].Style.Font.Size = 12;
+                worksheet.Cells[1, 9].Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
+                worksheet.Cells[1, 9].Style.Fill.BackgroundColor.SetColor(colFromHex);
+                worksheet.Cells[1, 9].Style.Font.Color.SetColor(Color.White);
+                worksheet.Cells[1, 9].Style.Font.Bold = true;
+
+                worksheet.Cells[1, 10].Value = "Latitud";
+                worksheet.Cells[1, 10].Style.Font.Size = 12;
+                worksheet.Cells[1, 10].Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
+                worksheet.Cells[1, 10].Style.Fill.BackgroundColor.SetColor(colFromHex);
+                worksheet.Cells[1, 10].Style.Font.Color.SetColor(Color.White);
+                worksheet.Cells[1, 10].Style.Font.Bold = true;
+
+                worksheet.Cells[1, 11].Value = "Longitud";
+                worksheet.Cells[1, 11].Style.Font.Size = 12;
+                worksheet.Cells[1, 11].Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
+                worksheet.Cells[1, 11].Style.Fill.BackgroundColor.SetColor(colFromHex);
+                worksheet.Cells[1, 11].Style.Font.Color.SetColor(Color.White);
+                worksheet.Cells[1, 11].Style.Font.Bold = true;
+
+                worksheet.Cells[1, 12].Value = "Ciudad";
+                worksheet.Cells[1, 12].Style.Font.Size = 12;
+                worksheet.Cells[1, 12].Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
+                worksheet.Cells[1, 12].Style.Fill.BackgroundColor.SetColor(colFromHex);
+                worksheet.Cells[1, 12].Style.Font.Color.SetColor(Color.White);
+                worksheet.Cells[1, 12].Style.Font.Bold = true;
+
+                worksheet.Cells[1, 13].Value = "Clúster";
+                worksheet.Cells[1, 13].Style.Font.Size = 12;
+                worksheet.Cells[1, 13].Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
+                worksheet.Cells[1, 13].Style.Fill.BackgroundColor.SetColor(colFromHex);
+                worksheet.Cells[1, 13].Style.Font.Color.SetColor(Color.White);
+                worksheet.Cells[1, 13].Style.Font.Bold = true;
+
+                worksheet2.Cells[1, 1].Value = "ID";
+                worksheet2.Cells[1, 1].Style.Font.Size = 12;
+                worksheet2.Cells[1, 1].Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
+                worksheet2.Cells[1, 1].Style.Fill.BackgroundColor.SetColor(colFromHex);
+                worksheet2.Cells[1, 1].Style.Font.Color.SetColor(Color.White);
+                worksheet2.Cells[1, 1].Style.Font.Bold = true;
+
+                worksheet2.Cells[1, 2].Value = "PT_INDICE";
+                worksheet2.Cells[1, 2].Style.Font.Size = 12;
+                worksheet2.Cells[1, 2].Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
+                worksheet2.Cells[1, 2].Style.Fill.BackgroundColor.SetColor(colFromHex);
+                worksheet2.Cells[1, 2].Style.Font.Color.SetColor(Color.White);
+                worksheet2.Cells[1, 2].Style.Font.Bold = true;
+
+                worksheet2.Cells[1, 3].Value = "Link Foto";
+                worksheet2.Cells[1, 3].Style.Font.Size = 12;
+                worksheet2.Cells[1, 3].Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
+                worksheet2.Cells[1, 3].Style.Fill.BackgroundColor.SetColor(colFromHex);
+                worksheet2.Cells[1, 3].Style.Font.Color.SetColor(Color.White);
+                worksheet2.Cells[1, 3].Style.Font.Bold = true;
+
+                int rows = 2;
+                foreach (var t in locales)
+                {
+                    worksheet.Cells[rows, 1].Value = t.Id;
+                    worksheet.Cells[rows, 2].Value = t.Code;
+                    worksheet.Cells[rows, 3].Value = t.ExternalCode;
+                    worksheet.Cells[rows, 4].Value = t.NameBranch;
+                    worksheet.Cells[rows, 5].Value = t.NameOwner;
+                    worksheet.Cells[rows, 6].Value = t.MainStreet;
+                    worksheet.Cells[rows, 7].Value = t.Reference;
+                    worksheet.Cells[rows, 8].Value = t.Phone;
+                    worksheet.Cells[rows, 9].Value = t.TypeBusiness;
+                    worksheet.Cells[rows, 10].Value = t.LatitudeBranch;
+                    worksheet.Cells[rows, 11].Value = t.LenghtBranch;
+                    worksheet.Cells[rows, 12].Value = t.NameCity;
+                    worksheet.Cells[rows, 13].Value = t.Cluster;
+                    rows++;
+                }
+
+                int rowsfotos = 2;
+                foreach (var t in fotos)
+                {
+                    worksheet2.Cells[rowsfotos, 1].Value = t.IdBranch;
+                    worksheet2.Cells[rowsfotos, 2].Value = t.ExternalCode;
+                    worksheet2.Cells[rowsfotos, 3].Value = t.UrlImage;
+                    rowsfotos++;
+                }
+
+                var _model = from x in _taskCampaignBusiness.GetHistoryCampign(Guid.Parse(id))
+                             select new { date = x.DateModification, status = x.StatusTask.Name, user = x.Users.Email, comment = x.CommentTaskNoImplemented, code = x.Tasks.Code, x.idtask };
+                if (_model != null)
+                {
+                    _model = _model.OrderByDescending(x => x.idtask).ToList();
+
+                }
+                // add a new worksheet to the empty workbook
+                package.Save();
+            }
+            var result = PhysicalFile(Path.Combine(sWebRootFolder, sFileName), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+
+            Response.Headers["Content-Disposition"] = new ContentDispositionHeaderValue("attachment")
+            {
+                FileName = file.Name
+            }.ToString();
+
+            return result;
+        }
+
         #region Exportar
         [HttpGet]
 

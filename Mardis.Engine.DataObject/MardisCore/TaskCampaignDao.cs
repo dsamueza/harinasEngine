@@ -18,6 +18,39 @@ namespace Mardis.Engine.DataObject.MardisCore
     public class TaskCampaignDao : ADao
     {
 
+        public IQueryable<Branch> BranchesByCampaign(string id)
+        {
+            Guid idAccount = (from c in Context.Campaigns
+                              where c.Id == Guid.Parse(id)
+                              select c.IdAccount).First();
+
+            var lista = (from b in Context.Branches
+                         join t in Context.TaskCampaigns.Where(t => t.IdCampaign == Guid.Parse(id)).Select(idb => idb.IdBranch).Distinct()
+                         on b.Id equals t
+                         where b.IdAccount == idAccount
+                         select b);
+
+            return lista;
+        }
+
+        public IQueryable<BranchImages> BranchImagesesByCampaign(string id)
+        {
+            Guid idAccount = (from c in Context.Campaigns
+                              where c.Id == Guid.Parse(id)
+                              select c.IdAccount).First();
+
+            var lista = (from b in Context.Branches
+                         join t in Context.TaskCampaigns.Where(t => t.IdCampaign == Guid.Parse(id)).Select(idb => idb.IdBranch).Distinct()
+                         on b.Id equals t
+                         join bi in Context.BranchImageses
+                         on b.Id equals bi.IdBranch
+                         where b.IdAccount == idAccount
+                         && bi.IdCampaign == Guid.Parse(id)
+                         select bi);
+
+            return lista;
+        }
+
         public TaskCampaignDao(MardisContext mardisContext) : base(mardisContext)
         {
             CoreFilterDetailDao = new CoreFilterDetailDao(mardisContext);
