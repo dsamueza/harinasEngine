@@ -266,6 +266,7 @@ function ApplyBindingTaskService(data) {
                 if (charCode > 31 && (charCode < 48 || charCode > 57)) {
                     return false;
                 }
+
                 console.log(charCode);
                 return true;
             }, getLabel(item) {
@@ -275,19 +276,16 @@ function ApplyBindingTaskService(data) {
 
                 console.log(item)
             },
-            OpenModalQuestionDinamic: function (_model) {
-                this.harinas.splice(0, 1);
-
-                this.harinas.push(_model[0])
-
-                $('#IdQuestionDinamic').modal('show');
+            secciondinamica: function (e) {
+                numsec = numsec + 1;
+                return numsec;
             },
             changeHandler: function (event) {
                 // change of userinput, do something
                 alert(event.id);
             },
-            moment: function () {
-                return moment();
+            moment: function (e) {
+                return moment(e);
             },
             openModal: function () {
                 return openModal();
@@ -298,15 +296,47 @@ function ApplyBindingTaskService(data) {
             Save: function () {
                 return Save();
             },
-            addRemoveIndex: function (index) {
-                this.poll.BranchImages[index].UrlImage = "";
+            addRemoveIndex: function (index, Id) {
 
+
+                this.poll.BranchImages.splice(index, 1);
+                deleteBranchImg(Id)
             },
             loadImg: function (index) {
 
                 var url = this.poll.BranchImages[index].UrlImage;
                 window.open(url, 'Download');
 
+            },
+
+            AcceptCode: function () {
+                SaveCode(this.poll.IdBranch, this.poll.BranchCodeNew);
+
+            },
+
+
+            acceptDinamic: function () {
+                SaveQuestionRepeat();
+
+            },
+            acceptDinamicCambioHarina: function (i, j, k) {
+                SaveQuestionRepeatCambioHarinas(i, j, k);
+            },
+            OpenModalEncuesta: function (e) {
+                $('#responsive').modal('show');
+            },
+            OpenModalQuestionDinamic: function (_model) {
+                this.harinas.splice(0, 1);
+                this.harinas.push(_model[0])
+                $('#IdQuestionDinamic').modal('show');
+            },
+            OpenModalQuestionDinamicCambioHarina: function (_model, i, j, k) {
+                this.harinas.splice(0, 1);
+                this.harinas.push(_model);
+                this.i = i;
+                this.j = j;
+                this.k = k;
+                $('#IdQuestionDinamicCambioHarina').modal('show');
             },
             classlenght: function (length) {
                 var bindclass = "col-sm-3";
@@ -322,24 +352,36 @@ function ApplyBindingTaskService(data) {
                 return bindclass;
 
             },
+
+            onFileAdd(e, idb, idc, idt) {
+
+                var files = e.target.files || e.dataTransfer.files;
+                if (!files.length)
+                    return;
+                this.createImageADD(files[0], idb, idc, idt);
+            },
+
             onFileChange(e, index) {
-                console.log(e.target.files)
+
                 var files = e.target.files || e.dataTransfer.files;
                 if (!files.length)
                     return;
                 this.createImage(files[0], index);
             },
-             OpenModalEncuesta: function (e) {
 
-                $('#responsive').modal('show');
-            }, col_sm_mardis(col){
-                 var maxColummn = col;
-                 var max = 83 / maxColummn + "%";
-                 console.log(max);
-                 return "padding-left: 5px; padding-right: 0;padding-top: 10px !important;font-weight:700; float: left;text-align: center; width:" + max+";";
+            createImageADD(file, idb, idc, idt) {
+                var image = new Image();
+                var reader = new FileReader();
 
-        },
-             
+                reader.onload = (e) => {
+
+                    AddBranchImg(e.target.result, idb, idc, idt);
+                };
+                reader.readAsDataURL(file);
+                resetImgVue();
+
+            },
+
             createImage(file, index) {
                 var image = new Image();
                 var reader = new FileReader();
@@ -349,20 +391,8 @@ function ApplyBindingTaskService(data) {
                     updateBranchImg(this.poll.BranchImages[index].Id, this.poll.BranchImages[index].UrlImage)
                 };
                 reader.readAsDataURL(file);
-                console.log(this.poll.BranchImages[index])
 
-            },
-                _modelServicef: function (id,idquestion) {
 
-                    var data = this.poll.ServiceCollection[0].ServiceDetailCollection;
-
-                    var _model = data.filter(d => d.Id === id);
-                    var _data2 = _model[0].QuestionCollection;
-                   var question = _data2.filter(d => d.idQuestionDetailMultiple === idquestion);
-                   
-                    //_model = _model.QuestionCollection.filter(d => d.idQuestionDetailMultiple === idquestion);
-                    
-                    return question
             }
         },
         computed: {
@@ -383,7 +413,44 @@ function ApplyBindingTaskService(data) {
 
     $.unblockUI();
 }
+function AddBranchImg(img, idb, idc, idt) {
+    $.blockUI({ message: "Actualizando Imagen.." });
 
+    $.ajax({
+        url: "/Task/SaveImage",
+        type: "POST",
+        data: {
+            Idtask: idt,
+            imgdata: img,
+            idbranch: idb,
+            idcampaign: idc
+        },
+        success: function (data) {
+
+
+            vueVM.$data.poll.BranchImages.push(data);
+
+            $.notify({
+                title: '<strong>Información :</strong>',
+                message: 'La foto  se cargo de forma exitosa'
+            });
+
+        },
+        complete: function (data) {
+            $.unblockUI();
+        },
+        error: function (error) {
+            console.log(error);
+            $.unblockUI();
+        }
+    });
+}
+function resetImgVue() {
+    viewer = null;
+    console.log(viewer)
+    imgvue()
+    console.log(viewer)
+}
 function BuscarPregunta(servicio, idpregunta) {
     if (servicio != null) {
         var preguntas = servicio.ServiceDetailCollection[s];
@@ -906,6 +973,7 @@ function limpiarQuestion(idquestion) {
 }
 
 
+
 function updateBranchImg(id, img) {
     $.blockUI({ message: "Actualizando Imagen.." });
 
@@ -944,12 +1012,15 @@ function deleteBranchImg(id) {
         url: "/Task/DeleteImage",
         type: "POST",
         data: {
-            idIdimg: id
+            imgdata: id
         },
         success: function (data) {
 
             if (data == "1") {
-                bootbox.alert("Foto ha sido eliminada");
+                $.notify({
+                    title: '<strong>Información :</strong>',
+                    message: 'La foto fue eliminada'
+                });
 
             } else {
                 bootbox.alert("Existío un error, Vuelva a intentarlo");
@@ -965,6 +1036,7 @@ function deleteBranchImg(id) {
         }
     });
 }
+var viewer
 function imgvue() {
     var galley = document.getElementById('galley');
     var viewer = new Viewer(galley, {

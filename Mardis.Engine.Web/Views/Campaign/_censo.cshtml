@@ -169,7 +169,8 @@
                                 @*<a class="btn btn-default btn-sm" id="btnCancelar" href="@Url.Action("MyTasks", "Task")">Salir</a>*@
 
 
-                                <a href="@Url.Action("MyTasks", "Task")" class="btn btn-default" id="btnCancelar" style="min-width: 100px;">
+
+                                <a href="@Url.Action("TasksPerCampaign", "Campaign", new { idCampaign = ViewData[CTask.IdCampaing].ToString() })" class="btn btn-default" id="btnCancelar" style="min-width: 100px;">
                                     <i class="clip-exit"></i> Salir
                                 </a>
 

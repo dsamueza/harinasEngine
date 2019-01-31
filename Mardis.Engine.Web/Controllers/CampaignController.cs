@@ -793,13 +793,16 @@ namespace Mardis.Engine.Web.Controllers
                 }
                 var filters = GetFilters(filterValues, deleteFilter);
                 var tasks = _campaignBusiness.GetPaginatedTaskPerCampaignViewModelDinamic(id, pageIndex, pageSize, filters, ApplicationUserCurrent.AccountId);
-
+                ViewBag.CountTasks = _taskCampaignBusiness._CountAllTasCamping(id, filters).ToString();
+                ViewBag.idcampaign = idCampaign;
+                var _MyTask = _taskCampaignBusiness._ModelTasks(tasks);
+                _taskCampaignBusiness.taskunBlockAll(Guid.Parse(ApplicationUserCurrent.UserId));
                 if (view == "list")
                 {
                     return View("~/Views/Task/TaskList.cshtml", tasks);
                 }
 
-                return View(tasks);
+                return View(_MyTask);
             }
             catch (Exception e)
             {
@@ -1079,7 +1082,7 @@ namespace Mardis.Engine.Web.Controllers
             {
                 ViewData[CTask.IdRegister] = idTask.ToString();
      
-                ViewData[CTask.IdCampaing] = Protector.Protect(idcampaing);
+                ViewData[CTask.IdCampaing] =idcampaing;
                 LoadSelectItems();
 
                 return View();

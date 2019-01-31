@@ -1,21 +1,21 @@
-﻿@model Mardis.Engine.Web.ViewModel.TaskViewModels.TaskPerCampaignViewModel
+﻿@model Mardis.Engine.Web.ViewModel.TaskViewModels.TaskCampaigViewModel
 @{
-    ViewData["Menu"] = "Tareas";
-    ViewData["Title"] = "Tareas";
-    ViewData["Description"] = "Mis Tareas";
+    ViewData["Menu"] = "Total de Tareas :";
+    ViewData["Title"] = "Tareas totales:";
+    ViewData["Description"] = ViewBag.CountTasks;
     Layout = "_Layout";
 
 }
 
 @section buttons{
-    <div class="pull-right">
-        <a title="Listado" class="btn btn-default input-sm" href="@Url.Action(Model.Properties.ActionName, Model.Properties.ControllerName, new { view = "list" })">
-            <i class="fa fa-list-alt"></i>
-        </a>
-        <a title="Kanban" class="btn btn-default input-sm" href="@Url.Action(Model.Properties.ActionName, Model.Properties.ControllerName, new { view = "block" })">
-            <i class="fa fa-th"></i>
-        </a>
-    </div>
+    @*<div class="pull-right">
+            <a title="Listado" class="btn btn-default input-sm" href="@Url.Action(Model.Properties.ActionName, Model.Properties.ControllerName, new { view = "list" })">
+                <i class="fa fa-list-alt"></i>
+            </a>
+            <a title="Kanban" class="btn btn-default input-sm" href="@Url.Action(Model.Properties.ActionName, Model.Properties.ControllerName, new {view = "block"})">
+                <i class="fa fa-th"></i>
+            </a>
+        </div>*@
 }
 
 @section filters{
@@ -24,21 +24,101 @@
 
 <link rel="stylesheet" href="~/lib/Slidebars/dist/slidebars.css">
 <link rel="stylesheet" href="~/css/theme/StyleFilter.css">
+<style>
+    #DatosTabla tbody {
+        font-size: 12px;
+        color: #545454;
+        font-weight: 600;
+    }
 
+    .user-footer a {
+        color: #be0811 !important;
+    }
+
+    #DatosTabla th {
+        font-size: 12px;
+        font-weight: 700;
+        color: black;
+    }
+
+    #DatosTabla a {
+        color: #20a0c6;
+        font-size: 16px;
+    }
+
+        #DatosTabla a:hover {
+            color: #20a0c6;
+            font-size: 18px;
+        }
+
+    .paginate_button {
+        font-size: 13px !important
+    }
+
+    .input-group .input-group__selections__comma {
+        padding-left: 0.9pc !important;
+    }
+
+    .input-group label {
+        left: 0.9pc !important;
+        font-weight: 700 !important;
+    }
+
+    .input-group .input-group--select__autocomplete {
+        padding-left: 0.9pc !important;
+        display: block;
+        width: 100%;
+        height: 38px;
+        padding: 6px 12px;
+        font-size: 14px;
+        line-height: 1.42857143;
+        color: #555;
+        background-color: #fff;
+        background-image: none;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+        box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+        -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
+        -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+        transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+    }
+
+    .btn-app {
+        top: -1.3pc !important;
+        margin: 0px !important;
+        color: white !important;
+        background-color: #76787a;
+        font-size: 11px !important;
+        font-weight: 700 !important;
+        border-radius: 0.3pc !important;
+        padding: 7px 5px !important;
+        height: 45px !important;
+    }
+
+        .btn-app:hover {
+            background-color: #a1a1a1 !important;
+        }
+
+    .breadcrumb i {
+        color: rgba(221, 24, 34, 0.98) !important;
+    }
+</style>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-beta.35/css/uikit.min.css" rel="stylesheet" />
+<link href="https://cdn.datatables.net/1.10.19/css/dataTables.uikit.min.css" rel="stylesheet" />
+<link href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" rel="stylesheet" />
+<link href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons' rel="stylesheet">
 
 <div id="divMyTask">
     <div class="row">
         <div class="row-fluid">
             @{ var tam = Model.tasks.Count;}
-        
             @foreach (var task in Model.tasks)
-    {
-  
-                            <div class="col-sm-2-mdr" style="text-align: center; border: thick solid white; background-color: @task.color;">
-                                <h5 class="control-label" style="color: white;">@task.type @(((Model.PageIndex * Model.PageSize) - Model.PageSize + 1) + " - " + (Model.PageIndex * Model.PageSize) + " / " + task.CountTasks)</h5>
-                            </div>
-        
-}
+            {
+                <div class="col-sm-2-mdr" style="text-align: center; border: thick solid white; background-color: @task.color;">
+                    <h5 class="control-label" style="color: white;">@task.type @(((Model.PageIndex * Model.PageSize) - Model.PageSize + 1) + " - " + (Model.PageIndex * Model.PageSize) + " / " + task.CountTasks)</h5>
+                </div>
+            }
         </div>
     </div>
 
@@ -50,12 +130,14 @@
 
                     @foreach (var task in listtask.TasksList)
                     {
+
+
                         <div class="panel panel-default" id="@("row" +task.Id )">
                             <div class="panel-body">
                                 <div class="row">
                                     <div class="col-sm-7">
                                         <strong>CAMPAÑA:</strong>
-                                        <a href="@Url.Action("ProfileCampaign", "Campaign", new { idTask = task.Id , idcampaing=Model.IdCampaign})">@task.CampaignName</a>
+                                        <a href="@Url.Action("ProfileCampaign", "Campaign", new { idTask = task.Id,idcampaing=@ViewBag.idcampaign  })">@task.CampaignName</a>
                                     </div>
                                     <div class="col-sm-3">
                                         <label style="font-size-adjust: 0.4;">@task.Route</label>
@@ -63,20 +145,26 @@
                                 </div>
                                 <div class="row">
                                     <div class="col-sm-12">
-                                        <strong>
-                                        Local:
-                                            <a href="@Url.Action("Profile", "Branch", new {idBranch = @task.BranchId})">@task.BranchName</a>
-                                        </strong>
+                                        <label style="font-size-adjust: 0.4;">@task.BranchName</label>
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-sm-6">
-                                        <label style="font-size-adjust: 0.4;">Código Mardis: </label>
+                                        <label style="font-size-adjust: 0.4;">Encuesta: </label>
                                     </div>
                                     <div class="col-sm-6">
                                         <label style="font-size-adjust: 0.4;">@task.BranchMardisCode</label>
                                     </div>
                                 </div>
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <label style="font-size-adjust: 0.4;">PT_Indice: </label>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <label style="font-size-adjust: 0.4;">@task.BranchExternalCode</label>
+                                    </div>
+                                </div>
+
                                 <div class="row">
                                     <div class="col-sm-9">
                                         <label style="font-size-adjust: 0.4;">@task.StartDate.ToString("dd/MM/yyyy")</label>
@@ -85,6 +173,20 @@
                                         &#x2500;&#x25CF;&#x2500;
                                     </div>
                                 </div>
+
+                                <div class="row">
+
+                                    <div class="col-sm-6">
+                                        <a href="#" onclick="History('@task.Id')" style="font-size-adjust: 0.4;" class="pull-left"><span class="fa fa-eye" style="color: @listtask.color"></span></a>
+                                    </div>
+                                    @if (task.StatusMigrate == "G")
+                                    {
+                                        <div class="col-sm-6">
+                                            <a href="#" style="font-size-adjust: 0.4;" class="pull-right"><span class="fa  fa-expeditedssl" style="color: #a8222a"> Migrado</span></a>
+                                        </div>
+                                    }
+                                </div>
+
                             </div>
                         </div>
 
@@ -93,6 +195,8 @@
             }
         </div>
     </div>
+
+   @Html.Partial("../Task/_HistoryStatus")
 </div>
 
 <div id="divFooter">
@@ -102,22 +206,82 @@
 @section scripts{
     <script src="~/js/viewModel/FilterHelper.js"></script>
     <script>
-        controllerName = "@Model.Properties.ControllerName";
-        actionName = "@Model.Properties.ActionName";
-
+        controllerName = "Campaign";
+        actionName = "TasksPerCampaign";
+        var idtask = "E6774B2A-B759-4C6A-B4A8-D8F08DDEF915";
+        var table;
         @foreach (var filter in Model.Properties.FilterValues)
         {
             @:var point = { 'IdFilter': "@filter.IdFilter", 'NameFilter': "@filter.NameFilter", 'Criteria': "@filter.Criteria", 'Value': "@filter.Value", 'Visible':'@filter.Visible' };
             @:filters.push(point);
         }
-        /*algoritmo de adaptacion*/
-        var maxColummn = '@Html.Raw(tam)';
+                var maxColummn = '@Html.Raw(tam)';
         var x = document.getElementsByClassName("col-sm-2-mdr");
         var i;
         var max= 100 / maxColummn + "%";
         for (i = 0; i < x.length; i++) {
                     x[i].style.width = max;
-                }
-   
+        }
+        generarTabla()
+        function History(id) {
+            idtask = id;
+
+
+
+            var table = $('#table-mardis-dt').DataTable();
+
+            table.clear().draw();
+            table.ajax.reload();
+            $('#responsive').modal('show');
+        }
+
+
+            function generarTabla() {
+                $.blockUI({ message: "cargando..." });
+             table = $('#table-mardis-dt').dataTable({
+                "language": {
+                    "url": "@Url.Content("~/js/latin.json")"
+                 },
+                 "pageLength": 10,
+                "ajax": {
+                    "url": '/Task/HistoryTB',
+                    "type": "GET",
+                    "data": function (d) {
+                        return $.extend({}, d, {
+                            "Id": idtask
+                        });
+                    },
+                    "dataSrc": function (json) {
+                        //     jQuery.each(json, function (index, value) {
+                        //         //now you can access properties using dot notation
+
+
+
+                        //         if (json[index].status) { json[index].status = "<input type='checkbox'   class='custom-control-input' id=" + json[index].route + " checked onclick='onToggle(this)'>"; }
+                        //         else { json[index].status = "<input type='checkbox' class='editor-active' id=" + json[index].route + " onclick='onToggle(this)' >" }
+
+                        //         json[index].linkbranch = "<a href='#responsive'" + " '   onclick='ModalPerfil(this);'  "+"id=" + (json[index].route+"link" )+ "><i class='fa fa-fw fa-group'></i> </a>";
+
+
+                        //});
+
+                        return json;
+                    }
+                },
+                "columns": [
+                    { "data": "date" },
+                    { "data": "user" },
+                    { "data": "status" },
+                     { "data": "comment" }
+                ],
+
+
+
+             }
+
+                );
+                $.unblockUI();
+        }
+
     </script>
 }
