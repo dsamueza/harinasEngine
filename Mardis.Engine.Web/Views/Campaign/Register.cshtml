@@ -236,6 +236,9 @@
         <div class="row">
             <div class="col-sm-12" style="text-align: center">
                 <button type="submit" class="btn btn-primary" formaction="Register">Guardar</button>
+
+                <a href="@Url.Action("ExportInforme", "Campaign", Model)" class="btn btn-info">Informe</a>
+
                 <a href="@Url.Action("Massive", "Task", new { idCampaign = Model.Id  })" class="btn btn-info">Importar Locales</a>
 
                 <a href="@Url.Action("Index","Campaign")" class="btn btn-default btn-sm">Salir</a>

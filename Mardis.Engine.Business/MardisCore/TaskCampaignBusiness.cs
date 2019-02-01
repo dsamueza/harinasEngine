@@ -450,6 +450,16 @@ namespace Mardis.Engine.Business.MardisCore
             return _taskCampaignDao.GetAlltasksByCampaignNewId(idCampaign);
         }
 
+        public IQueryable<Branch> ListBranch(string id)
+        {
+            return _taskCampaignDao.BranchesByCampaign(id);
+        }
+
+        public IQueryable<BranchImages> ListBranchImages(string id)
+        {
+            return _taskCampaignDao.BranchImagesesByCampaign(id);
+        }
+
 
         private List<BranchImages> GetImagesTask(Guid idAccount, MyTaskViewModel taskWithPoll)
         {
