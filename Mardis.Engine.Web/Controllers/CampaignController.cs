@@ -801,7 +801,8 @@ namespace Mardis.Engine.Web.Controllers
                 {
                     return View("~/Views/Task/TaskList.cshtml", tasks);
                 }
-
+                _MyTask.Properties.ActionName = "TasksPerCampaign";
+                _MyTask.Properties.ControllerName = "Campaign";
                 return View(_MyTask);
             }
             catch (Exception e)

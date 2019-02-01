@@ -133,11 +133,12 @@ namespace Mardis.Engine.Web
             services.AddDistributedMemoryCache();
 
             services.AddMemoryCache();
+            var u = sessionTimeOut;
             services.AddSession(options =>
             {
                 // Set a short timeout for easy testing.
 
-                options.IdleTimeout = TimeSpan.FromMinutes(sessionTimeOut);
+                options.IdleTimeout = TimeSpan.FromHours(2);
 
             });
 

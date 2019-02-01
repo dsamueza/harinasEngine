@@ -134,42 +134,54 @@
 
                         <div class="panel panel-default" id="@("row" +task.Id )">
                             <div class="panel-body">
-                                <div class="row">
-                                    <div class="col-sm-7">
+
+                                @*<div class="col-sm-7">
                                         <strong>CAMPAÑA:</strong>
                                         <a href="@Url.Action("ProfileCampaign", "Campaign", new { idTask = task.Id,idcampaing=@ViewBag.idcampaign  })">@task.CampaignName</a>
-                                    </div>
-                                    <div class="col-sm-3">
-                                        <label style="font-size-adjust: 0.4;">@task.Route</label>
-                                    </div>
-                                </div>
+                                    </div>*@
                                 <div class="row">
-                                    <div class="col-sm-12">
-                                        <label style="font-size-adjust: 0.4;">@task.BranchName</label>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-sm-6">
-                                        <label style="font-size-adjust: 0.4;">Encuesta: </label>
-                                    </div>
-                                    <div class="col-sm-6">
-                                        <label style="font-size-adjust: 0.4;">@task.BranchMardisCode</label>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-sm-6">
-                                        <label style="font-size-adjust: 0.4;">PT_Indice: </label>
-                                    </div>
-                                    <div class="col-sm-6">
-                                        <label style="font-size-adjust: 0.4;">@task.BranchExternalCode</label>
+                                    <div class="col-sm-12 pull-right">
+                                        <label style="font-size-adjust: 0.3;">@task.Route</label>
                                     </div>
                                 </div>
 
                                 <div class="row">
-                                    <div class="col-sm-9">
-                                        <label style="font-size-adjust: 0.4;">@task.StartDate.ToString("dd/MM/yyyy")</label>
+
+                                    <div class="col-sm-12">
+
+                                        <a href="@Url.Action("ProfileCampaign", "Campaign", new { idTask = task.Id,idcampaing=@ViewBag.idcampaign  })" style="color: @listtask.color">@task.BranchMardisCode</a>
+
                                     </div>
-                                    <div class="col-sm-2" style="color: @listtask.color">
+
+
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <label style="font-size-adjust: 0.3;">@task.BranchName</label>
+                                    </div>
+                                </div>
+
+                                @*<div class="row">
+                                        <div class="col-sm-12">
+                                            <label style="font-size-adjust: 0.4;">@task.BranchMardisCode</label>
+                                        </div>
+                                    </div>*@
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <label style="font-size-adjust: 0.3;">Código: </label>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <label style="font-size-adjust: 0.3;">@task.BranchExternalCode</label>
+                                    </div>
+                                </div> <div class="row">
+                                    <div class="col-sm-8">
+
+                                        <label style="font-size-adjust: 0.4; font-weight:700">@task.StartDate.ToString("dd/MM/yyyy")</label>
+
+                                    </div>
+                                    <div class="col-sm-3" style="color: @listtask.color">
                                         &#x2500;&#x25CF;&#x2500;
                                     </div>
                                 </div>
@@ -177,7 +189,7 @@
                                 <div class="row">
 
                                     <div class="col-sm-6">
-                                        <a href="#" onclick="History('@task.Id')" style="font-size-adjust: 0.4;" class="pull-left"><span class="fa fa-eye" style="color: @listtask.color"></span></a>
+                                        <a href="#" onclick="History('@task.Id')" style="font-size-adjust: 0.3;" class="pull-left"><span class="fa fa-eye" style="color: @listtask.color"></span></a>
                                     </div>
                                     @if (task.StatusMigrate == "G")
                                     {
@@ -196,9 +208,9 @@
         </div>
     </div>
 
-   @Html.Partial("../Task/_HistoryStatus")
 </div>
 
+@Html.Partial("../Task/_HistoryStatus")
 <div id="divFooter">
     @Html.Partial("_PagingPartial", Model)
 </div>
@@ -218,7 +230,7 @@
                 var maxColummn = '@Html.Raw(tam)';
         var x = document.getElementsByClassName("col-sm-2-mdr");
         var i;
-        var max= 100 / maxColummn + "%";
+        var max = 100 / maxColummn + "%";
         for (i = 0; i < x.length; i++) {
                     x[i].style.width = max;
         }
