@@ -160,7 +160,24 @@ namespace Mardis.Engine.Web.Controllers
                 return null;
             }
         }
+       private string EstadoLocal(string statusregister) {
+            var STATUS = "";
 
+            switch (statusregister)
+            {
+                case "A":
+                    STATUS = "ACTIVO";
+                    break;
+                case "I":
+                    STATUS = "INACTIVO";
+                    break;
+                case "N":
+                    STATUS = "NUEVO";
+                    break;
+            }
+
+            return STATUS; 
+        }
         [HttpGet]
         public IActionResult ExportInforme(string id)
         {
@@ -180,7 +197,8 @@ namespace Mardis.Engine.Web.Controllers
                 b.LatitudeBranch,
                 b.LenghtBranch,
                 NameCity = b.District.Name,
-                b.Cluster
+                b.Cluster,
+               estado= EstadoLocal(b.StatusRegister)
             }).ToList();
 
             var fotos = _taskCampaignBusiness.ListBranchImages(id).Select(bi => new
@@ -318,6 +336,16 @@ namespace Mardis.Engine.Web.Controllers
                 worksheet.Cells[1, 13].Style.Font.Color.SetColor(Color.White);
                 worksheet.Cells[1, 13].Style.Font.Bold = true;
 
+                worksheet.Cells[1, 14].Value = "Estado Local";
+                worksheet.Cells[1, 14].Style.Font.Size = 12;
+                worksheet.Cells[1, 14].Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
+                worksheet.Cells[1, 14].Style.Fill.BackgroundColor.SetColor(colFromHex);
+                worksheet.Cells[1, 14].Style.Font.Color.SetColor(Color.White);
+                worksheet.Cells[1, 14].Style.Font.Bold = true;
+
+
+
+
                 worksheet2.Cells[1, 1].Value = "ID";
                 worksheet2.Cells[1, 1].Style.Font.Size = 12;
                 worksheet2.Cells[1, 1].Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
@@ -339,22 +367,24 @@ namespace Mardis.Engine.Web.Controllers
                 worksheet2.Cells[1, 3].Style.Font.Color.SetColor(Color.White);
                 worksheet2.Cells[1, 3].Style.Font.Bold = true;
 
+
                 int rows = 2;
                 foreach (var t in locales)
                 {
                     worksheet.Cells[rows, 1].Value = t.Id;
                     worksheet.Cells[rows, 2].Value = t.Code;
                     worksheet.Cells[rows, 3].Value = t.ExternalCode;
-                    worksheet.Cells[rows, 4].Value = t.NameBranch;
+                    worksheet.Cells[rows, 4].Value = t.NameBranch.ToUpper();
                     worksheet.Cells[rows, 5].Value = t.NameOwner;
                     worksheet.Cells[rows, 6].Value = t.MainStreet;
                     worksheet.Cells[rows, 7].Value = t.Reference;
                     worksheet.Cells[rows, 8].Value = t.Phone;
-                    worksheet.Cells[rows, 9].Value = t.TypeBusiness;
+                    worksheet.Cells[rows, 9].Value = t.TypeBusiness.ToUpper().TrimEnd().TrimStart();
                     worksheet.Cells[rows, 10].Value = t.LatitudeBranch;
                     worksheet.Cells[rows, 11].Value = t.LenghtBranch;
                     worksheet.Cells[rows, 12].Value = t.NameCity;
                     worksheet.Cells[rows, 13].Value = t.Cluster;
+                    worksheet.Cells[rows, 14].Value = t.estado;
                     rows++;
                 }
 
@@ -1018,6 +1048,13 @@ namespace Mardis.Engine.Web.Controllers
                     id = Guid.Parse(Protector.Unprotect(idCampaign));
                 }
                 var filters = GetFilters(filterValues, deleteFilter);
+                if (filters.Where(x => x.NameFilter == "IdCampaign").Count() > 0)
+                {
+                    var varcampid = filters.Where(x => x.NameFilter == "IdCampaign").First().Value;
+                    id = Guid.Parse(varcampid);
+                    idCampaign = Protector.Protect(varcampid);
+                    SetSessionVariable("idCampaign", idCampaign);
+                }
                 var tasks = _campaignBusiness.GetPaginatedTaskPerCampaignViewModelDinamic(id, pageIndex, pageSize, filters, ApplicationUserCurrent.AccountId);
                 ViewBag.CountTasks = _taskCampaignBusiness._CountAllTasCamping(id, filters).ToString();
                 ViewBag.idcampaign = idCampaign;

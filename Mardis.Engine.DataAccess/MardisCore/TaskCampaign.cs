@@ -83,6 +83,7 @@ namespace Mardis.Engine.DataAccess.MardisCore
         public string CodeGemini { get; set; }
         public string StatusMigrate { get; set; }
         public string StatusField { get; set; }
+        public string Icon { get; set; }
         public ICollection<Answer> Answers { get; set; }
         public ICollection<PollsTask> PollsTaskss { get; set; }
         public ICollection<historialTareas> HistoryTask { get; set; }

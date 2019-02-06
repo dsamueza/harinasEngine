@@ -199,13 +199,14 @@ namespace Mardis.Engine.DataObject.MardisCore
                    new GeoPositionViewModel()
                    {
                        Title = c.Code,
-                       IconUrl = GetIcon(c.StatusTask.Name),
+                       IconUrl = GetIconCluster(c.Branch.Cluster),
                        Latitude = c.Branch.LatitudeBranch.Replace(",", "."),
                        Longitude = c.Branch.LenghtBranch.Replace(",", "."),
                        IdTask = GetIdTask(c.Id),
                        NameBranch = c.Branch.Name,
                        CodeBranch = c.Branch.ExternalCode,
                        //ImageUrl = c.Branch.BranchImages.FirstOrDefault().UrlImage?? ""
+                       Cluster=c.Branch.Cluster
                    })
                 .ToList();
         }
@@ -224,7 +225,20 @@ namespace Mardis.Engine.DataObject.MardisCore
                     return CImages.OrangeMarker;
             }
         }
-
+        private string GetIconCluster(string status)
+        {
+            switch (status)
+            {
+                case "1":
+                    return CImages.BlueMarker;
+                case "2":
+                    return CImages.GreenMarker;
+                case "3":
+                    return CImages.RedMarker;
+                default:
+                    return CImages.OrangeMarker;
+            }
+        }
         public int NumbertaskbyCampaign(Guid idcampaing) {
 
 

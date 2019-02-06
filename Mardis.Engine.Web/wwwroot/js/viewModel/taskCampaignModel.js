@@ -105,13 +105,21 @@ function getParameterByName(name) {
 Vue.directive('info-sender', {
     bind: function (el, binding, vnode) {
         el.addEventListener("change", function () {
-            if (store.get(el.id) == null)
-                store.set(el.id, { Idquestion: el.id, AnswerQuestion: el.value, idTask: getParameterByName('idTask'), idanswer: el.name, estado: "P" });
-            else
-                if (store.get(el.id).idanswer == "00000000-0000-0000-0000-000000000000" || store.get(el.id).idanswer == "")
-                    store.set(el.id, { Idquestion: el.id, AnswerQuestion: el.value, idTask: getParameterByName('idTask'), idanswer: el.name, estado: "P" });
+            if (store.get(el.name) == null) {
+                if (el.name != "00000000-0000-0000-0000-000000000000")
+                    store.set(el.name, { Idquestion: el.id, AnswerQuestion: el.value, idTask: getParameterByName('idTask'), idanswer: el.name, estado: "P" });
                 else
-                    store.set(el.id, { Idquestion: el.id, AnswerQuestion: el.value, idTask: getParameterByName('idTask'), idanswer: store.get(el.id).idanswer, estado: "P" });
+                    store.set(el.id, { Idquestion: el.id, AnswerQuestion: el.value, idTask: getParameterByName('idTask'), idanswer: el.name, estado: "P" });
+
+
+            }
+            else {
+                if (store.get(el.name).idanswer == "00000000-0000-0000-0000-000000000000" || store.get(el.id).idanswer == "") {
+                    store.set(el.name, { Idquestion: el.id, AnswerQuestion: el.value, idTask: getParameterByName('idTask'), idanswer: el.name, estado: "P" });
+                }
+                else
+                    store.set(el.name, { Idquestion: el.id, AnswerQuestion: el.value, idTask: getParameterByName('idTask'), idanswer: store.get(el.id).idanswer, estado: "P" });
+            }
             //alert(el.value);
             let storeSize = 0;
             store.each(function (value, key) {
@@ -145,7 +153,7 @@ Vue.directive('info-sender', {
                     success: function (data) {
                         if (data) {
                             for (var d in data) {
-                                store.set(data[d].Idquestion, { Idquestion: data[d].Idquestion, AnswerQuestion: data[d].AnswerQuestion, idTask: data[d].idTask, idanswer: data[d].idAnswer, estado: data[d].estado });
+                                store.set(data[d].idAnswer, { Idquestion: data[d].Idquestion, AnswerQuestion: data[d].AnswerQuestion, idTask: data[d].idTask, idanswer: data[d].idAnswer, estado: data[d].estado });
                             }
                             espera = 0;
 

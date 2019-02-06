@@ -19,5 +19,7 @@
         public string NameBranch { get; set; }
 
         public string CodeBranch { get; set; }
+
+        public string Cluster { get; set; }
     }
 }

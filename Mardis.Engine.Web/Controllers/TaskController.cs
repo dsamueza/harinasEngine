@@ -201,6 +201,12 @@ namespace Mardis.Engine.Web.Controllers
                     id = Guid.Parse(_protector.Unprotect(idCampaign));
                 }
                 var filters = GetFilters(filterValues, deleteFilter);
+                if (filters.Where(x => x.NameFilter == "IdCampaign").Count() > 0) {
+                    var varcampid = filters.Where(x => x.NameFilter == "IdCampaign").First().Value;
+                    id = Guid.Parse(varcampid);
+                    idCampaign = _protector.Protect(varcampid);
+                    SetSessionVariable("idCampaign", idCampaign);
+                }
                 var tasks = _campaignBusiness.GetPaginatedTaskPerCampaignViewModelDinamic(id, pageIndex, pageSize, filters, ApplicationUserCurrent.AccountId);
                 ViewBag.CountTasks = _taskCampaignBusiness._CountAllTasCamping(id, filters).ToString();
                 ViewBag.idcampaign = idCampaign;
@@ -382,7 +388,7 @@ namespace Mardis.Engine.Web.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(new EventId(0, "Error Index"), ex.Message);
+                    _logger.LogError(new EventId(0, "Error Index"), ex.Message);
                 return null;
             }
         }
@@ -876,7 +882,7 @@ namespace Mardis.Engine.Web.Controllers
                     worksheet.Cells[rows, 2].Value = t.Cluster;
                     worksheet.Cells[rows, 3].Value = t.Code;
                     worksheet.Cells[rows, 4].Value = t.ExternalCode;
-                    worksheet.Cells[rows, 5].Value = t.Name;
+                    worksheet.Cells[rows, 5].Value = t.Name.ToUpper();
                     worksheet.Cells[rows, 6].Value = t.Estado_c;
                     worksheet.Cells[rows, 7].Value = t.Phone;
                     worksheet.Cells[rows, 8].Value = t.Encuestador;
@@ -887,7 +893,7 @@ namespace Mardis.Engine.Web.Controllers
                     worksheet.Cells[rows, 12].Value = t.Commentario;
                     if (!listado.First().IdAccount.Equals(Guid.Parse("85024910-FC12-4DD8-AE58-761BF972DEB7")))
                     {
-                        worksheet.Cells[rows, 11].Value = t.TypeBusiness;
+                        worksheet.Cells[rows, 11].Value = t.TypeBusiness.ToUpper().TrimEnd().TrimStart();
                     }
                     if (listado.First().IdAccount.Equals(Guid.Parse("85024910-FC12-4DD8-AE58-761BF972DEB7")))
                     {

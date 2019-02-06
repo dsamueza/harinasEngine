@@ -26,6 +26,8 @@ namespace Mardis.Engine.Web.ViewModel.TaskViewModels
 
         public string Latitude { get; set; }
         public string StatusMigrate { get; set; }
+        public string Icon { get; set; } 
         
+
     }
 }

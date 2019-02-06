@@ -32,7 +32,8 @@ namespace Mardis.Engine.Converter
                                     Longitude = taskCampaign.Branch.LenghtBranch,
                                     Latitude = taskCampaign.Branch.LatitudeBranch,
                                     BranchId = taskCampaign.IdBranch
-                                    ,StatusMigrate=taskCampaign.StatusMigrate
+                                    , StatusMigrate = taskCampaign.StatusMigrate
+                                    ,Icon=taskCampaign.Icon
                                 })
                 .ToList();
         }

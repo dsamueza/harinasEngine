@@ -115,9 +115,10 @@
             @{ var tam = Model.tasks.Count;}
             @foreach (var task in Model.tasks)
             {
-                <div class="col-sm-2-mdr" style="text-align: center; border: thick solid white; background-color: @task.color;">
-                    <h5 class="control-label" style="color: white;">@task.type @(((Model.PageIndex * Model.PageSize) - Model.PageSize + 1) + " - " + (Model.PageIndex * Model.PageSize) + " / " + task.CountTasks)</h5>
-                </div>
+            <div class="col-sm-2-mdr" style="text-align: center; border: thick solid white; background-color: @task.color;     min-height: 75px;">
+                <h5 class="control-label" style="color: white; margin-top:0px !important;margin-bottom:0px !important;font-size:14px !important"> @task.type </h5>
+                <h5 class="control-label" style="color: white; margin-top:0px !important;margin-bottom:0px !important;font-size:14px !important"> @(((Model.PageIndex * Model.PageSize) - Model.PageSize + 1) + "-" + (Model.PageIndex * Model.PageSize) + "/" + task.CountTasks)</h5>
+            </div>
             }
         </div>
     </div>
@@ -136,12 +137,12 @@
                             <div class="panel-body">
 
                                 @*<div class="col-sm-7">
-                                        <strong>CAMPAÑA:</strong>
-                                        <a href="@Url.Action("ProfileCampaign", "Campaign", new { idTask = task.Id,idcampaing=@ViewBag.idcampaign  })">@task.CampaignName</a>
-                                    </div>*@
+            <strong>CAMPAÑA:</strong>
+            <a href="@Url.Action("ProfileCampaign", "Campaign", new { idTask = task.Id,idcampaing=@ViewBag.idcampaign  })">@task.CampaignName</a>
+        </div>*@
                                 <div class="row">
                                     <div class="col-sm-12 pull-right">
-                                        <label style="font-size-adjust: 0.3;">@task.Route</label>
+                                        <label style="font-size-adjust: 0.2;">@task.Route</label>
                                     </div>
                                 </div>
 
@@ -155,50 +156,52 @@
 
 
                                 </div>
-                                <div class="row">
-                                    <div class="col-sm-12">
-                                        <label style="font-size-adjust: 0.3;">@task.BranchName</label>
-                                    </div>
-                                </div>
+                                @*<div class="row">
+            <div class="col-sm-12">
+                <label style="font-size-adjust: 0.2;">@task.BranchName</label>
+            </div>
+        </div>*@
 
                                 @*<div class="row">
-                                        <div class="col-sm-12">
-                                            <label style="font-size-adjust: 0.4;">@task.BranchMardisCode</label>
-                                        </div>
-                                    </div>*@
+            <div class="col-sm-12">
+                <label style="font-size-adjust: 0.4;">@task.BranchMardisCode</label>
+            </div>
+        </div>*@
                                 <div class="row">
                                     <div class="col-sm-12">
-                                        <label style="font-size-adjust: 0.3;">Código: </label>
+                                        <label style="font-size-adjust: 0.2">Código: </label>
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-sm-12">
-                                        <label style="font-size-adjust: 0.3;">@task.BranchExternalCode</label>
+                                        <label style="font-size-adjust: 0.2;">@task.BranchExternalCode</label>
                                     </div>
                                 </div> <div class="row">
                                     <div class="col-sm-8">
 
-                                        <label style="font-size-adjust: 0.4; font-weight:700">@task.StartDate.ToString("dd/MM/yyyy")</label>
+                                        <label style="font-size-adjust: 0.2; font-weight:700">@task.StartDate.ToString("dd/MM/yyyy")</label>
 
                                     </div>
-                                    <div class="col-sm-3" style="color: @listtask.color">
-                                        &#x2500;&#x25CF;&#x2500;
-                                    </div>
+
                                 </div>
 
                                 <div class="row">
-
                                     <div class="col-sm-6">
-                                        <a href="#" onclick="History('@task.Id')" style="font-size-adjust: 0.3;" class="pull-left"><span class="fa fa-eye" style="color: @listtask.color"></span></a>
+                                        <a href="#" onclick="History('@task.Id')" style="font-size-adjust: 0.4;" class="pull-left"><span class="fa fa-eye" style="color: @listtask.color"></span></a>
                                     </div>
+                                    <div class="col-sm-6">
+                                        <span class="@task.Icon pull-right" style="font-size-adjust: 0.4; color: @listtask.color"></span>
+                                    </div>
+
+                                </div>
+                                <div class="row">
                                     @if (task.StatusMigrate == "G")
                                     {
                                         <div class="col-sm-6">
-                                            <a href="#" style="font-size-adjust: 0.4;" class="pull-right"><span class="fa  fa-expeditedssl" style="color: #a8222a"> Migrado</span></a>
+                                            <a href="#" style="font-size-adjust: 0.4;" class="col-lg-offset-7"><span class="fa  fa-expeditedssl" style="color: #a8222a"> Migrado</span></a>
                                         </div>
                                     }
                                 </div>
-
                             </div>
                         </div>
 
