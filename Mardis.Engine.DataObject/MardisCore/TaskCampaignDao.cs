@@ -330,7 +330,32 @@ namespace Mardis.Engine.DataObject.MardisCore
 
             return resultsList;
         }
+        public List<StatusTask> GetMyTaskViewItemModelFilter(int pageIndex, int pageSize, List<FilterValue> filterValues, Guid idAccount)
+        {
 
+            var strPredicate = $" StatusRegister == \"{CStatusRegister.Active}\" " +
+                              $"&& IdAccount == \"{idAccount.ToString()}\" ";
+
+            var dataElement = Context.TaskCampaigns
+                .Include(t => t.StatusTask)
+                .Include(t => t.Campaign);
+               
+              
+            strPredicate += GetFilterPredicate(filterValues);
+
+            var resultsList = dataElement
+                .Where(strPredicate)
+                .Select(x=>x.StatusTask)
+                .Distinct()
+                .ToList();
+       var   data=  from st in resultsList
+            join stc in Context.StatusTaskAccounts
+            on st.Id equals stc.Idstatustask
+            where stc.Idaccount == idAccount
+                    orderby stc.ORDER
+            select st;
+            return data.ToList();
+        }
         public int GetTaskCountByCampaignAndStatus(string nameStatus, List<FilterValue> filterValues, Guid idAccount)
         {
             var strPredicate = $"StatusTask.Name ==  \"{nameStatus}\" " +

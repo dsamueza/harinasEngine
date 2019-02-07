@@ -320,13 +320,19 @@ namespace Mardis.Engine.Business.MardisCore
             var data = _taskCampaignDao.statusAllow(idAccount, pageIndex, pageSize);
             int aux = 0;
             int   max = 0;
+            if (  filters.Count() > 1)
+            {
+                data = _taskCampaignDao.GetMyTaskViewItemModelFilter( pageIndex, pageSize, filters, idAccount);
 
-            foreach (var allow in data)
+            }
+                foreach (var allow in data)
             {
                 aux = _taskCampaignDao.GetTaskCountByCampaignAndStatus(allow.Name, filters, idAccount);
                 var taskslist = GetMyTaskViewItemModel(allow.Name,pageIndex, pageSize, filters, idAccount);
                 max = (aux > max) ? aux : max;
-                itemResult.tasks.Add(new MyStatusTaskViewModel { TasksList = taskslist, CountTasks = aux, type = allow.Name, color = allow.color });
+              
+              itemResult.tasks.Add(new MyStatusTaskViewModel { TasksList = taskslist, CountTasks = aux, type = allow.Name, color = allow.color });
+              
             }
             itemResult.IdCampaign = idCampaign;
             return ConfigurePagination(itemResult, pageIndex, pageSize, filters, max);
@@ -375,6 +381,7 @@ namespace Mardis.Engine.Business.MardisCore
                     _taskCampaignDao.GetPaginatedTasksByCampaignAndStatus(status, pageIndex, pageSize, filters,
                         idAccount));
         }
+     
 
         public CampaignGeopositionViewModel GetCampaignGeoposition(List<FilterValue> filterValues, string campaign, Guid idAccount, IDataProtector protector)
         {

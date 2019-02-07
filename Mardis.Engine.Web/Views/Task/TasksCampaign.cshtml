@@ -137,9 +137,9 @@
                             <div class="panel-body">
 
                                 @*<div class="col-sm-7">
-            <strong>CAMPAÑA:</strong>
-            <a href="@Url.Action("ProfileCampaign", "Campaign", new { idTask = task.Id,idcampaing=@ViewBag.idcampaign  })">@task.CampaignName</a>
-        </div>*@
+                                    <strong>CAMPAÑA:</strong>
+                                    <a href="@Url.Action("ProfileCampaign", "Campaign", new { idTask = task.Id,idcampaing=@ViewBag.idcampaign  })">@task.CampaignName</a>
+                                </div>*@
                                 <div class="row">
                                     <div class="col-sm-12 pull-right">
                                         <label style="font-size-adjust: 0.2;">@task.Route</label>
@@ -157,16 +157,16 @@
 
                                 </div>
                                 @*<div class="row">
-            <div class="col-sm-12">
-                <label style="font-size-adjust: 0.2;">@task.BranchName</label>
-            </div>
-        </div>*@
+                                    <div class="col-sm-12">
+                                        <label style="font-size-adjust: 0.2;">@task.BranchName</label>
+                                    </div>
+                                </div>*@
 
                                 @*<div class="row">
-            <div class="col-sm-12">
-                <label style="font-size-adjust: 0.4;">@task.BranchMardisCode</label>
-            </div>
-        </div>*@
+                                    <div class="col-sm-12">
+                                        <label style="font-size-adjust: 0.4;">@task.BranchMardisCode</label>
+                                    </div>
+                                </div>*@
                                 <div class="row">
                                     <div class="col-sm-12">
                                         <label style="font-size-adjust: 0.2">Código: </label>
@@ -188,7 +188,7 @@
 
                                 <div class="row">
                                     <div class="col-sm-6">
-                                        <a href="#" onclick="History('@task.Id')" style="font-size-adjust: 0.4;" class="pull-left"><span class="fa fa-eye" style="color: @listtask.color"></span></a>
+                                        <a href="#" onclick="History('@task.Id','@ViewBag.idcampaign','@task.BranchMardisCode')" style="font-size-adjust: 0.4;" class="pull-left"><span class="fa fa-eye" style="color: @listtask.color"></span></a>
                                     </div>
                                     <div class="col-sm-6">
                                         <span class="@task.Icon pull-right" style="font-size-adjust: 0.4; color: @listtask.color"></span>
@@ -204,17 +204,18 @@
                                     }
                                 </div>
                             </div>
-                            </div>
+                        </div>
 
                     }
                 </div>
             }
         </div>
+        @Html.Partial("_HistoryStatus")
     </div>
 
 </div>
 
-@Html.Partial("_HistoryStatus")
+
 
 <div id="divFooter">
     @Html.Partial("_PagingPartial", Model)
@@ -240,15 +241,22 @@
                     x[i].style.width = max;
         }
         generarTabla()
-        function History(id) {
+        function History(id,idcampaign,code) {
             idtask = id;
 
 
 
             var table = $('#table-mardis-dt').DataTable();
-
+      
             table.clear().draw();
             table.ajax.reload();
+            var link = "../Task/Profile?idTask=" + id + "&campaign=" + idcampaign
+
+            app.$data.code = code;
+            app.$data.link = link;
+   
+//           - $('#lbdT').val=code
+
             $('#responsive').modal('show');
         }
 
@@ -299,6 +307,14 @@
                 );
                 $.unblockUI();
         }
+
+        var app = new Vue({
+            el: '#InfoEncuesta',
+            data: {
+                code: '',
+                link: ''
+            }
+        })
 
     </script>
 }

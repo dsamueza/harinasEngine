@@ -173,7 +173,7 @@ namespace Mardis.Engine.Web.Controllers
         }
 
         [HttpGet]
-        public IActionResult TasksCampaign(string idCampaign, string filterValues, bool deleteFilter, string view, int pageIndex = 1, int pageSize = 10)
+        public IActionResult TasksCampaign(string idCampaign, string filterValues, bool deleteFilter, string view, int pageIndex = 1, int pageSize = 6)
         {
             try
             {
@@ -1147,7 +1147,7 @@ namespace Mardis.Engine.Web.Controllers
                                  select new { date = x.DateModification, status = x.StatusTask.Name, user = x.Users.Email ,comment=x.CommentTaskNoImplemented};
                     if (_model!=null)
                     {
-                        var _data = _model.OrderByDescending(x=>x.date).ToList();
+                        var _data = _model.OrderByDescending(x=>x.date).Distinct().ToList();
                         return Json(_data);
                     }
                     else

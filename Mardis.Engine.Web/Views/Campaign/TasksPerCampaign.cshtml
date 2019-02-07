@@ -187,7 +187,7 @@
 
                                 <div class="row">
                                     <div class="col-sm-6">
-                                        <a href="#" onclick="History('@task.Id')" style="font-size-adjust: 0.4;" class="pull-left"><span class="fa fa-eye" style="color: @listtask.color"></span></a>
+                                        <a href="#" onclick="History('@task.Id','@ViewBag.idcampaign','@task.BranchMardisCode')" style="font-size-adjust: 0.4;" class="pull-left"><span class="fa fa-eye" style="color: @listtask.color"></span></a>
                                     </div>
                                     <div class="col-sm-6">
                                         <span class="@task.Icon pull-right" style="font-size-adjust: 0.4; color: @listtask.color"></span>
@@ -238,15 +238,20 @@
                     x[i].style.width = max;
         }
         generarTabla()
-        function History(id) {
+        function History(id, idcampaign, code) {
             idtask = id;
 
 
 
             var table = $('#table-mardis-dt').DataTable();
-
+            var link = "../Campaign/ProfileCampaign?idTask=" + id + "&idcampaing=" + idcampaign
             table.clear().draw();
             table.ajax.reload();
+            app.$data.code = code;
+            app.$data.link = link;
+
+            //           - $('#lbdT').val=code
+
             $('#responsive').modal('show');
         }
 
@@ -297,6 +302,12 @@
                 );
                 $.unblockUI();
         }
-
+        var app = new Vue({
+            el: '#InfoEncuesta',
+            data: {
+                code: '',
+                link: ''
+            }
+        })
     </script>
 }

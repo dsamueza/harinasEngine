@@ -675,6 +675,13 @@ namespace Mardis.Engine.Business.MardisCore
                 Idanswer = Idanswer == null ? Guid.Empty : Idanswer;
                 if (Idanswer == Guid.Empty && question.QuestionComplete.Count()>0)
                 {
+                    var task = Context.Answers.Where(x => x.IdTask.Equals(idtask) && x.IdQuestion.Equals(question.Id));
+                    if (task.Count() > 0) {
+
+                        Idanswer = task.First().Id;
+                    } else {
+
+
                     var answer = new Answer()
                     {
                         IdAccount = idaccount,
@@ -688,6 +695,7 @@ namespace Mardis.Engine.Business.MardisCore
                     };
                     answer =  _answerDao.InsertOrUpdate(answer);
                     Idanswer = answer.Id;
+                    }
                 }
 
                 foreach (var iddetail in question.QuestionComplete)
@@ -715,6 +723,7 @@ namespace Mardis.Engine.Business.MardisCore
             {
                 try
                 {
+                
                     Context.AnswerDetails.RemoveRange(Context.AnswerDetails.Where(a => a.Answer.Id == idanswer));
                  Context.SaveChanges();
                     if (Detail.Count() > 0) {
@@ -2980,8 +2989,8 @@ namespace Mardis.Engine.Business.MardisCore
                 var _model = _securityModel.Where(x => x.Iduser.Equals(user)&& x.Idtask.Equals(idtask));
                 if (_model.Count() > 0)
                 {
-
-                    return "";
+                        var _modelTask = _securityModel.Where(x => x.Idtask.Equals(idtask));
+                        return _modelTask.First().Mail;
                 }
                 else {
 

@@ -1020,7 +1020,7 @@ namespace Mardis.Engine.Web.Controllers
 
 
         [HttpGet]
-        public IActionResult TasksPerCampaign(string idCampaign, string filterValues, bool deleteFilter, string view, int pageIndex = 1, int pageSize = 10)
+        public IActionResult TasksPerCampaign(string idCampaign, string filterValues, bool deleteFilter, string view, int pageIndex = 1, int pageSize = 6)
         {
             try
             {
