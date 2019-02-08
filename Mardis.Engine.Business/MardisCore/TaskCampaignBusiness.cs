@@ -2369,7 +2369,8 @@ namespace Mardis.Engine.Business.MardisCore
                                             BranchModel.ExternalCode = GetCellValue(doc, cell);
                                             break;
                                         case 3:
-                                            BranchModel.TypeBusiness = GetCellValue(doc, cell);
+                                            BranchModel.TypeBusiness = GetCellValue(doc, cell).ToUpper();
+                                  
                                             break;
                                         case 4:
                                             BranchModel.Name = GetCellValue(doc, cell);
@@ -3121,6 +3122,50 @@ namespace Mardis.Engine.Business.MardisCore
             }
             }
             return _questionRequeredModel.ToList();
+        }
+        #endregion
+
+
+        #region Seleccionar campañas x Usuarios
+
+        /// <summary>
+        /// Genera Cache de campaña por Usuario
+        /// </summary>
+        /// <param name="user"></param>
+        /// <param name="Idcampaing"></param>
+        public void UserCampaignRedis(Guid user, string Idcampaing)
+        {
+
+   
+          _redisCache.Set("UsersbyCampaign:" + user, Idcampaing);
+                
+                
+        }
+        /// <summary>
+        /// Obtiene la Cache de campaña por Usuario
+        /// </summary>
+        /// <param name="user"></param>
+        /// <param name="Idcampaing"></param>
+        /// <returns></returns>
+        public string GetUserCampaignRedis(Guid user, string Idcampaing)
+        {
+            var _securityModel = _redisCache.Get<string>("UsersbyCampaign:" + user);
+
+
+            return _securityModel != null ? _securityModel.ToString() : "";
+
+
+        }
+        public bool RemoveFlushCampaign(Guid user)
+        {
+
+            
+                _redisCache.flush("UsersbyCampaign" + user);
+           
+            return true;
+
+
+
         }
         #endregion
     }

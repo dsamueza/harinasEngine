@@ -1026,11 +1026,11 @@ namespace Mardis.Engine.Web.Controllers
             {
                 if (!string.IsNullOrEmpty(idCampaign))
                 {
-                    SetSessionVariable("idCampaign", idCampaign);
+                    _taskCampaignBusiness.UserCampaignRedis(Guid.Parse(ApplicationUserCurrent.UserId), idCampaign);
                 }
                 else
                 {
-                    idCampaign = GetSessionVariable("idCampaign");
+                    idCampaign = _taskCampaignBusiness.GetUserCampaignRedis(Guid.Parse(ApplicationUserCurrent.UserId), idCampaign);
                 }
 
                 if (!string.IsNullOrEmpty(view))

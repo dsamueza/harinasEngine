@@ -178,12 +178,13 @@ namespace Mardis.Engine.Web.Controllers
             try
             {
                 if (!string.IsNullOrEmpty(idCampaign))
-                {
-                    SetSessionVariable("idCampaign", idCampaign);
+                {    // SetSessionVariable("idCampaign", idCampaign);
+                    _taskCampaignBusiness.UserCampaignRedis(Guid.Parse(ApplicationUserCurrent.UserId), idCampaign);
                 }
                 else
                 {
-                    idCampaign = GetSessionVariable("idCampaign");
+                    //idCampaign = GetSessionVariable("idCampaign");
+                    idCampaign = _taskCampaignBusiness.GetUserCampaignRedis(Guid.Parse(ApplicationUserCurrent.UserId), idCampaign);
                 }
 
                 if (!string.IsNullOrEmpty(view))
@@ -207,6 +208,7 @@ namespace Mardis.Engine.Web.Controllers
                     idCampaign = _protector.Protect(varcampid);
                     SetSessionVariable("idCampaign", idCampaign);
                 }
+               
                 var tasks = _campaignBusiness.GetPaginatedTaskPerCampaignViewModelDinamic(id, pageIndex, pageSize, filters, ApplicationUserCurrent.AccountId);
                 ViewBag.CountTasks = _taskCampaignBusiness._CountAllTasCamping(id, filters).ToString();
                 ViewBag.idcampaign = idCampaign;
