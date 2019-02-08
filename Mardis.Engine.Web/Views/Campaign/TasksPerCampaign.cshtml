@@ -24,6 +24,8 @@
 
 <link rel="stylesheet" href="~/lib/Slidebars/dist/slidebars.css">
 <link rel="stylesheet" href="~/css/theme/StyleFilter.css">
+<link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css" />
+<link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css" />
 <style>
     #DatosTabla tbody {
         font-size: 12px;
@@ -104,122 +106,196 @@
         color: rgba(221, 24, 34, 0.98) !important;
     }
 </style>
+<style type="text/css">
+
+    html, body {
+        margin: 0;
+        padding: 0;
+    }
+
+    * {
+        box-sizing: inherit;
+    }
+
+    .slider {
+        width: 100%;
+        margin: 0px auto;
+    }
+
+    .slick-slide {
+        margin: 0px 20px;
+    }
+
+    .slick-slider {
+        user-select: text;
+        -webkit-tap-highlight-color: transparent;
+    }
+
+    .slick-next {
+        right: 0px;
+    }
+
+        .slick-prev, .slick-next,
+        .slick-prev:before, .slick-next:before {
+            position: absolute;
+            top: 1%;
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            color: blue;
+        }
+</style>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-beta.35/css/uikit.min.css" rel="stylesheet" />
 <link href="https://cdn.datatables.net/1.10.19/css/dataTables.uikit.min.css" rel="stylesheet" />
 <link href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" rel="stylesheet" />
 <link href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons' rel="stylesheet">
 
 <div id="divMyTask">
-    <div class="row">
-        <div class="row-fluid">
-            @{ var tam = Model.tasks.Count;}
-            @foreach (var task in Model.tasks)
-            {
-            <div class="col-sm-2-mdr" style="text-align: center; border: thick solid white; background-color: @task.color;     min-height: 75px;">
-                <h5 class="control-label" style="color: white; margin-top:0px !important;margin-bottom:0px !important;font-size:14px !important"> @task.type </h5>
-                <h5 class="control-label" style="color: white; margin-top:0px !important;margin-bottom:0px !important;font-size:14px !important"> @(((Model.PageIndex * Model.PageSize) - Model.PageSize + 1) + "-" + (Model.PageIndex * Model.PageSize) + "/" + task.CountTasks)</h5>
-            </div>
-            }
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="row-fluid">
-            @foreach (var listtask in Model.tasks)
-            {
-                <div class="col-sm-2-mdr" style="border: thick solid #CCCCCC;">
-
-                    @foreach (var task in listtask.TasksList)
-                    {
-
-
-                        <div class="panel panel-default" id="@("row" +task.Id )">
-                            <div class="panel-body">
-
-                                @*<div class="col-sm-7">
-            <strong>CAMPAÑA:</strong>
-            <a href="@Url.Action("ProfileCampaign", "Campaign", new { idTask = task.Id,idcampaing=@ViewBag.idcampaign  })">@task.CampaignName</a>
-        </div>*@
-                                <div class="row">
-                                    <div class="col-sm-12 pull-right">
-                                        <label style="font-size-adjust: 0.2;">@task.Route</label>
-                                    </div>
+    <section class="regular slider" align="center">
+        @{var cont = 1; var numStatus = 11;
+            var tam = (Model.tasks.Count() > numStatus ? numStatus : Model.tasks.Count()); int pages = (Model.tasks.Count() > numStatus ? (Model.tasks.Count() / tam) + 1 : 1);}
+        @for (int i = 0; i < pages; i++)
+        {
+            <div class="row">
+                <div class="row">
+                    <div class="row-fluid">
+                        @{cont = 1;}
+                        @foreach (var status in Model.tasks)
+                        {
+                            if (cont > (tam * i) && cont <= (tam * (i + 1)))
+                            {
+                                <div class="col-sm-2-mdr" style="text-align: center; border: thick solid white; background-color: @status.color;     min-height: 75px;">
+                                    <h5 class="control-label" style="color: white; margin-top:0px !important;margin-bottom:0px !important;font-size:14px !important"> @status.type </h5>
+                                    <h5 class="control-label" style="color: white; margin-top:0px !important;margin-bottom:0px !important;font-size:14px !important"> @(((Model.PageIndex * Model.PageSize) - Model.PageSize + 1) + "-" + (Model.PageIndex * Model.PageSize) + "/" + status.CountTasks)</h5>
                                 </div>
-
-                                <div class="row">
-
-                                    <div class="col-sm-12">
-
-                                        <a href="@Url.Action("ProfileCampaign", "Campaign", new { idTask = task.Id,idcampaing=@ViewBag.idcampaign  })" style="color: @listtask.color">@task.BranchMardisCode</a>
-
-                                    </div>
-
-
-                                </div>
-                                @*<div class="row">
-            <div class="col-sm-12">
-                <label style="font-size-adjust: 0.2;">@task.BranchName</label>
-            </div>
-        </div>*@
-
-                                @*<div class="row">
-            <div class="col-sm-12">
-                <label style="font-size-adjust: 0.4;">@task.BranchMardisCode</label>
-            </div>
-        </div>*@
-                                <div class="row">
-                                    <div class="col-sm-12">
-                                        <label style="font-size-adjust: 0.2">Código: </label>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-sm-12">
-                                        <label style="font-size-adjust: 0.2;">@task.BranchExternalCode</label>
-                                    </div>
-                                </div> <div class="row">
-                                    <div class="col-sm-8">
-
-                                        <label style="font-size-adjust: 0.2; font-weight:700">@task.StartDate.ToString("dd/MM/yyyy")</label>
-
-                                    </div>
-
-                                </div>
-
-                                <div class="row">
-                                    <div class="col-sm-6">
-                                        <a href="#" onclick="History('@task.Id','@ViewBag.idcampaign','@task.BranchMardisCode')" style="font-size-adjust: 0.4;" class="pull-left"><span class="fa fa-eye" style="color: @listtask.color"></span></a>
-                                    </div>
-                                    <div class="col-sm-6">
-                                        <span class="@task.Icon pull-right" style="font-size-adjust: 0.4; color: @listtask.color"></span>
-                                    </div>
-
-                                </div>
-                                <div class="row">
-                                    @if (task.StatusMigrate == "G")
+                            }
+                            cont++;
+                        }
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="row-fluid">
+                        @{cont = 1;}
+                        @foreach (var listtask in Model.tasks)
+                        {
+                            if (cont > (tam * i) && cont <= (tam * (i + 1)))
+                            {
+                                <div class="col-sm-2-mdr" style="border: thick solid #CCCCCC;">
+                                    @foreach (var task in listtask.TasksList)
                                     {
-                                        <div class="col-sm-6">
-                                            <a href="#" style="font-size-adjust: 0.4;" class="col-lg-offset-7"><span class="fa  fa-expeditedssl" style="color: #a8222a"> Migrado</span></a>
+                                        <div class="panel panel-default" id="@("row" + task.Id )">
+                                            <div class="panel-body">
+
+                                                @*<div class="col-sm-7">
+                                                        <strong>CAMPAÑA:</strong>
+                                                        <a href="@Url.Action("ProfileCampaign", "Campaign", new { idTask = task.Id,idcampaing=@ViewBag.idcampaign  })">@task.CampaignName</a>
+                                                    </div>*@
+                                                <div class="row">
+                                                    <div class="col-sm-12 pull-right">
+                                                        <label style="font-size-adjust: 0.2;">@task.Route</label>
+                                                    </div>
+                                                </div>
+
+                                                <div class="row">
+
+                                                    <div class="col-sm-12">
+
+                                                        <a href="@Url.Action("Profile", "Task", new { idTask = task.Id, campaign = @ViewBag.idcampaign })" style="color: @listtask.color">@task.BranchMardisCode</a>
+
+                                                    </div>
+
+
+                                                </div>
+                                                @*<div class="row">
+                                                        <div class="col-sm-12">
+                                                            <label style="font-size-adjust: 0.2;">@task.BranchName</label>
+                                                        </div>
+                                                    </div>*@
+
+                                                @*<div class="row">
+                                                        <div class="col-sm-12">
+                                                            <label style="font-size-adjust: 0.4;">@task.BranchMardisCode</label>
+                                                        </div>
+                                                    </div>*@
+                                                <div class="row">
+                                                    <div class="col-sm-12">
+                                                        <label style="font-size-adjust: 0.2">Código: </label>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-sm-12">
+                                                        <label style="font-size-adjust: 0.2;">@task.BranchExternalCode</label>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-sm-8">
+
+                                                        <label style="font-size-adjust: 0.2; font-weight:700">@task.StartDate.ToString("dd/MM/yyyy")</label>
+
+                                                    </div>
+
+                                                </div>
+
+                                                <div class="row">
+                                                    <div class="col-sm-6">
+                                                        <a href="#" onclick="History('@task.Id','@ViewBag.idcampaign','@task.BranchMardisCode')" style="font-size-adjust: 0.4;" class="pull-left"><span class="fa fa-eye" style="color: @listtask.color"></span></a>
+                                                    </div>
+                                                    <div class="col-sm-6">
+                                                        <span class="@task.Icon pull-right" style="font-size-adjust: 0.4; color: @listtask.color"></span>
+                                                    </div>
+
+                                                </div>
+                                                <div class="row">
+                                                    @if (task.StatusMigrate == "G")
+                                                    {
+                                                        <div class="col-sm-6">
+                                                            <a href="#" style="font-size-adjust: 0.4;" class="col-lg-offset-7"><span class="fa  fa-expeditedssl" style="color: #a8222a"> Migrado</span></a>
+                                                        </div>
+                                                    }
+                                                </div>
+                                            </div>
                                         </div>
                                     }
                                 </div>
-                            </div>
-                        </div>
-
-                    }
+                            }
+                            cont++;
+                        }
+                    </div>
                 </div>
-            }
-        </div>
-    </div>
-
-</div>
-
-@Html.Partial("../Task/_HistoryStatus")
-<div id="divFooter">
-    @Html.Partial("_PagingPartial", Model)
+                <div id="divFooter" class="row">
+                    @Html.Partial("_PagingPartial", Model)
+                </div>
+            </div>
+        }
+    </section>
+    @Html.Partial("../Task/_HistoryStatus")
 </div>
 
 @section scripts{
+    <script type="text/javascript" src="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
     <script src="~/js/viewModel/FilterHelper.js"></script>
+    <script type="text/javascript">
+        $(".regular").slick({
+            dots: false,
+            arrows: true,
+            infinite: false,
+            draggable: false,
+            fade: true,
+            focusOnSelect: false,
+            useCSS: false,
+            slidesToShow: 1,
+            slidesToScroll: 1
+        });
+        $(".variable").slick({
+            dots: true,
+            infinite: true,
+            variableWidth: true
+        });
+        $(".lazy").slick({
+            lazyLoad: 'ondemand', // ondemand progressive anticipated
+            infinite: true
+        });
+    </script>
     <script>
         controllerName = "Campaign";
         actionName = "TasksPerCampaign";
