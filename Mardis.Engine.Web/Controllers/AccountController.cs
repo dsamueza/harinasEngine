@@ -1,6 +1,8 @@
 ﻿using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Mardis.Engine.Business.MardisCore;
+using Mardis.Engine.Framework;
 using Mardis.Engine.Web.App_code;
 using Mardis.Engine.Web.Model;
 using Mardis.Engine.Web.Models.AccountViewModels;
@@ -22,7 +24,8 @@ namespace Mardis.Engine.Web.Controllers
         private readonly IEmailSender _emailSender;
         private readonly ISmsSender _smsSender;
         private readonly ILogger _logger;
-
+        private readonly TaskCampaignBusiness _taskBusiness;
+        private readonly RedisCache _redisCache = new RedisCache();
         public AccountController(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
@@ -142,11 +145,13 @@ namespace Mardis.Engine.Web.Controllers
         {
             await _signInManager.SignOutAsync();
             _logger.LogInformation(4, "User logged out.");
+            _redisCache.flush("UsersbyCampaign:" + Global.UserID);
             Global.ImportantData = null;
             Global.UserID = new System.Guid();
             Global.AccountId = new System.Guid();
             Global.ProfileId = new System.Guid();
             Global.PersonId = new System.Guid();
+          
             return RedirectToAction(nameof(HomeController.Index), "Home");
         }
 

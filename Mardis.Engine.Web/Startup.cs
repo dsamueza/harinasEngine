@@ -138,7 +138,6 @@ namespace Mardis.Engine.Web
             services.AddSession(options =>
             {
                 // Set a short timeout for easy testing.
-           
                 options.IdleTimeout = TimeSpan.FromMinutes(40);
 
             });
