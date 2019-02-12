@@ -11,6 +11,7 @@
                             chips
                             color="blue-grey lighten-2"
                             item-text="Answer"
+                             v-bind:disabled="!question.IsPermit"
                             item-value="Id"
                             multiple>
                 <template slot="selection"

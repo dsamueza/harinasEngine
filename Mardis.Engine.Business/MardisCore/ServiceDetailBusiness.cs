@@ -147,6 +147,7 @@ namespace Mardis.Engine.Business.MardisCore
         public List<MyTaskServicesDetailViewModel> GetAnsweredSections(List<MyTaskServicesDetailViewModel> model, List<Answer> answers)
         {
             int pos = 0;
+
             answers = answers.Distinct().ToList();
             List<MyTaskServicesDetailViewModel> Section = new List<MyTaskServicesDetailViewModel>();
             if (answers.Count() > 0) {
@@ -220,8 +221,12 @@ namespace Mardis.Engine.Business.MardisCore
 
                             var question = Section[i]?.QuestionCollection.FirstOrDefault(q => q.Id == answer.IdQuestion);
                             var answerquestion = Section[i].IsDynamic? answers.Where(x => x.IdQuestion == questionList[i].Id && x.sequenceSection==answer.sequenceSection).ToList():answers.Where(x => x.IdQuestion == questionList[i].Id && (x.sequenceSection == i + 1 || x.sequenceSection == 0 || x.sequenceSection == null)).ToList();
-                           
-
+                            //if (question.Id == Guid.Parse("386EAD4E-9DC2-44CD-8A5A-E92C18634296"))
+                            //{
+                            //    var v= 1;
+                            //}
+                            //var allow = AllowQuestion.Where(x => x.IdQuestion == question.Id);
+                            //question.IsPermit = allow.Count() > 0 ? false : true;
                             //if (answer.Question.TypePoll.Code == CTypePoll.Many) {
                             //     question = Section[i]?.QuestionCollection.FirstOrDefault(q => q.QuestionDetailCollection.Where(y => y.IdQuestion == answer.IdQuestion && y.Id == answerDetail.IdQuestionDetail).First().Id == answerDetail.IdQuestionDetail);
                             //     answerquestion = answers.Where(x => x.IdQuestion == questionList[i].Id && (x.sequenceSection == 1)).ToList();
@@ -234,6 +239,7 @@ namespace Mardis.Engine.Business.MardisCore
                             if (answerquestion.Count() > 0)
                             {
                                 var resp = answerquestion[0].AnswerDetails.ToList();
+                 
 
                                 if (question != null)
                                 {

@@ -92,5 +92,18 @@ namespace Mardis.Engine.DataObject.MardisCore
                 .Where(a => a.IdTask == idTask && a.StatusRegister==CStatusRegister.Active)
                 .ToList();
         }
+        public List<AnwerRequiredProfile> GetAllQuestionRequire(Guid idservice)
+        {
+
+
+            //var task=Context.Query<MyTaskViewModel>($@"select a.*, b.Name as MerchantName, b.Surname as MerchantSurname,a.CodigoGemini as CodeGemini , a.CommentTaskNoImplemented as  CommentTaskNotImplemented
+            //from vw_Campaign_Information a
+            //    inner join mardiscommon.person b on a.idmerchantperson = b.id
+            //where a.IdTask='{idTask}'").FirstOrDefault();
+            var tasks = Context.Query<AnwerRequiredProfile>($@"select Id ,idProfile ,permissionType   ,IdQuestion   ,Idstatustask from vw_data_answerPermitbyService where  idService='{idservice}'").ToList();
+            return tasks;
+
+        }
+
     }
 }

@@ -18,7 +18,7 @@
     </div>
     <!--Titulos-->
     <div class="col-sm-12">
-        <div class="checkSeccion">
+        <div class="checkSeccion"  v-bind:disabled="!question.IsPermit">
             <label for="answer.Id" class="col-sm-9 mardis-checkSub">
                 <span>{{ answer.Answer }}</span>
                 <input v-for-events type="checkbox" class="inputcheckSub subsec" v-bind:id="answer.Id" v-bind:value="answer.IdQuestion" v-bind:name="question.IdAnswer" v-model="answer.Checked" onchange="onToggle(this)">
@@ -27,9 +27,9 @@
         <div v-for="(question, i) in _modelServicef(section.Id,answer.Id)">
 
             <div v-bind:style="col_sm_mardis(answer.Weight)">
-                <input v-info-sender v-if="question.CodeTypePoll == 'OPEN'" class="form-control inputmardis subsec" style="margin: 0 auto; float: none; background-color: #cccccc;" v-model="question.Answer" v-bind:id="question.Id" v-bind:name="question.IdAnswer" />
+                <input v-info-sender v-if="question.CodeTypePoll == 'OPEN'" class="form-control inputmardis subsec" style="margin: 0 auto; float: none; background-color: #cccccc;" v-model="question.Answer" v-bind:id="question.Id" v-bind:name="question.IdAnswer"  v-bind:disabled="!question.IsPermit"/>
                 <select v-info-sender v-if="question.CodeTypePoll == 'ONE'" class="inputmardis subsec" v-model="question.IdQuestionDetail" v-bind:id="question.Id" v-bind:name="question.IdAnswer"
-                        style="margin:0 auto; float: none;" onchange="valorseleccion(this)">
+                        style="margin:0 auto; float: none;" onchange="valorseleccion(this)" v-bind:disabled="!question.IsPermit">
                     <div class="panel-body" style="padding: 5px;">
                         <div class="panel panel-mardis-grey " style="margin-bottom: 5px;">
                             <option v-for="answer in question.QuestionDetailCollection" v-bind:value="answer.Id">{{answer.Answer}}</option>
@@ -44,10 +44,11 @@
                                 color="blue-grey lighten-2"
                                 item-text="Idconcept"
                                 item-value="Id"
+                                 v-bind:disabled="!question.IsPermit"
                                 multiple
                                 v-if="question.CodeTypePoll == 'COMPLETE'"
                                 :get-label="getLabel"
-                                v-complete>
+                                v-complete >
                     <template slot="selection"
                               slot-scope="data">
                         <v-chip :selected="data.selected"

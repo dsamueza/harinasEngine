@@ -379,7 +379,7 @@ namespace Mardis.Engine.Business.MardisCore
         /// <param name="idTask">Identificador de Tarea</param>
         /// <param name="idAccount">Identificador de cuenta</param>
         /// <returns></returns>
-        public MyTaskViewModel GetSectionsPoll(Guid idTask, Guid idAccount)
+        public MyTaskViewModel GetSectionsPoll(Guid idTask, Guid idAccount,Guid idprofile)
         {
 
             var taskWithPoll = _taskCampaignDao.GetForProfile(idTask, idAccount);
@@ -394,7 +394,7 @@ namespace Mardis.Engine.Business.MardisCore
             myWatch.Start();
 
 #endif
-            taskWithPoll.ServiceCollection = GetServiceListFromCampaign(taskWithPoll.IdCampaign, idAccount, idTask);
+            taskWithPoll.ServiceCollection = GetServiceListFromCampaign(taskWithPoll.IdCampaign, idAccount, idTask, idprofile);
 
 #if DEBUG
             myWatch.Stop();
@@ -402,7 +402,9 @@ namespace Mardis.Engine.Business.MardisCore
             taskWithPoll = AnswerTheQuestionsFromTaskPoll(idTask, taskWithPoll);
             taskWithPoll.BranchImages = GetImagesTask(idAccount, taskWithPoll);
             taskWithPoll.IdTaskNotImplemented = taskWithPoll.IdStatusTask;
+           // taskWithPoll = TheQuestionsPermit(idTask, taskWithPoll);
 #if DEBUG
+
             myWatch.Stop();
 #endif
 
@@ -435,6 +437,24 @@ namespace Mardis.Engine.Business.MardisCore
             return taskWithPoll;
         }
 
+
+        #region Preguntas permitidas por Perfil
+        /// <summary>
+        /// Metodo para permitir o negar edicion de preguntas
+        /// </summary>
+        /// <param name="idTask">Id de la tarea actual</param>
+        /// <param name="taskWithPoll">Modelo de respuestas y preguntas</param>
+        /// <returns></returns>
+        private MyTaskViewModel TheQuestionsPermit(Guid idTask, MyTaskViewModel taskWithPoll)
+        {
+            var AllowQuestion = _answerDao.GetAllQuestionRequire(taskWithPoll.ServiceCollection.First().Id);
+      
+
+            return taskWithPoll;
+        }
+
+
+        #endregion
 
 
 
@@ -1108,11 +1128,11 @@ namespace Mardis.Engine.Business.MardisCore
             return true;
         }
 
-        public List<MyTaskServicesViewModel> GetServiceListFromCampaign(Guid idCampaign, Guid idAccount, Guid idTask)
+        public List<MyTaskServicesViewModel> GetServiceListFromCampaign(Guid idCampaign, Guid idAccount, Guid idTask, Guid Idprofile)
         {
             int numero_seccion = 0;
             var servicesParalel = new ConcurrentBag<MyTaskServicesViewModel>();
-            var campaignServices = _redisCache.Get<List<MyTaskServicesViewModel>>("CampaignServices:" + idCampaign);
+            var campaignServices = _redisCache.Get<List<MyTaskServicesViewModel>>("CampaignServices: " + idCampaign+"Profile:"+ Idprofile);
             string idseccion = "";
 
 
@@ -1130,12 +1150,12 @@ namespace Mardis.Engine.Business.MardisCore
                             Id = s.Service.Id,
                             Name = s.Service.Name,
                             Template = s.Service.Template,
-                            ServiceDetailCollection = GetSectionsFromService(s.IdService, idAccount, idTask)
+                            ServiceDetailCollection = GetSectionsFromService(s.IdService, idAccount, idTask,Idprofile)
                         });
                     });
                 campaignServices = servicesParalel.ToList();
 
-                _redisCache.Set("CampaignServices:" + idCampaign, campaignServices);
+                _redisCache.Set("CampaignServices:" + idCampaign+"Profile:"+ Idprofile, campaignServices);
             }
             //agregar seccion si es dinamica
             if (campaignServices != null)
@@ -1241,16 +1261,16 @@ namespace Mardis.Engine.Business.MardisCore
             return campaignServices;
         }
 
-        public List<MyTaskServicesDetailViewModel> GetSectionsFromService(Guid idService, Guid idAccount, Guid idTask)
+        public List<MyTaskServicesDetailViewModel> GetSectionsFromService(Guid idService, Guid idAccount, Guid idTask,Guid Idprofile)
         {
             var sections =
                 Mapper.Map<List<MyTaskServicesDetailViewModel>>(_serviceDetailDao.GetServiceDetailsFromService(idService, idAccount, idTask));
 
-
+            var AllowQuestion = _answerDao.GetAllQuestionRequire(idService).Where(x=>x.idProfile.Equals(Idprofile)).Select(x => x.IdQuestion).ToList();
             sections.AsParallel().ForAll(s =>
             {
-                s.QuestionCollection = GetQuestionsFromSection(s.Id);
-                s.Sections.AsParallel().ForAll(sc => sc.QuestionCollection = GetQuestionsFromSection(sc.Id));
+                s.QuestionCollection = GetQuestionsFromSection(s.Id, AllowQuestion);
+                s.Sections.AsParallel().ForAll(sc => sc.QuestionCollection = GetQuestionsFromSection(sc.Id, AllowQuestion));
             });
 
             return sections;
@@ -1275,8 +1295,8 @@ namespace Mardis.Engine.Business.MardisCore
 
             sections.AsParallel().ForAll(s =>
             {
-                s.QuestionCollection = GetQuestionsFromSection(s.Id);
-                s.Sections.AsParallel().ForAll(sc => sc.QuestionCollection = GetQuestionsFromSection(sc.Id));
+                s.QuestionCollection = GetQuestionsFromSectionS(s.Id);
+                s.Sections.AsParallel().ForAll(sc => sc.QuestionCollection = GetQuestionsFromSectionS(sc.Id));
             });
 
             return sections;
@@ -1287,9 +1307,28 @@ namespace Mardis.Engine.Business.MardisCore
         /// </summary>
         /// <param name="idSection">Identificador de la sección</param>
         /// <returns>Listado de preguntas con opciones de respuestas por Sección</returns>
-        public List<MyTaskQuestionsViewModel> GetQuestionsFromSection(Guid idSection)
+        public List<MyTaskQuestionsViewModel> GetQuestionsFromSection(Guid idSection,List<Guid> AllowQuestion)
         {
             var questions = Mapper.Map<List<MyTaskQuestionsViewModel>>(_questionDao.GetCompleteQuestion(idSection).Result);
+       
+            questions.Where(x => AllowQuestion.Contains(x.Id)).ToList().ForEach(u=>u.IsPermit=false);
+         
+
+            /* foreach (var q in questions)
+             {
+                 q.sequence = 1;
+                 resultado.Add(q);
+             }*/
+
+            return questions.OrderBy(q => q.Order).ToList();
+        }
+
+        public List<MyTaskQuestionsViewModel> GetQuestionsFromSectionS(Guid idSection)
+        {
+            var questions = Mapper.Map<List<MyTaskQuestionsViewModel>>(_questionDao.GetCompleteQuestion(idSection).Result);
+
+
+
 
             /* foreach (var q in questions)
              {
@@ -2369,7 +2408,7 @@ namespace Mardis.Engine.Business.MardisCore
                                             BranchModel.ExternalCode = GetCellValue(doc, cell);
                                             break;
                                         case 3:
-                                            BranchModel.TypeBusiness = GetCellValue(doc, cell).ToUpper();
+                                            BranchModel.TypeBusiness = GetCellValue(doc, cell).ToUpper().TrimEnd().TrimStart();
                                   
                                             break;
                                         case 4:

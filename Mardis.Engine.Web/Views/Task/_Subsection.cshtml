@@ -18,9 +18,9 @@
                             </div>
 
                             <div v-if="question.CodeTypePoll=='MANY'||question.CodeTypePoll=='OPEN'||question.CodeTypePoll=='ONE'" class="panel-body" style="padding-bottom: 5px; padding-top: 5px;">
-                                <input v-info-sender v-if="question.CodeTypePoll=='OPEN'" class="form-control inputmardis subsec" style="margin: 0 auto; float: none; background-color: #cccccc;" v-model="question.Answer" v-bind:id="question.Id" v-bind:name="question.IdAnswer" />
+                                <input v-info-sender v-if="question.CodeTypePoll=='OPEN'" class="form-control inputmardis subsec" style="margin: 0 auto; float: none; background-color: #cccccc;" v-model="question.Answer" v-bind:id="question.Id" v-bind:name="question.IdAnswer"  v-bind:disabled="!question.IsPermit" />
 
-                                <select v-info-sender v-if="question.CodeTypePoll=='ONE'" class="inputmardis subsec" v-model="question.IdQuestionDetail" style="margin: 5%; float: none;" v-bind:id="question.Id" v-bind:name="question.IdAnswer">
+                                <select v-info-sender v-if="question.CodeTypePoll=='ONE'" class="inputmardis subsec" v-model="question.IdQuestionDetail" style="margin: 5%; float: none;" v-bind:id="question.Id" v-bind:name="question.IdAnswer"  v-bind:disabled="!question.IsPermit">
                                     <option v-for="answer in question.QuestionDetailCollection" v-bind:value="answer.Id">{{answer.Answer}}</option>
                                 </select>
                             </div>
@@ -75,9 +75,9 @@
                          'col-sm-18':  subSection.QuestionCollection.length >  7 }"
                                                             style="padding-left: 5px; padding-right: 0;">
 
-                                                            <input v-info-sender  v-if="question.CodeTypePoll == 'OPEN'"  class="form-control inputmardis subsec" style="margin: 0 auto; float: none; background-color: #cccccc;" v-model="question.Answer" v-bind:id="question.Id"  v-bind:name="question.IdAnswer"/>
+                                                            <input v-info-sender  v-if="question.CodeTypePoll == 'OPEN'"  class="form-control inputmardis subsec" style="margin: 0 auto; float: none; background-color: #cccccc;" v-model="question.Answer" v-bind:id="question.Id"  v-bind:disabled="!question.IsPermit" v-bind:name="question.IdAnswer"/>
 
-                                                            <select v-info-sender v-if="question.CodeTypePoll == 'ONE'" class="inputmardis subsec" v-model="question.IdQuestionDetail" v-bind:id="question.Id" v-bind:name="question.IdAnswer"
+                                                            <select v-info-sender v-if="question.CodeTypePoll == 'ONE'" class="inputmardis subsec" v-model="question.IdQuestionDetail" v-bind:id="question.Id"  v-bind:disabled="!question.IsPermit" v-bind:name="question.IdAnswer"
                                                             style="margin:0 auto; float: none;" onchange="valorseleccion(this)">
                                                                 <div class="panel-body" style="padding: 5px;">
 
@@ -94,7 +94,7 @@
                                                                             chips
                                                                             color="blue-grey lighten-2"
                                                                            item-text="Answer"
-
+                                                                              v-bind:disabled="!question.IsPermit"
                                                                             item-value="Id"
                                                                             multiple
                                                                               v-if="question.CodeTypePoll == 'COMPLETE'"

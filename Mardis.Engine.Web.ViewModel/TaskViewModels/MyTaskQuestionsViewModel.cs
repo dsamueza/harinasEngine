@@ -42,7 +42,7 @@ namespace Mardis.Engine.Web.ViewModel.TaskViewModels
         public Guid IdParentSection { get; set; }
 
         public string SubSectionTitle { get; set; }
-
+        public bool IsPermit { get; set; } = true;
 
         public Guid idQuestionDetailMultiple { get; set; }
         

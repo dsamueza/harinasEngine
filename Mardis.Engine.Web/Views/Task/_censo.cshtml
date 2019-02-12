@@ -45,8 +45,8 @@
                                                         </div>
                                                         <div class="panel-body" style="padding-bottom: 5px; padding-top: 5px;">
 
-                                                            <input v-info-sender v-if="question.CodeTypePoll=='OPEN'" v-model="question.Answer" class="form-control inputmardis subsec" v-bind:id="question.Id" v-bind:name="question.IdAnswer" style="margin: 0 auto; float: none; background-color: #cccccc;" onchange="valorseleccion(this)" />
-                                                            <select v-info-sender v-if="question.CodeTypePoll=='ONE'" class="inputmardis subsec" v-model="question.IdQuestionDetail" v-bind:id="question.Id" v-bind:name="question.IdAnswer" style="margin: 0 auto; float: none;" onchange="valorseleccion(this)">
+                                                            <input v-info-sender v-if="question.CodeTypePoll=='OPEN'" v-model="question.Answer" class="form-control inputmardis subsec" v-bind:id="question.Id" v-bind:name="question.IdAnswer" style="margin: 0 auto; float: none; background-color: #cccccc;" onchange="valorseleccion(this)" v-bind:disabled="!question.IsPermit" />
+                                                            <select v-info-sender v-if="question.CodeTypePoll=='ONE'" class="inputmardis subsec" v-model="question.IdQuestionDetail" v-bind:id="question.Id" v-bind:name="question.IdAnswer" style="margin: 0 auto; float: none;" onchange="valorseleccion(this)" v-bind:disabled="!question.IsPermit">
                                                                 <option v-for="answer in question.QuestionDetailCollection" v-bind:value="answer.Id">{{answer.Answer}}</option>
                                                             </select>
                                                             @*<v-autocomplete v-if="question.CodeTypePoll=='ONE'"
@@ -73,7 +73,7 @@
                                                             <div class="form-check">
                                                                 <label for="answer.Id" class="col-sm-6 mardis-check">
                                                                     <span>{{ answer.Answer }}</span>
-                                                                    <input v-for-events type="checkbox" class="inputcheck subsec" v-bind:id="answer.Id" v-bind:value="answer.IdQuestion" v-bind:name="question.IdAnswer" v-model="answer.Checked" onchange="onToggle(this)">
+                                                                    <input v-for-events type="checkbox" class="inputcheck subsec" v-bind:id="answer.Id" v-bind:value="answer.IdQuestion" v-bind:name="question.IdAnswer" v-model="answer.Checked" onchange="onToggle(this)" v-bind:disabled="!question.IsPermit">
                                                                 </label>
                                                             </div>
                                                         </div>
@@ -88,7 +88,7 @@
                                                             <div class="form-check">
                                                                 <label for="answer.Id" class="col-sm-6 mardis-check">
                                                                     <span>{{ answer.Answer }}</span>
-                                                                    <input v-for-events type="checkbox" class="inputcheck subsec" v-bind:id="answer.Id" v-bind:value="answer.IdQuestion" v-bind:name="question.IdAnswer" v-model="answer.Checked" onchange="onToggle(this)">
+                                                                    <input v-for-events type="checkbox" class="inputcheck subsec" v-bind:id="answer.Id" v-bind:value="answer.IdQuestion" v-bind:name="question.IdAnswer" v-model="answer.Checked" onchange="onToggle(this)" v-bind:disabled="!question.IsPermit">
                                                                 </label>
                                                             </div>
                                                         </div>
@@ -100,7 +100,7 @@
                                                 <div v-bind:class="classlenght(question.Weight)" v-if="question.CodeTypePoll=='MANY' && question.HasPhoto=='D' " style="text-align:-webkit-center; margin-top:25PX;margin-bottom:25px">
                                                     <span style="font-weight:600; font-size: 14px !important;color:#0040a0;">{{question.Title}}</span>
                                                     <div v-for="(answer,k) in question.QuestionDetailCollection">
-                                                        <div v-if="answer.Checked">
+                                                        <div v-if="answer.Checked" v-bind:disabled="!question.IsPermit">
                                                             <div v-bind:class="classlenght(answer.Weight)">
                                                                 <div class="form-check">
                                                                     <label for="answer.Id" class="col-sm-6 mardis-check">
@@ -123,12 +123,13 @@
                                                 <!--Inicio Seccion de preguntas de conceptos Individuales-->
                                                 <div v-bind:class="classlenght(question.Weight)" v-if="question.CodeTypePoll=='COMPLETE'" style="text-align:-webkit-center;">
                                                     @Html.Partial("_QuestionConcept_individual")
+
                                                 </div>
                                                 <!--Fin  Seccion de preguntas de conceptos Individuales-->
                                             </div>
                                             <!--Inicio Seccion de respuestas multiples con preguntas anidadas-->
                                             <div v-for="(question, j) in section.QuestionCollection">
-                                                @*@Html.Partial("../Task/_QuestionMultipleSec")*@
+                                                @*@Html.Partial("_QuestionMultipleSec")*@
 
                                                 <!--Inicio Seccion de respuestas multiples con preguntas anidadas-->
                                                 <div class="col-sm-12" v-if="question.CodeTypePoll=='MANY' && question.HasPhoto=='M' " style="text-align:-webkit-center;">

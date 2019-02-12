@@ -332,7 +332,7 @@ namespace Mardis.Engine.Web.Controllers
         {
             try
             {
-                var model = _taskCampaignBusiness.GetSectionsPoll(idTask, _idAccount);
+                var model = _taskCampaignBusiness.GetSectionsPoll(idTask, _idAccount,Global.ProfileId);
                     JSonConvertUtil.Convert(model);
                 return Json(model);
 
