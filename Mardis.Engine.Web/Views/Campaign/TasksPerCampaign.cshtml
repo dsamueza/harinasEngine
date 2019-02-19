@@ -166,8 +166,9 @@
         width: 20px;
         height: 20px;
         cursor: pointer;
-        color: dimgray;
+        color: #1110108c;
     }
+    
 </style>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-beta.35/css/uikit.min.css" rel="stylesheet" />
 <link href="https://cdn.datatables.net/1.10.19/css/dataTables.uikit.min.css" rel="stylesheet" />
@@ -176,7 +177,7 @@
 
 <div id="divMyTask">
     <section class="regular slider" align="center">
-        @{var cont = 1; var numStatus = 11;
+        @{var cont = 1; var numStatus = 10;
             var tam = (Model.tasks.Count() > numStatus ? numStatus : Model.tasks.Count()); int pages = (Model.tasks.Count() > numStatus ? (Model.tasks.Count() / tam) + 1 : 1);}
         @for (int i = 0; i < pages; i++)
         {
@@ -224,7 +225,7 @@
 
                                                     <div class="col-sm-12">
 
-                                                        <a href="@Url.Action("Profile", "Task", new { idTask = task.Id, campaign = @ViewBag.idcampaign })" style="color: @listtask.color">@task.BranchMardisCode</a>
+                                                        <a href="@Url.Action("ProfileCampaign", "Campaign", new { idTask = task.Id, idcampaing = @ViewBag.idcampaign })" style="color: @listtask.color">@task.BranchMardisCode</a>
 
                                                     </div>
 

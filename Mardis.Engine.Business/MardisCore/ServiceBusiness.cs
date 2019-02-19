@@ -1263,7 +1263,7 @@ namespace Mardis.Engine.Business.MardisCore
         }
 
 
-        public string SaveQuestion(QuestionRegisterViewModel _model)
+        public List<QuestionDetailRegisterViewModel> SaveQuestion(QuestionRegisterViewModel _model)
         {
 
 
@@ -1308,23 +1308,45 @@ namespace Mardis.Engine.Business.MardisCore
                     var questionDetail = Context.Query<QuestionDetail>($@"EXEC dbo.sp_createQuestionDetail @idquestion='{_model.Id}' , @answer='{detail.Answer}' ,@code='{detail.Idconcept}' ").FirstOrDefault();
 
                 }
-                return "1";
+            var PostQuestion=    Context
+                                   .QuestionDetails
+                                   .Where(x => x.IdQuestion == Guid.Parse(_model.Id))
+                                   .Select(q=> new QuestionDetailRegisterViewModel {
+                                       Id=q.Id.ToString() ,
+                                       IdQuestion=q.IdQuestion.ToString(),
+                                       Answer=q.Answer,
+                                       Order=q.Order,
+                                       IdQuestionLink=q.IdQuestionLink.ToString(),
+                                       Weight=q.Weight,
+                                       StatusRegister=q.StatusRegister,
+                                       Aggregatefield=q.Aggregatefield,
+                                       Idconcept=q.Idconcept,
+
+                                   });
+                return PostQuestion.OrderBy(x => x.Order).ToList();
             }
             catch (Exception e)
             {
 
-                return "0";
+                return null;
             }
 
 
 
 
         }
-        public string RemoveFlushService(Guid idservice)
+        public string RemoveFlushService(Guid idservice,Guid Account)
         {
+            var perfil = _serviceDao.GetProfilebyAccount(Account);
 
             foreach (var item in _serviceDao.Getcampaign(idservice))
             {
+                foreach (var p in perfil)
+                {
+                    _redisCache.flush("CampaignServices:" + item.IdCampaign.ToString() + "Profile:" + p.Id.ToString());
+                }
+
+                //"CampaignServices:" + idCampaign+"Profile:"+ Idprofile
                 _redisCache.flush("CampaignServices:" + item.IdCampaign.ToString());
             }
 

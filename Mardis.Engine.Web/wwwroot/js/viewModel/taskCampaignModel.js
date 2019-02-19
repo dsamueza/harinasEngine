@@ -123,7 +123,7 @@ Vue.directive('info-sender', {
             //alert(el.value);
             let storeSize = 0;
             store.each(function (value, key) {
-                console.log(key, '==', value)
+                //console.log(key, '==', value)
                 if (key.estado == "P") {
                     storeSize++;
                 }
@@ -213,27 +213,28 @@ Vue.directive('complete', {
 });
 function onToggle(question) {
 
-    //$.ajax({
-    //    url: '/Task/SaveAnswerQuestionMultiple',
-    //    type: "POST",
-    //    content: "application/json; charset=utf-8",
-    //    data: {
-    //        id: question.id,
-    //        value: question.value,
-    //        idanswer: question.name
-    //        , Idtask: getParameterByName('idTask')
-    //    },
-    //    success: function (data) {
+    $.ajax({
+        url: '/Task/SaveAnswerQuestionMultiple',
+        type: "POST",
+        content: "application/json; charset=utf-8",
+        data: {
+            id: question.id,
+            value: question.value,
+            idanswer: question.name
+            , Idtask: getParameterByName('idTask')
+            , idstatus: vueVM.$data.poll.IdStatusTask
+        },
+        success: function (data) {
 
-    //    },
+        },
 
-    //    error: function () {
+        error: function () {
 
 
-    //    }
-    //    ,
-    //    async: true, // La petición es síncrona
-    //});
+        }
+        ,
+        async: true, // La petición es síncrona
+    });
 }
 function ApplyBindingTaskService(data) {
     vueVM = new Vue({
@@ -244,6 +245,7 @@ function ApplyBindingTaskService(data) {
             status_engine: data.IdStatusTask,
             autoUpdate: true,
             isUpdating: false,
+            search:"SSSS",
             harinas: [{
                 Id: '',
                 AnswerDetailId: '',
@@ -264,7 +266,7 @@ function ApplyBindingTaskService(data) {
 
                 }
             },
-            search(val) {
+            poll(val) {
                 alert(val);
             }
         },
@@ -283,6 +285,10 @@ function ApplyBindingTaskService(data) {
             remove(item) {
 
                 console.log(item)
+            },
+            onChange: function() {
+                var a = this;
+                console.log(a);
             },
             secciondinamica: function (e) {
                 numsec = numsec + 1;
@@ -401,6 +407,24 @@ function ApplyBindingTaskService(data) {
                 reader.readAsDataURL(file);
 
 
+            }, col_sm_mardis(col) {
+                var maxColummn = col;
+                var max = 83 / maxColummn + "%";
+                return "padding-left: 5px; padding-right: 0;padding-top: 10px !important;font-weight:700; float: left;text-align: center; width:" + max + ";";
+
+            },
+
+            _modelServicef: function (id, idquestion) {
+
+                var data = this.poll.ServiceCollection[0].ServiceDetailCollection;
+
+                var _model = data.filter(d => d.Id === id);
+                var _data2 = _model[0].QuestionCollection;
+                var question = _data2.filter(d => d.idQuestionDetailMultiple === idquestion);
+
+                //_model = _model.QuestionCollection.filter(d => d.idQuestionDetailMultiple === idquestion);
+
+                return question
             }
         },
         computed: {
@@ -420,6 +444,29 @@ function ApplyBindingTaskService(data) {
 
 
     $.unblockUI();
+}
+//importante
+function SetInput(codigo) {
+
+ //   var data = vueVM.$data.poll.ServiceCollection[0].ServiceDetailCollection;
+
+ //   var _model = data.filter(d => d.Id === codigo.alt);
+
+ //   var _data2 = _model[0].QuestionCollection;
+ //   console.log(_data2);
+ //   var question = _data2.filter(d => d.Id === codigo.id);
+ 
+ //   // ObtenerPregunta(codigo.value, codigo.id);
+ ////7e4078bb-c420-47a9-47b3-08d6913c58f3
+ //   //969571c5-2fe5-44c3-fb54-08d6913c5903
+ //   var _modelVal = data.filter(d => d.Id === "7e4078bb-c420-47a9-47b3-08d6913c58f3");
+ //   var _dataval = _modelVal[0].QuestionCollection;
+ //   var questionval = _dataval.filter(d => d.Id === "969571c5-2fe5-44c3-fb54-08d6913c5903");
+ //   console.log(questionval);
+ //   if (questionval[0].Answer == "") {
+
+ //       alert('Respuesta No contesta')
+ //   }
 }
 function AddBranchImg(img, idb, idc, idt) {
     $.blockUI({ message: "Actualizando Imagen.." });

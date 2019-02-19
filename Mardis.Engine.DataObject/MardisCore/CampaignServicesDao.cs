@@ -241,7 +241,7 @@ namespace Mardis.Engine.DataObject.MardisCore
                 if (routes.Count() > 0)
                 {
                     var route = routes.First();
-                    var actuallyRoute = route.Length > 5 ? route + '-' + document : document;
+                    var actuallyRoute = (route.Length > 5 || route!=null) ? route + '-' + document : document;
                     var updatebranches = Context.Branches.Where(x => x.IdAccount == idAccount && x.RUTAAGGREGATE == rout).ToList();
                     updatebranches.ForEach(a => a.IMEI_ID = actuallyRoute);
                     Context.Branches.UpdateRange(updatebranches);

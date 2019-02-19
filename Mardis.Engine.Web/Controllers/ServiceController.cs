@@ -325,7 +325,7 @@ namespace Mardis.Engine.Web.Controllers
             }
             var result = idservice;
 
-            _serviceBusiness.RemoveFlushService(Guid.Parse(idservice));
+            _serviceBusiness.RemoveFlushService(Guid.Parse(idservice), ApplicationUserCurrent.AccountId);
             return Json(result);
         }
 

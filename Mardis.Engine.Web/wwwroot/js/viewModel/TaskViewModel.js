@@ -277,7 +277,28 @@ Vue.directive('complete', {
 
 });
 function onToggle(question) {
- 
+    $.ajax({
+        url: '/Task/SaveAnswerQuestionMultiple',
+        type: "POST",
+        content: "application/json; charset=utf-8",
+        data: {
+            id: question.id,
+            value: question.value,
+            idanswer: question.name
+            , Idtask: getParameterByName('idTask')
+            , idstatus: vueVM.$data.poll.IdStatusTask
+        },
+        success: function (data) {
+
+        },
+
+        error: function () {
+
+
+        }
+        ,
+        async: true, // La petición es síncrona
+    });
 }
 function ApplyBindingTaskService(data) {
     vueVM = new Vue({
@@ -445,7 +466,25 @@ function ApplyBindingTaskService(data) {
             reader.readAsDataURL(file);
           
          
-        }
+            }, col_sm_mardis(col) {
+                var maxColummn = col;
+                var max = 83 / maxColummn + "%";
+                console.log(max);
+                return "padding-left: 5px; padding-right: 0;padding-top: 10px !important;font-weight:700; float: left;text-align: center; width:" + max + ";";
+
+            },
+            _modelServicef: function (id, idquestion) {
+
+                var data = this.poll.ServiceCollection[0].ServiceDetailCollection;
+
+                var _model = data.filter(d => d.Id === id);
+                var _data2 = _model[0].QuestionCollection;
+                var question = _data2.filter(d => d.idQuestionDetailMultiple === idquestion);
+
+                //_model = _model.QuestionCollection.filter(d => d.idQuestionDetailMultiple === idquestion);
+
+                return question
+            }
         }
     });
 
@@ -533,58 +572,58 @@ function BuscarPregunta(servicio, idpregunta) {
 }
 function ValProfile() {
 
-    $.blockUI({ message: "Verificando respuestas obligatorias" });
-    var mensaje="";
-    $.ajax({
-        url: "/Task/ProfileQuestion",
-        type: "post",
-        data: {
-        task: ko.toJSON(vueVM.$data.poll)
+    //$.blockUI({ message: "Verificando respuestas obligatorias" });
+    //var mensaje="";
+    //$.ajax({
+    //    url: "/Task/ProfileQuestion",
+    //    type: "post",
+    //    data: {
+    //    task: ko.toJSON(vueVM.$data.poll)
           
-        },
-        success: function (data) {
+    //    },
+    //    success: function (data) {
     
-            var isval = data.length;
-            if (isval > 0)
-            {
-                for (var j = 0; j < data.length; j++)
-                {
+    //        var isval = data.length;
+    //        if (isval > 0)
+    //        {
+    //            for (var j = 0; j < data.length; j++)
+    //            {
 
-                    mensaje = mensaje + "<br> Falta información en la pregunta : " + "<b>" +data[j].name +"</b>";
-                }
-                $.unblockUI();
-                bootbox.confirm({
-                    title: "Pregunta Obligatorias",
-                    message:   mensaje ,
-                    buttons: {
-                        confirm: {
-                            label: 'Entendido',
-                            className: 'btn-danger'
-                        },
+    //                mensaje = mensaje + "<br> Falta información en la pregunta : " + "<b>" +data[j].name +"</b>";
+    //            }
+    //            $.unblockUI();
+    //            bootbox.confirm({
+    //                title: "Pregunta Obligatorias",
+    //                message:   mensaje ,
+    //                buttons: {
+    //                    confirm: {
+    //                        label: 'Entendido',
+    //                        className: 'btn-danger'
+    //                    },
 
-                    },
-                    callback: function (result) {
+    //                },
+    //                callback: function (result) {
                       
-                    }
-                });
-                $.unblockUI();
-            }
-            else
-            {
-                $.unblockUI();
-                Save();
+    //                }
+    //            });
+    //            $.unblockUI();
+    //        }
+    //        else
+    //        {
+    //            $.unblockUI();
 
-            }
+
+    //        }
           
-        },
-        error: function (xhr, ajaxOptions, thrownError) {
-            $.unblockUI();
-        }
+    //    },
+    //    error: function (xhr, ajaxOptions, thrownError) {
+    //        $.unblockUI();
+    //    }
 
       
-    });
+    //});
  
- 
+    Save();
 }
 function ValidarPreguntas() {
     var mensaje = "";

@@ -302,13 +302,18 @@
         filters = "@ViewData["currentFilter"]";
         function valorseleccion(codigo) {
 
-            ObtenerPregunta(codigo.value,codigo.id);
+          //  ObtenerPregunta(codigo.value,codigo.id);
 
 
 
+
+        } function QuestionVal(codigo) {
+
+        
+            SetInput(codigo);
 
         }
-
+   
 
         function UploadFilesNew() {
             $.blockUI({ message: "Generando el PDF" });

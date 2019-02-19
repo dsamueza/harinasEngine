@@ -84,8 +84,8 @@
         <br />
     </div>
 
-    <div class="panel panel-default">
-        <div class="panel-heading" style="background-color: #4d4d4d">
+    <div class="panel panel-danger">
+        <div class="panel-heading" style="background-color: rgba(14, 13, 13, 0.76);">
             <i class="fa fa-newspaper-o" style="color: white;"></i><a href="#"></a>
 
            
@@ -96,7 +96,7 @@
                 </div>*@
             <br />
         </div>
-        <div class="panel-body" id="divPollTitle" style="background-color: #cccccc">
+        <div class="panel-body" id="divPollTitle" style="background-color: rgba(0, 0, 0, 0.08);">
             <div class="row" style="background-color: #CCCCCC;">
                 <div class="col-sm-8">
 
@@ -110,27 +110,26 @@
                 @*--For Secciones--*@
                 <div style="margin-top: 7px;"></div>
 
-                <div v-bind:id="'pnl_' + section.Id" class="panel panel-default" style="padding-left: 5px; padding-right: 5px;" v-if="(section.StatusRegister=='A' && section.Id != '00000000-0000-0000-0000-000000000000')|| section.Id == '00000000-0000-0000-0000-000000000000'">
-                    <div class="panel-heading">
+                <div v-bind:id="'pnl_' + section.Id" class="panel panel-primary" style="padding-left: 5px; padding-right: 5px;" v-if="(section.StatusRegister=='A' && section.Id != '00000000-0000-0000-0000-000000000000')|| section.Id == '00000000-0000-0000-0000-000000000000'">
+                    <div class="panel-heading" style="background-color:rgba(160, 79, 10, 0.69);">
                         <div>
                             <div class="col-sm-1">
-                                <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" v-bind:href="'body_'+section.Id">
+                                <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" v-bind:href="'body_'+section.Id" style="color:black">
                                     <i class="fa fa-list-alt"></i>
                                 </a>
                             </div>
-                            <div class="col-sm-3">
-                                <input class="form-control input-xs" v-bind:id="'inti_'+section.Id" v-model="section.SectionTitle" type="text" placeholder="Ingrese la Sección" required>
-                            </div>
+                           
 
-
-
+                       <div class="panel-title">
+                                        <a data-toggle="collapse" v-bind:href="'#pnlService_'+section.Id"><strong style="color:black;   text-transform: capitalize !important;    font-size: 14px;">{{section.SectionTitle}}</strong></a>
+                                    </div>
                         </div>
                         <div class="panel-tools">
 
                         </div>
                     </div>
                     <div class="panel-body" style="padding-top: 2px; padding-left: 5px; padding-bottom: 2px; padding-right: 5px;">
-                        <div v-bind:id="'body_'+section.Id" class="panel-collapse collapse in">
+                        <div v-bind:id="'pnlService_'+section.Id" class="panel-collapse collapse">
                             <div class="row">
                                 <div class="col-sm-4">
 
@@ -219,7 +218,7 @@
                                         </div>
                                         <div style="margin-top: 5px;"></div>
                                         <div class="col-sm-4 pull-right">
-                                            <button type="submit" class="btn btn-link btn-orange" v-bind:data-ordersection="i" v-bind:data-ordersubsection="j" v-on:click="SaveQuestionIndividual(question.Id,question)">
+                                            <button type="submit" class="btn btn-link btn-orange" v-bind:data-ordersection="i" v-bind:data-ordersubsection="j" v-on:click="SaveQuestionIndividual(-1,i,j,question,1)">
                                                 Guardar <i class="fa fa-save"></i>
                                             </button>
                                         </div>
@@ -233,25 +232,27 @@
 
                     <div v-for="(subSection, j) in section.Sections" v-bind:id="'pnl_'+subSection.Id" class="panel panel-default" style="padding-left: 5px; padding-right: 5px;">
                         @*--For SubSecciones--*@
-                        <div class="panel-heading">
+                        <div class="panel-heading " style="    background-color: rgb(167, 165, 165); color:white">
                             <div>
                                 <div class="col-sm-1">
                                     <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" v-bind:href="'#body_'+subSection.Id">
                                         <i class="fa fa-list-alt"></i>
                                     </a>
                                 </div>
-                                <div class="col-sm-3">
+                                @*<div class="col-sm-3">
                                     <input class="form-control input-xs" v-bind:id="'inti_'+subSection.Id" v-model="subSection.SectionTitle" type="text" placeholder="Ingrese la Sección">
-                                </div>
+                                </div>*@
 
-
+                                <div class="panel-title">
+                                        <a data-toggle="collapse" v-bind:href="'#inti_'+subSection.Id"><strong style=" text-transform: capitalize !important;    font-size: 14px;">{{subSection.SectionTitle}}</strong></a>
+                                    </div>
 
 
                             </div>
 
                         </div>
                         <div class="panel-body">
-                            <div v-bind:id="'body_'+subSection.Id" class="panel-collapse collapse in">
+                            <div v-bind:id="'inti_'+subSection.Id" class="panel-collapse collapse">
                                 <div class="row">
                                     <div class="col-sm-4">
                                         <button type="submit" class="btn btn-link btn-sm" v-bind:data-ordersection="i" v-bind:data-ordersubsection="j" onclick="AddSubQuestion(false,false,this);">
@@ -328,7 +329,7 @@
                                                 <div style="margin-top: 5px;"></div>
                                             </div>
                                             <div class="col-sm-4 pull-right">
-                                                <button type="submit" class="btn btn-link btn-orange" v-bind:data-ordersection="i" v-bind:data-ordersubsection="j" v-on:click="SaveQuestionIndividual(question.Id,question);">
+                                                <button type="submit" class="btn btn-link btn-orange" v-bind:data-ordersection="i" v-bind:data-ordersubsection="j" v-on:click="SaveQuestionIndividual( i,j,k,question,2);">
                                                     Guardar <i class="fa fa-save"></i>
                                                 </button>
                                             </div>

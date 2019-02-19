@@ -88,13 +88,13 @@
                                                                 </div>
                                                             </select>
                                                              <v-autocomplete v-model="question.QuestionComplete"
-                                                                            :disabled="isUpdating"
+                                                                       
                                                                             :items="question.QuestionDetailCollection"
                                                                             box
                                                                             chips
                                                                             color="blue-grey lighten-2"
                                                                            item-text="Answer"
-                                                                              v-bind:disabled="!question.IsPermit"
+                                                                              :disabled="!question.IsPermit"
                                                                             item-value="Id"
                                                                             multiple
                                                                               v-if="question.CodeTypePoll == 'COMPLETE'"

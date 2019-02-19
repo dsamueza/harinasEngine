@@ -21,131 +21,132 @@
                     <div class="row">
                         <div class="col-sm-12">
                            <div style="margin-top: 7px;"></div>
-                            <div class="panel panel-warning" v-for="(section, i) in service.ServiceDetailCollection">
-                                <div class="panel-heading center" v-bind:href="'#panel_'+section.Id" data-toggle="" v-if="section.GroupName!='modal'">
-                                    <div v-if="section.IsDynamic==true">
-                                        {{section.SectionTitle}} {{secciondinamica(i)}}
-                                        <button class="btn btn-default btn-xs" v-bind:data-IdSection="section.Id" v-bind:data-order="i" onclick="AddSection(false,false, this);" title="Insertar secci�n final">
-                                            <i class="fa fa-level-up"></i>
-                                        </button>
-                                    </div>
-                                    <div v-if="section.IsDynamic!=true">
-                                        {{section.SectionTitle}}
-                                    </div>
-                                </div>
-                                <div v-bind:id="'panel_'+section.Id" class="panel panel-default collapse in"  v-if="section.GroupName!='modal'">
-                                    <div class="panel-body" style="padding: 5px;">
-                                        <div class="row">
-                                            <div v-for="(question, j) in section.QuestionCollection">
-                                                <!--Inicio Seccion de respuesta simple y seleccion -->
-                                                <div v-bind:class="classlenght(question.Weight)" v-if="(question.CodeTypePoll=='ONE'||question.CodeTypePoll=='OPEN' ) && question.Weight!='-1'">
-                                                    <div class="panel panel-mardis-grey" style="margin-bottom: 5px;">
-                                                        <div class="panel-heading headQuestion" style="padding-bottom: 0; padding-top: 0; height: 10%; color: white;">
-                                                            {{question.Title}}
-                                                        </div>
-                                                        <div class="panel-body" style="padding-bottom: 5px; padding-top: 5px;">
+                           <div class="panel panel-warning" v-for="(section, i) in service.ServiceDetailCollection">
+                               <div class="panel-heading center" v-bind:href="'#panel_'+section.Id" data-toggle="" v-if="section.GroupName!='modal'">
+                                   <div v-if="section.IsDynamic==true">
+                                       {{section.SectionTitle}} {{secciondinamica(i)}}
+                                       <button class="btn btn-default btn-xs" v-bind:data-IdSection="section.Id" v-bind:data-order="i" onclick="AddSection(false,false, this);" title="Insertar secci�n final">
+                                           <i class="fa fa-level-up"></i>
+                                       </button>
+                                   </div>
+                                   <div v-if="section.IsDynamic!=true">
+                                       {{section.SectionTitle}}
+                                   </div>
+                               </div>
+                             
+                               <div v-bind:id="'panel_'+section.Id" class="panel panel-default collapse in" v-if="section.GroupName!='modal'">
+                                   <div class="panel-body" style="padding: 5px;">
+                                       <div class="row">
+                                           <div v-for="(question, j) in section.QuestionCollection">
+                                               <!--Inicio Seccion de respuesta simple y seleccion -->
+                                               <div v-bind:class="classlenght(question.Weight)" v-if="(question.CodeTypePoll=='ONE'||question.CodeTypePoll=='OPEN' ) && question.Weight!='-1'">
+                                                   <div class="panel panel-mardis-grey" style="margin-bottom: 5px;">
+                                                       <div class="panel-heading headQuestion" style="padding-bottom: 0; padding-top: 0; height: 10%; color: white;">
+                                                           {{question.Title}}
+                                                       </div>
+                                                       <div class="panel-body" style="padding-bottom: 5px; padding-top: 5px;">
 
-                                                            <input v-info-sender v-if="question.CodeTypePoll=='OPEN'" v-model="question.Answer" class="form-control inputmardis subsec" v-bind:id="question.Id" v-bind:name="question.IdAnswer" style="margin: 0 auto; float: none; background-color: #cccccc;" onchange="valorseleccion(this)" v-bind:disabled="!question.IsPermit" />
-                                                            <select v-info-sender v-if="question.CodeTypePoll=='ONE'" class="inputmardis subsec" v-model="question.IdQuestionDetail" v-bind:id="question.Id" v-bind:name="question.IdAnswer" style="margin: 0 auto; float: none;" onchange="valorseleccion(this)" v-bind:disabled="!question.IsPermit">
-                                                                <option v-for="answer in question.QuestionDetailCollection" v-bind:value="answer.Id">{{answer.Answer}}</option>
-                                                            </select>
-                                                            @*<v-autocomplete v-if="question.CodeTypePoll=='ONE'"
-                                                                            v-model="question.IdQuestionDetail"
-                                                                            :items="question.QuestionDetailCollection"
-                                                                            box
-                                                                            item-text="Answer"
-                                                                            item-value="Id"
-                                                                            class="form-control inputmardis subsec"
-                                                                            style="margin: 0 auto; float: none; background-color: #cccccc;">
-                                                            </v-autocomplete>*@
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <!--fin Seccion de respuesta simple y seleccion -->
-                                                <!--Inicio Seccion de respuestas multiples estilo asi bajo-->
-                                                <div v-bind:class="classlenght(question.Weight)" v-if="question.CodeTypePoll=='MANY' && question.HasPhoto=='N' " style="text-align:-webkit-center;">
-                                                    <div class="panel panel-mardis-grey" style="margin-bottom: 1px;">
-                                                        <div class="panel-heading" style="padding-bottom: 12px; padding-top: 0; height: 10%; color: white;">
-                                                            {{question.Title}}
-                                                        </div>
+                                                           <input v-info-sender v-if="question.CodeTypePoll=='OPEN'" v-model="question.Answer" class="form-control inputmardis subsec" v-bind:id="question.Id" v-bind:name="question.IdAnswer" style="margin: 0 auto; float: none; background-color: #cccccc;" onchange="valorseleccion(this)" v-bind:disabled="!question.IsPermit" />
+                                                           <select v-info-sender v-if="question.CodeTypePoll=='ONE'" class="inputmardis subsec" v-model="question.IdQuestionDetail" v-bind:id="question.Id" v-bind:name="question.IdAnswer" style="margin: 0 auto; float: none;" onchange="valorseleccion(this)" v-bind:disabled="!question.IsPermit">
+                                                               <option v-for="answer in question.QuestionDetailCollection" v-bind:value="answer.Id">{{answer.Answer}}</option>
+                                                           </select>
+                                                           @*<v-autocomplete v-if="question.CodeTypePoll=='ONE'"
+                                                    v-model="question.IdQuestionDetail"
+                                                    :items="question.QuestionDetailCollection"
+                                                    box
+                                                    item-text="Answer"
+                                                    item-value="Id"
+                                                    class="form-control inputmardis subsec"
+                                                    style="margin: 0 auto; float: none; background-color: #cccccc;">
+                                    </v-autocomplete>*@
+                                                       </div>
+                                                   </div>
+                                               </div>
+                                               <!--fin Seccion de respuesta simple y seleccion -->
+                                               <!--Inicio Seccion de respuestas multiples estilo asi bajo-->
+                                               <div v-bind:class="classlenght(question.Weight)" v-if="question.CodeTypePoll=='MANY' && question.HasPhoto=='N' " style="text-align:-webkit-center;">
+                                                   <div class="panel panel-mardis-grey" style="margin-bottom: 1px;">
+                                                       <div class="panel-heading" style="padding-bottom: 12px; padding-top: 0; height: 10%; color: white;">
+                                                           {{question.Title}}
+                                                       </div>
 
-                                                        <div v-for="answer in question.QuestionDetailCollection">
-                                                            <div class="form-check">
-                                                                <label for="answer.Id" class="col-sm-6 mardis-check">
-                                                                    <span>{{ answer.Answer }}</span>
-                                                                    <input v-for-events type="checkbox" class="inputcheck subsec" v-bind:id="answer.Id" v-bind:value="answer.IdQuestion" v-bind:name="question.IdAnswer" v-model="answer.Checked" onchange="onToggle(this)" v-bind:disabled="!question.IsPermit">
-                                                                </label>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <!--Fin de respuestas multiples con preguntas estilo asi bajo-->
-                                                <!--Inicio Seccion de respuestas multiples diseño a lo largo-->
-                                                <div v-bind:class="classlenght(question.Weight)" v-if="question.CodeTypePoll=='MANY' && question.HasPhoto=='L' " style="text-align:-webkit-center; margin-top:15PX">
-                                                    <span style="font-weight:600; font-size: 12px !important;">{{question.Title}}</span>
-                                                    <div v-for="answer in question.QuestionDetailCollection">
-                                                        <div v-bind:class="classlenght(answer.Weight)">
-                                                            <div class="form-check">
-                                                                <label for="answer.Id" class="col-sm-6 mardis-check">
-                                                                    <span>{{ answer.Answer }}</span>
-                                                                    <input v-for-events type="checkbox" class="inputcheck subsec" v-bind:id="answer.Id" v-bind:value="answer.IdQuestion" v-bind:name="question.IdAnswer" v-model="answer.Checked" onchange="onToggle(this)" v-bind:disabled="!question.IsPermit">
-                                                                </label>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
+                                                       <div v-for="answer in question.QuestionDetailCollection">
+                                                           <div class="form-check">
+                                                               <label for="answer.Id" class="col-sm-6 mardis-check">
+                                                                   <span>{{ answer.Answer }}</span>
+                                                                   <input v-for-events type="checkbox" class="inputcheck subsec" v-bind:id="answer.Id" v-bind:value="answer.IdQuestion" v-bind:name="question.IdAnswer" v-model="answer.Checked" onchange="onToggle(this)" v-bind:disabled="!question.IsPermit">
+                                                               </label>
+                                                           </div>
+                                                       </div>
+                                                   </div>
+                                               </div>
+                                               <!--Fin de respuestas multiples con preguntas estilo asi bajo-->
+                                               <!--Inicio Seccion de respuestas multiples diseño a lo largo-->
+                                               <div v-bind:class="classlenght(question.Weight)" v-if="question.CodeTypePoll=='MANY' && question.HasPhoto=='L' " style="text-align:-webkit-center; margin-top:15PX">
+                                                   <span style="font-weight:600; font-size: 12px !important;">{{question.Title}}</span>
+                                                   <div v-for="answer in question.QuestionDetailCollection">
+                                                       <div v-bind:class="classlenght(answer.Weight)">
+                                                           <div class="form-check">
+                                                               <label for="answer.Id" class="col-sm-6 mardis-check">
+                                                                   <span>{{ answer.Answer }}</span>
+                                                                   <input v-for-events type="checkbox" class="inputcheck subsec" v-bind:id="answer.Id" v-bind:value="answer.IdQuestion" v-bind:name="question.IdAnswer" v-model="answer.Checked" onchange="onToggle(this)" v-bind:disabled="!question.IsPermit">
+                                                               </label>
+                                                           </div>
+                                                       </div>
+                                                   </div>
+                                               </div>
 
-                                                <!--Fin  Seccion de respuestas multiples diseño a lo largo-->
-                                                <!--Inicio Seccion de respuestas Dinamicas-->
-                                                <div v-bind:class="classlenght(question.Weight)" v-if="question.CodeTypePoll=='MANY' && question.HasPhoto=='D' " style="text-align:-webkit-center; margin-top:25PX;margin-bottom:25px">
-                                                    <span style="font-weight:600; font-size: 14px !important;color:#0040a0;">{{question.Title}}</span>
-                                                    <div v-for="(answer,k) in question.QuestionDetailCollection">
-                                                        <div v-if="answer.Checked" v-bind:disabled="!question.IsPermit">
-                                                            <div v-bind:class="classlenght(answer.Weight)">
-                                                                <div class="form-check">
-                                                                    <label for="answer.Id" class="col-sm-6 mardis-check">
-                                                                        <span>{{ answer.Answer }}</span>
-                                                                        <a href="#" v-on:click="OpenModalQuestionDinamic(answer.AnwerDetailSecondModel)" style="font-size-adjust: 0.4;" class="pull-right">
-                                                                            <span class="fa fa-plus-square" style="font-size: 10px;  padding-left: 5px;">
-                                                                            </span>
-                                                                        </a>
-                                                                        <a href="#" v-on:click="OpenModalQuestionDinamicCambioHarina(answer,i,j,k)" style="font-size-adjust: 0.4;" class="pull-right">
-                                                                            <span class="fa fa-adjust" style="font-size: 10px;  padding-left: 5px;">
-                                                                            </span>
-                                                                        </a>
-                                                                    </label>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <!--Fin  Seccion de respuestas Dinamicas-->
-                                                <!--Inicio Seccion de preguntas de conceptos Individuales-->
-                                                <div v-bind:class="classlenght(question.Weight)" v-if="question.CodeTypePoll=='COMPLETE'" style="text-align:-webkit-center;">
-                                                    @Html.Partial("_QuestionConcept_individual")
+                                               <!--Fin  Seccion de respuestas multiples diseño a lo largo-->
+                                               <!--Inicio Seccion de respuestas Dinamicas-->
+                                               <div v-bind:class="classlenght(question.Weight)" v-if="question.CodeTypePoll=='MANY' && question.HasPhoto=='D' " style="text-align:-webkit-center; margin-top:25PX;margin-bottom:25px">
+                                                   <span style="font-weight:600; font-size: 14px !important;color:#0040a0;">{{question.Title}}</span>
+                                                   <div v-for="(answer,k) in question.QuestionDetailCollection">
+                                                       <div v-if="answer.Checked" v-bind:disabled="!question.IsPermit">
+                                                           <div v-bind:class="classlenght(answer.Weight)">
+                                                               <div class="form-check">
+                                                                   <label for="answer.Id" class="col-sm-6 mardis-check">
+                                                                       <span>{{ answer.Answer }}</span>
+                                                                       <a href="#" v-on:click="OpenModalQuestionDinamic(answer.AnwerDetailSecondModel)" style="font-size-adjust: 0.4;" class="pull-right">
+                                                                           <span class="fa fa-plus-square" style="font-size: 10px;  padding-left: 5px;">
+                                                                           </span>
+                                                                       </a>
+                                                                       <a href="#" v-on:click="OpenModalQuestionDinamicCambioHarina(answer,i,j,k)" style="font-size-adjust: 0.4;" class="pull-right">
+                                                                           <span class="fa fa-adjust" style="font-size: 10px;  padding-left: 5px;">
+                                                                           </span>
+                                                                       </a>
+                                                                   </label>
+                                                               </div>
+                                                           </div>
+                                                       </div>
+                                                   </div>
+                                               </div>
+                                               <!--Fin  Seccion de respuestas Dinamicas-->
+                                               <!--Inicio Seccion de preguntas de conceptos Individuales-->
+                                               <div v-bind:class="classlenght(question.Weight)" v-if="question.CodeTypePoll=='COMPLETE'" style="text-align:-webkit-center;">
+                                                   @Html.Partial("_QuestionConcept_individual")
 
-                                                </div>
-                                                <!--Fin  Seccion de preguntas de conceptos Individuales-->
-                                            </div>
-                                            <!--Inicio Seccion de respuestas multiples con preguntas anidadas-->
-                                            <div v-for="(question, j) in section.QuestionCollection">
-                                                @*@Html.Partial("_QuestionMultipleSec")*@
+                                               </div>
+                                               <!--Fin  Seccion de preguntas de conceptos Individuales-->
+                                           </div>
+                                           <!--Inicio Seccion de respuestas multiples con preguntas anidadas-->
+                                           <div v-for="(question, j) in section.QuestionCollection">
+                                               @*@Html.Partial("_QuestionMultipleSec")*@
 
-                                                <!--Inicio Seccion de respuestas multiples con preguntas anidadas-->
-                                                <div class="col-sm-12" v-if="question.CodeTypePoll=='MANY' && question.HasPhoto=='M' " style="text-align:-webkit-center;">
-                                                    @Html.Partial("_QuestionMultipleSec")
-                                                </div>
-                                                <!--Fin de respuestas multiples con preguntas anidadas-->
+                                               <!--Inicio Seccion de respuestas multiples con preguntas anidadas-->
+                                               <div class="col-sm-12" v-if="question.CodeTypePoll=='MANY' && question.HasPhoto=='M' " style="text-align:-webkit-center;">
+                                                   @Html.Partial("_QuestionMultipleSec")
+                                               </div>
+                                               <!--Fin de respuestas multiples con preguntas anidadas-->
 
-                                            </div>
-                                            <!--Fin de respuestas multiples con preguntas anidadas-->
-                                            <!--Inicio Subsecciones-->
-                                            @Html.Partial("_Subsection")
-                                            <!--Fin  Subsecciones-->
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                                           </div>
+                                           <!--Fin de respuestas multiples con preguntas anidadas-->
+                                           <!--Inicio Subsecciones-->
+                                           @Html.Partial("_Subsection")
+                                           <!--Fin  Subsecciones-->
+                                       </div>
+                                   </div>
+                               </div>
+                           </div>
                             <div class="panel panel-default">
                                 <div class="panel-heading" style="text-align: center;">
                                     <div class="panel-title">

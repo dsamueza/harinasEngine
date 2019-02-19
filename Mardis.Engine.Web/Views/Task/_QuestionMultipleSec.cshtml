@@ -18,10 +18,10 @@
     </div>
     <!--Titulos-->
     <div class="col-sm-12">
-        <div class="checkSeccion"  v-bind:disabled="!question.IsPermit">
+        <div class="checkSeccion"  >
             <label for="answer.Id" class="col-sm-9 mardis-checkSub">
                 <span>{{ answer.Answer }}</span>
-                <input v-for-events type="checkbox" class="inputcheckSub subsec" v-bind:id="answer.Id" v-bind:value="answer.IdQuestion" v-bind:name="question.IdAnswer" v-model="answer.Checked" onchange="onToggle(this)">
+             <input v-for-events type="checkbox" v-bind:disabled="!question.IsPermit"  class="inputcheckSub subsec" v-bind:id="answer.Id" v-bind:value="answer.IdQuestion" v-bind:name="question.IdAnswer" v-model="answer.Checked" onchange="onToggle(this)">
             </label>
         </div>
         <div v-for="(question, i) in _modelServicef(section.Id,answer.Id)">
@@ -37,7 +37,6 @@
                     </div>
                 </select>
                 <v-autocomplete v-model="question.QuestionComplete"
-                                :disabled="isUpdating"
                                 :items="question.QuestionDetailCollection"
                                 box
                                 chips

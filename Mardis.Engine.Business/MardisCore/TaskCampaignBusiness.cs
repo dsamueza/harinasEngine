@@ -948,11 +948,11 @@ namespace Mardis.Engine.Business.MardisCore
 
 
                         if (question.TypePoll.Code == CTypePoll.One)
-                            CreateAnswerDetailQuestion(answer, question, Guid.Parse(answerquestion.AnswerQuestion), "");
+                            CreateAnswerDetailQuestion(answer, question, Guid.Parse(answerquestion.AnswerQuestion), "", IdMerchant);
                         if (question.TypePoll.Code == CTypePoll.Open)
-                            CreateAnswerDetailQuestion(answer, question, Guid.Parse("00000000-0000-0000-0000-000000000000"), answerquestion.AnswerQuestion);
+                            CreateAnswerDetailQuestion(answer, question, Guid.Parse("00000000-0000-0000-0000-000000000000"), answerquestion.AnswerQuestion, IdMerchant);
                         if (question.TypePoll.Code == CTypePoll.Many)
-                            CreateAnswerDetailQuestionMany(answer, question, Guid.Parse(answerquestion.AnswerQuestion), answerquestion.AnswerQuestion);
+                            CreateAnswerDetailQuestionMany(answer, question, Guid.Parse(answerquestion.AnswerQuestion), answerquestion.AnswerQuestion, IdMerchant);
                         answerquestion.idAnswer = answer.Id.ToString();
                         answerquestion.estado = "I";
 
@@ -985,9 +985,8 @@ namespace Mardis.Engine.Business.MardisCore
             }
 
         }
-        private void CreateAnswerDetailQuestion(Answer answer, Question question, Guid Idquestiondetail, String Answervalue)
+        private void CreateAnswerDetailQuestion(Answer answer, Question question, Guid Idquestiondetail, String Answervalue,Guid Iduser)
         {
-         
                 Context.AnswerDetails.RemoveRange(Context.AnswerDetails.Where(a => a.Answer.Id == answer.Id));
             Context.SaveChanges();
             var answerDetail =
@@ -997,6 +996,7 @@ namespace Mardis.Engine.Business.MardisCore
                     IdAnswer = answer.Id,
                     CopyNumber = 0,
                     StatusRegister = CStatusRegister.Active
+                   ,iduser=Iduser
                 };
 
 
@@ -1012,7 +1012,7 @@ namespace Mardis.Engine.Business.MardisCore
 
             _answerDetailDao.InsertOrUpdate(answerDetail);
         }
-        private void CreateAnswerDetailQuestionMany(Answer answer, Question question, Guid Idquestiondetail, String Answervalue)
+        private void CreateAnswerDetailQuestionMany(Answer answer, Question question, Guid Idquestiondetail, String Answervalue,Guid Iduser)
         {
 
             using (var transaction = Context.Database.BeginTransaction())
@@ -1033,6 +1033,7 @@ namespace Mardis.Engine.Business.MardisCore
                             IdAnswer = answer.Id,
                             CopyNumber = 0,
                             StatusRegister = CStatusRegister.Active
+                            ,iduser=Iduser
                         };
 
 
@@ -1043,7 +1044,7 @@ namespace Mardis.Engine.Business.MardisCore
 
                     _answerDetailDao.InsertOrUpdate(answerDetail);
                 }
-
+                transaction.Commit();
             }
          
         }
@@ -1132,10 +1133,10 @@ namespace Mardis.Engine.Business.MardisCore
         {
             int numero_seccion = 0;
             var servicesParalel = new ConcurrentBag<MyTaskServicesViewModel>();
-            var campaignServices = _redisCache.Get<List<MyTaskServicesViewModel>>("CampaignServices: " + idCampaign+"Profile:"+ Idprofile);
+            var campaignServices = _redisCache.Get<List<MyTaskServicesViewModel>>("CampaignServices:" + idCampaign+"Profile:"+ Idprofile);
             string idseccion = "";
 
-
+         
 
             if (campaignServices == null || idseccion != "")
             {
@@ -1155,7 +1156,7 @@ namespace Mardis.Engine.Business.MardisCore
                     });
                 campaignServices = servicesParalel.ToList();
 
-                _redisCache.Set("CampaignServices:" + idCampaign+"Profile:"+ Idprofile, campaignServices);
+                _redisCache.Set("CampaignServices:" + idCampaign + "Profile:" + Idprofile, campaignServices);
             }
             //agregar seccion si es dinamica
             if (campaignServices != null)

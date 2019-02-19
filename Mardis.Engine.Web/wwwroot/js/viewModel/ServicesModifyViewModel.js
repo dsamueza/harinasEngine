@@ -705,10 +705,10 @@ function ApplyBindingRegisterService(data) {
             moment: function () {
                 return moment();
             },
-            SaveQuestionIndividual: function (idquestion,_data) {
+            SaveQuestionIndividual: function (Idseccion,idsubsec,idquestion,_data,issecc) {
 
          
-                Save(_data);
+                Save(Idseccion,idsubsec,idquestion,_data,issecc);
 
             }
         }
@@ -717,7 +717,7 @@ function ApplyBindingRegisterService(data) {
     $.unblockUI();
 }
 
-function Save(model) {
+function Save(curr, sect, ix, model, issecc) {
     $.blockUI({ message: "" });
     $.ajax({
         url: "/Service/SaveQuestion",
@@ -726,19 +726,29 @@ function Save(model) {
             question: JSON.stringify(model)
         },
         success: function (data) {
-            if (data == "1") {
+            if (data.length>0) {
                 $.unblockUI();
                 $.notify({
                     title: '<strong>Información :</strong>',
                     message: 'La información fue almacenada correctamente'
                 });
+                if (issecc === 1) { 
+                    vueVM.$data.service.ServiceDetailList[sect].Questions[ix].QuestionDetails = [];
+                    vueVM.$data.service.ServiceDetailList[sect].Questions[ix].QuestionDetails = data;
+                }
+                if (issecc === 2) {
+                    vueVM.$data.service.ServiceDetailList[curr].Sections[sect].Questions[ix].QuestionDetails = [];
+                    vueVM.$data.service.ServiceDetailList[curr].Sections[sect].Questions[ix].QuestionDetails = data;
+                }
             } else {
                 $.unblockUI();
                 $.notify({
                     title: '<strong>Información :</strong>',
-                    message: 'La información fue almacenada correctamente'
+                    message: 'La información no pudo ser  almacenada correctamente'
                 });
             }
+       
+      
         },
         error: function (xhr) {
             $.unblockUI();

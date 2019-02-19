@@ -199,7 +199,16 @@ namespace Mardis.Engine.Web.Controllers
                 var id = Guid.Empty;
                 if (!string.IsNullOrEmpty(idCampaign))
                 {
-                    id = Guid.Parse(_protector.Unprotect(idCampaign));
+                    try
+                    {
+                        id = Guid.Parse(_protector.Unprotect(idCampaign));
+                    }
+                    catch (Exception)
+                    {
+
+                        return RedirectToAction("GroupTask", "Task");
+                    }
+                   
                 }
                 var filters = GetFilters(filterValues, deleteFilter);
                 if (filters.Where(x => x.NameFilter == "IdCampaign").Count() > 0) {

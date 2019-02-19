@@ -29,6 +29,8 @@
                                         </button>
                                     </div>
                                 </div>
+                                @*<input v-model="search">
+                                {{search}}*@
                                 <div v-bind:id="'panel_'+section.Id" class="panel panel-default collapse in">
                                     <div class="panel-body" style="padding: 5px;">
                                         <div class="row">
@@ -41,9 +43,9 @@
                                                         </div>
                                                         <div class="panel-body" style="padding-bottom: 5px; padding-top: 5px;">
 
-                                                            <input v-info-sender v-if="question.CodeTypePoll=='OPEN'" v-model="question.Answer" class="form-control inputmardis subsec" v-bind:disabled="!question.IsPermit" v-bind:id="question.Id" v-bind:name="question.IdAnswer" style="margin: 0 auto; float: none; background-color: #cccccc;" onchange="valorseleccion(this)" />
+                                                            <input v-info-sender v-if="question.CodeTypePoll=='OPEN'" v-model="question.Answer" class="form-control inputmardis subsec" v-bind:disabled="!question.IsPermit" v-bind:id="question.Id" v-bind:name="question.IdAnswer" style="margin: 0 auto; float: none; background-color: #cccccc;" v-bind:alt="section.Id" onchange="QuestionVal(this)" />
 
-                                                            <select v-info-sender v-if="question.CodeTypePoll=='ONE'" class="inputmardis subsec" v-model="question.IdQuestionDetail"  v-bind:disabled="!question.IsPermit" v-bind:id="question.Id" v-bind:name="question.IdAnswer" style="margin: 0 auto; float: none;" onchange="valorseleccion(this)">
+                                                            <select v-info-sender v-if="question.CodeTypePoll=='ONE'" class="inputmardis subsec" v-model="question.IdQuestionDetail" v-bind:disabled="!question.IsPermit" v-bind:id="question.Id" v-bind:name="question.IdAnswer" style="margin: 0 auto; float: none;"  onchange="QuestionVal(this)"  >
                                                                 <option v-for="answer in question.QuestionDetailCollection" v-bind:value="answer.Id">{{answer.Answer}}</option>
                                                             </select>
                                                         </div>
@@ -126,7 +128,7 @@
                                             @Html.Partial("../Task/_Subsection")
                                             <!--Fin  Subsecciones-->
                                         </div>
-                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             <div class="panel panel-default">

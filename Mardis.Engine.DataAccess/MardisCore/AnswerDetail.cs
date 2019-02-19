@@ -28,7 +28,7 @@ namespace Mardis.Engine.DataAccess.MardisCore
 
         [ForeignKey("IdAnswer")]
         public Answer Answer { get; set; }
-
+        public Guid? iduser { get; set; }
         public string StatusRegister { get; set; } = CStatusRegister.Active;
     }
 }

@@ -7,6 +7,7 @@ using Mardis.Engine.Framework.Resources;
 using Microsoft.EntityFrameworkCore;
 using Mardis.Engine.Web.ViewModel.Utility;
 using System.Diagnostics;
+using Mardis.Engine.DataAccess.MardisSecurity;
 
 namespace Mardis.Engine.DataObject.MardisCore
 {
@@ -127,6 +128,12 @@ namespace Mardis.Engine.DataObject.MardisCore
                         && srv.StatusRegister == CStatusRegister.Active)
                 .ToList();
         }
+        public List<Profile> GetProfilebyAccount(Guid idAccount)
+        {
+            var profile = Context.Users.Include(x => x.Profile).Where(x => x.IdAccount.Equals(idAccount)).Select(t => t.Profile).Distinct();
+            return profile.ToList();
+        }
+
         public List<Service> GetServicesByAccount(Guid idAccount)
         {
             return Context.Services

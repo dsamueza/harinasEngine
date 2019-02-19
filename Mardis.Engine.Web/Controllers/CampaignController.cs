@@ -1018,7 +1018,16 @@ namespace Mardis.Engine.Web.Controllers
             return JSonConvertUtil.Convert(listResult);
         }
 
-
+        /// <summary>
+        /// Get de tareas activas por campaña
+        /// </summary>
+        /// <param name="idCampaign">Identificador campaña</param>
+        /// <param name="filterValues">Filtros activos</param>
+        /// <param name="deleteFilter"></param>
+        /// <param name="view">forma de la vista</param>
+        /// <param name="pageIndex">paginación</param>
+        /// <param name="pageSize">Número de registros</param>
+        /// <returns></returns>
         [HttpGet]
         public IActionResult TasksPerCampaign(string idCampaign, string filterValues, bool deleteFilter, string view, int pageIndex = 1, int pageSize = 6)
         {
@@ -1045,7 +1054,15 @@ namespace Mardis.Engine.Web.Controllers
                 var id = Guid.Empty;
                 if (!string.IsNullOrEmpty(idCampaign))
                 {
-                    id = Guid.Parse(Protector.Unprotect(idCampaign));
+                    try
+                    {
+                        id = Guid.Parse(Protector.Unprotect(idCampaign));
+                    }
+                    catch (Exception)
+                    {
+
+                        return RedirectToAction("GroupTask", "Task");
+                    }
                 }
                 var filters = GetFilters(filterValues, deleteFilter);
                 if (filters.Where(x => x.NameFilter == "IdCampaign").Count() > 0)
@@ -1054,6 +1071,7 @@ namespace Mardis.Engine.Web.Controllers
                     id = Guid.Parse(varcampid);
                     idCampaign = Protector.Protect(varcampid);
                     SetSessionVariable("idCampaign", idCampaign);
+
                 }
                 var tasks = _campaignBusiness.GetPaginatedTaskPerCampaignViewModelDinamic(id, pageIndex, pageSize, filters, ApplicationUserCurrent.AccountId);
                 ViewBag.CountTasks = _taskCampaignBusiness._CountAllTasCamping(id, filters).ToString();
@@ -1134,7 +1152,14 @@ namespace Mardis.Engine.Web.Controllers
                 return RedirectToAction("Index", "StatusCode", new { statusCode = 1 });
             }
         }
-
+        /// <summary>
+        /// Llamada al Metodo Get de Perfil Campañas
+        /// </summary>
+        /// <param name="filterValues">filtros existentes</param>
+        /// <param name="deleteFilter"></param>
+        /// <param name="pageSize">Paginación</param>
+        /// <param name="pageIndex">Inicio</param>
+        /// <returns></returns>
         public IActionResult Index(string filterValues, bool deleteFilter, int pageSize = 12, int pageIndex = 1)
         {
             try
@@ -1358,6 +1383,9 @@ namespace Mardis.Engine.Web.Controllers
             }
 
         }
+        /// <summary>
+        /// Generados de View Bag del Controlador
+        /// </summary>
         public void LoadSelectItems()
         {
             ViewBag.StatusList = _statusTaskBusiness.GetAllStatusTasks(ApplicationUserCurrent.AccountId, Guid.Parse(ApplicationUserCurrent.UserId))
