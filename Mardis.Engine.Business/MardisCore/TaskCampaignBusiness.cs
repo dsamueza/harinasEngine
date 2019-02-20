@@ -1402,6 +1402,8 @@ namespace Mardis.Engine.Business.MardisCore
                 clPieLogo.HorizontalAlignment = Element.ALIGN_LEFT;
                 tblCuerpo.AddCell(clLogo);
                 tblCuerpo.AddCell(clPieLogo);
+                PdfPCell saltoLinea = new PdfPCell(new Paragraph("\n"));
+                saltoLinea.Border = 0;
 
                 // Escribimos el encabezamiento en el documento
                 PdfPCell cltitulo = new PdfPCell(new Paragraph("Encuesta", boldFont2));
@@ -1410,7 +1412,11 @@ namespace Mardis.Engine.Business.MardisCore
                 cltitulo.PaddingTop = 10;
                 cltitulo.PaddingBottom = 10;
                 cltitulo.HorizontalAlignment = 1;
+                tblCuerpo.AddCell(saltoLinea);
+                tblCuerpo.AddCell(saltoLinea);
                 tblCuerpo.AddCell(cltitulo);
+                tblCuerpo.AddCell(saltoLinea);
+                tblCuerpo.AddCell(saltoLinea);
                 tblCuerpo.WidthPercentage = 100;
                 iTextSharp.text.Font _standardFont = new iTextSharp.text.Font(iTextSharp.text.Font.FontFamily.HELVETICA, 9, iTextSharp.text.Font.NORMAL, BaseColor.BLACK);
                 //  Datos de la encuestas
@@ -1644,19 +1650,23 @@ namespace Mardis.Engine.Business.MardisCore
                     //subsecciones
                     foreach (var subsection in section.Sections)
                     {
-                       
-                            var seccionnumber = subsection.QuestionCollection.Count();
-                            PdfPTable tblPreguntas = null;
-                            var tamtable = seccionnumber+1;
-                            tblPreguntas = new PdfPTable(tamtable);
+                        int deConceptos = subsection.QuestionCollection.Where(x => x.IdTypePoll == Guid.Parse("38F97F00-A86E-4820-9554-3F84F99787ED")).Count();
+                        if (deConceptos>0)
+                        {
+                            continue;
+                        }
+                        var seccionnumber = subsection.QuestionCollection.Count();
+                        PdfPTable tblPreguntas = null;
+                        var tamtable = seccionnumber+1;
+                        tblPreguntas = new PdfPTable(tamtable);
 
-                            var clmarca = new PdfPCell(new Phrase());
-                            var clTablaMarca = new PdfPCell(new Phrase());
-                            var tblMarca = new PdfPTable(1);
-                            var tblrespuestaMarca = new PdfPTable(1);
-                            int preguntaCont = 0;
-                            int j = 0;
-                            var aux = 0;
+                        var clmarca = new PdfPCell(new Phrase());
+                        var clTablaMarca = new PdfPCell(new Phrase());
+                        var tblMarca = new PdfPTable(1);
+                        var tblrespuestaMarca = new PdfPTable(1);
+                        int preguntaCont = 0;
+                        int j = 0;
+                        var aux = 0;
                         PdfPCell clpreguntasub = null;
                         var phrasesub = new Phrase();
                         phrasesub.Add(new Chunk(" ", boldFont));
@@ -1737,8 +1747,13 @@ namespace Mardis.Engine.Business.MardisCore
                         break;
 
                     }
-                        foreach (var subsection in section.Sections)
+                    foreach (var subsection in section.Sections)
                     {
+                        int deConceptos = subsection.QuestionCollection.Where(x => x.IdTypePoll == Guid.Parse("38F97F00-A86E-4820-9554-3F84F99787ED")).Count();
+                        if (deConceptos > 0)
+                        {
+                            continue;
+                        }
                         var seccionnumber = subsection.QuestionCollection.Count();
                         PdfPTable tblPreguntas = null;
                         var tamtable = seccionnumber+1;
