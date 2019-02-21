@@ -2404,6 +2404,7 @@ namespace Mardis.Engine.Business.MardisCore
                                                 Isval(BranchModel.Code, 1, j);
                                             }
                                             BranchModel.ESTADOAGGREGATE = "S";
+                                            BranchModel.state_period = "S";
                                             break;
                                         case 2:
                                             BranchModel.ExternalCode = GetCellValue(doc, cell);
