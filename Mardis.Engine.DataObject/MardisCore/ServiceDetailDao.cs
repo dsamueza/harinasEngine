@@ -117,6 +117,9 @@ namespace Mardis.Engine.DataObject.MardisCore
                                tb.Service.IdAccount == idAccount)
                   .OrderBy(s => s.Order)
                   .ToList();
+
+         
+
             return consulta.OrderBy(x => x.Order).ToList();
         }
         public ServiceDetail GetServiceDetailsFromServiceID(Guid idService, Guid idAccount, Guid idservicedetail)

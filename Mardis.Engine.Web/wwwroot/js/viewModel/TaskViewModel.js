@@ -25,6 +25,7 @@ function LoadTaskById(idTask,campaign) {
             if (data) {
                 store.clearAll();
                 ApplyBindingTaskService(data);
+                console.log(data);
                 imgvue();
             } else {
                 alert("Error! no se ha encontrado la tarea" + error);
@@ -71,7 +72,7 @@ Vue.directive('info-sender', {
                     storeSize++;
                 }
             })
-            if (storeSize >= 2 && espera == 0) {
+            if (storeSize >= 3 && espera == 0) {
                 //    //preparar
                 espera = 1;
                 let infoList = [];
@@ -237,36 +238,36 @@ function SaveQuestionRepeatCambioHarinas(i, j, k) {
     });
 }
 
-Vue.directive('for-events', {
-    bind: function (el, binding, vnode) {
-        el.addEventListener("change", function () {
-            $.ajax({
-                url: '/Task/SaveAnswerQuestionMultiple',
-                type: "POST",
-                content: "application/json; charset=utf-8",
-                data: {
-                    id: el.id,
-                    value: el.value,
-                    idanswer: el.name
-                    , Idtask: getParameterByName('idTask')
-                    , idstatus: vueVM.$data.poll.IdStatusTask
-                },
-                success: function (data) {
+//Vue.directive('for-events', {
+//    bind: function (el, binding, vnode) {
+//        el.addEventListener("change", function () {
+//            $.ajax({
+//                url: '/Task/SaveAnswerQuestionMultiple',
+//                type: "POST",
+//                content: "application/json; charset=utf-8",
+//                data: {
+//                    id: el.id,
+//                    value: el.value,
+//                    idanswer: el.name
+//                    , Idtask: getParameterByName('idTask')
+//                    , idstatus: vueVM.$data.poll.IdStatusTask
+//                },
+//                success: function (data) {
 
-                },
+//                },
 
-                error: function () {
+//                error: function () {
 
 
-                }
-                ,
-                async: true, // La petición es síncrona
-            });
-        });
+//                }
+//                ,
+//                async: true, // La petición es síncrona
+//            });
+//        });
 
-    }
+//    }
       
-});
+//});
 
 Vue.directive('complete', {
     bind: function (el, binding, vnode) {

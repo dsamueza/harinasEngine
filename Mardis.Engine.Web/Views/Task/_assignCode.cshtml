@@ -42,11 +42,12 @@
                             </div>
                             <!-- /.lockscreen-image -->
                             <!-- lockscreen credentials (contains the form) -->
+                     
                             <form class="lockscreen-credentials">
                                 <div class="input-group">
-                                    <input type="text" class="form-control" placeholder="Código Encuestas" v-model="poll.BranchCodeNew"  :disabled="poll.StatusBranch==='A'">
+                                    <input type="text" class="form-control" placeholder="Código Encuestas" v-model="poll.BranchCodeNew" :disabled="poll.StatusBranch==='A'">
                                     <div class="input-group-btn">
-                                        <button type="button" class="btn" v-on:click="AcceptCode" :disabled="poll.StatusBranch==='A'"><i class="fa fa-save text-muted"  ></i></button>
+                                        <button type="button" class="btn" v-on:click="AcceptCode" :disabled="poll.StatusBranch==='A'"><i class="fa fa-save text-muted"></i></button>
                                     </div>
                                 </div>
                             </form>

@@ -1273,6 +1273,33 @@ namespace Mardis.Engine.Business.MardisCore
                 s.QuestionCollection = GetQuestionsFromSection(s.Id, AllowQuestion);
                 s.Sections.AsParallel().ForAll(sc => sc.QuestionCollection = GetQuestionsFromSection(sc.Id, AllowQuestion));
             });
+            //secciones con preguntas con conceptos para mejorar el metodo de guardo
+            foreach (var _question in sections)
+            {
+
+                var hasConcept = _question.QuestionCollection.Where(x => x.CodeTypePoll == "COMPLETE");
+                if (hasConcept.Count() > 0)
+                { 
+                sections.Where(z => z.Id == _question.Id).First().hasConcept = true;
+                    break;
+                }
+              
+            }
+            foreach (var _question in sections)
+            {
+                foreach (var _seccion in _question.Sections)
+                {
+
+                    var hasConcept = _seccion.QuestionCollection.Where(x => x.CodeTypePoll == "COMPLETE");
+                    if (hasConcept.Count() > 0)
+                    {
+                        sections.Where(z => z.Id == _question.Id).First().Sections.Where(s=>s.Id==_seccion.Id).First().hasConcept = true;                     break;
+                    }
+                }
+
+            }
+
+
 
             return sections;
         }

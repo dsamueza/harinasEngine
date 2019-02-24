@@ -24,7 +24,7 @@ namespace Mardis.Engine.Web.ViewModel.TaskViewModels
         public string GroupName { get; set; }
 
         public Guid? IdSection { get; set; }
-
+        public bool hasConcept { get; set; }
         public List<MyTaskServicesDetailViewModel> Sections { get; set; }
 
         public List<MyTaskQuestionsViewModel> QuestionCollection { get; set; }

@@ -459,7 +459,7 @@ namespace Mardis.Engine.Web.Controllers
             var _questionModel = new List<MyTaskQuestionsViewModel>();
             var _questionModelSub = new List<MyTaskQuestionsViewModel>();
 
-            foreach (var _question in _task.ServiceCollection.First().ServiceDetailCollection)
+            foreach (var _question in _task.ServiceCollection.First().ServiceDetailCollection.Where(z=>z.hasConcept==true))
             {
 
 
@@ -469,7 +469,7 @@ namespace Mardis.Engine.Web.Controllers
             }
             foreach (var _question in _task.ServiceCollection.First().ServiceDetailCollection)
             {
-                foreach (var _seccion in _question.Sections)
+                foreach (var _seccion in _question.Sections.Where(z => z.hasConcept == true))
                 {
 
                     _questionModelSub.AddRange(_seccion.QuestionCollection.Where(x => x.CodeTypePoll == "COMPLETE"));
