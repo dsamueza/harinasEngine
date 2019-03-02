@@ -431,7 +431,8 @@ namespace Mardis.Engine.Web.Controllers
                 {
                     var modelAnswer = JSonConvertUtil.Deserialize<List<MyTaskQuestionDetailsViewModel>>(dinamic);
                     if (modelAnswer == null) return Json("2");
-                    modelAnswer.First().AnwerDetailSecondModel.First().QuestionComplete.Add(idMarca.First());
+                    //modelAnswer.First().AnwerDetailSecondModel.First().QuestionComplete.Add(idMarca.First());
+                    modelAnswer.First().SelectedAnswer = idMarca.First();
                     var _post = _taskCampaignBusiness.saveDinamicCambioHarinas(modelAnswer);
 
                     return Json(_post);

@@ -190,7 +190,7 @@ function SaveQuestionRepeatCambioHarinas(i, j, k) {
             Idtask: getParameterByName('idTask')
             , tasks: ko.toJSON(vueVM.$data.poll)
             , dinamic: ko.toJSON(vueVM.$data.harinas)
-            , idMarca: vueVM.$data.harinas[0].QuestionComplete
+            , idMarca: vueVM.$data.IdMarcaMolino
         },
         success: function (data) {
             $.unblockUI();
@@ -203,7 +203,7 @@ function SaveQuestionRepeatCambioHarinas(i, j, k) {
                 });
                 var QuestionDetailCollectionArray = vueVM.$data.poll.ServiceCollection[0].ServiceDetailCollection[i].QuestionCollection[j].QuestionDetailCollection;
                 for (var index = 0; index < QuestionDetailCollectionArray.length; index++) {
-                    if (QuestionDetailCollectionArray[index].Id == vueVM.$data.harinas[0].QuestionComplete) {
+                    if (QuestionDetailCollectionArray[index].Id == vueVM.$data.IdMarcaMolino) {
                         QuestionDetailCollectionArray[index].Checked = true;
                         QuestionDetailCollectionArray[index].AnwerDetailSecondModel = JSON.parse(data[1]);
                     }
@@ -321,6 +321,7 @@ function ApplyBindingTaskService(data) {
                 Peso: '',
                 Factura: ''
             }],
+            IdMarcaMolino: [{}]
         },
 
         watch: {

@@ -46,8 +46,8 @@
                                                        </div>
                                                        <div class="panel-body" style="padding-bottom: 5px; padding-top: 5px;">
 
-                                                           <input v-info-sender v-if="question.CodeTypePoll=='OPEN'" v-model="question.Answer" class="form-control inputmardis subsec" v-bind:id="question.Id" v-bind:name="question.IdAnswer" style="margin: 0 auto; float: none; background-color: #cccccc;" v-bind:disabled="!question.IsPermit" />
-                                                           <select v-info-sender v-if="question.CodeTypePoll=='ONE'" class="inputmardis subsec" v-model="question.IdQuestionDetail" v-bind:id="question.Id" v-bind:name="question.IdAnswer" style="margin: 0 auto; float: none;" onchange="valorseleccion(this)" v-bind:disabled="!question.IsPermit">
+                                                           <input v-info-sender v-if="question.CodeTypePoll=='OPEN'" v-model="question.Answer" class="form-control inputmardis subsec" v-bind:id="question.Id" v-bind:name="question.IdAnswer" style="margin: 0 auto; float: none; background-color: #cccccc;" v-bind:disabled="!question.IsPermit" autocomplete="off" />
+                                                           <select v-info-sender v-if="question.CodeTypePoll=='ONE'" class="inputmardis subsec" v-model="question.IdQuestionDetail" v-bind:id="question.Id" v-bind:name="question.IdAnswer" style="margin: 0 auto; float: none;" onchange="valorseleccion(this)" v-bind:disabled="!question.IsPermit"  >
                                                                <option v-for="answer in question.QuestionDetailCollection" v-bind:value="answer.Id">{{answer.Answer}}</option>
                                                            </select>
                                                            @*<v-autocomplete v-if="question.CodeTypePoll=='ONE'"

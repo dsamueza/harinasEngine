@@ -864,9 +864,9 @@ namespace Mardis.Engine.Business.MardisCore
                 List<String> result = new List<String>();
                 try
                 {
-                    var marcaHarina = Context.QuestionDetails.Where(qd => qd.Id.ToString() == _data[0].AnwerDetailSecondModel.First().QuestionComplete.First()).First().Answer;
+                    var marcaHarina = Context.QuestionDetails.Where(qd => qd.Id == Guid.Parse(_data.First().SelectedAnswer)).First().Answer;
                     var idAnswerDetail = _data[0].AnwerDetailSecondModel.First().AnswerDetailId;
-                    var idQuestionDetail = _data[0].AnwerDetailSecondModel.First().QuestionComplete.First();
+                    var idQuestionDetail = _data.First().SelectedAnswer;
                     var idAnswerDetailSecondLevel = _data[0].AnwerDetailSecondModel.First().Id;
 
                     var itemAnswerDetail = Context.AnswerDetails.Where(ad => ad.Id == idAnswerDetail).First();
@@ -1312,6 +1312,31 @@ namespace Mardis.Engine.Business.MardisCore
             {
                 sections.QuestionCollection = GetQuestionsFromSectionID(sections.Id, Orden);
                 sections.Sections.AsParallel().ForAll(sc => sc.QuestionCollection = GetQuestionsFromSectionID(sc.Id, Orden));
+
+
+
+
+                    var hasConcept = sections.QuestionCollection.Where(x => x.CodeTypePoll == "COMPLETE");
+                    if (hasConcept.Count() > 0)
+                    {
+                        sections.hasConcept = true;
+                  
+                    }
+
+
+
+                    foreach (var _seccion in sections.Sections)
+                    {
+
+                        var hasConcepts = _seccion.QuestionCollection.Where(x => x.CodeTypePoll == "COMPLETE");
+                        if (hasConcepts.Count() > 0)
+                        {
+                        sections.Sections.Where(s => s.Id == _seccion.Id).First().hasConcept = true; 
+                        }
+                    }
+
+
+
             }
             return sections;
         }

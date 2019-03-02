@@ -175,6 +175,7 @@
                     <div class="panel-body">
 
                         <div class="row">
+           
                             <div class="col-sm-4">
                                 <strong>PT Indice: </strong> {{poll.BranchMardisCode}}
                             </div>
@@ -212,11 +213,13 @@
                         </div>
                         <div class="row">
                             <div class="col-sm-4">
-                                <strong>Parroquia: </strong> {{poll.BranchParish}}
-                            </div>
-
-                            <div class="col-sm-4">
                                 <strong>Propietario: </strong> {{poll.BranchOwnerName}}
+                            </div>
+                            <div class="col-sm-4">
+                                <strong>Zona: </strong> {{poll.Cluster}}
+                            </div>
+                            <div class="col-sm-4">
+                                <strong>Canal: </strong> {{poll.BranchTypeBusiness}}
                             </div>
                         </div>
 
@@ -256,7 +259,9 @@
                 </div>
             </div>
         </div>
+
         @Html.Partial("_censo")
+
         @Html.Partial("_assignCode")
         @Html.Partial("_QuestionDinamic")
         @*<div v-if="poll.ServiceCollection[0].Template=='Matrix'">
@@ -270,8 +275,6 @@
                 @Html.Partial("_censo")
 
             </div>*@
-
-
 
     </div> @*Fin Sección de Encuestas*@
 

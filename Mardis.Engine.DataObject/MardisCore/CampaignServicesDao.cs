@@ -236,7 +236,7 @@ namespace Mardis.Engine.DataObject.MardisCore
 
             try
             {
-                var routes = Context.Branches.Where(x => x.IdAccount == idAccount && x.RUTAAGGREGATE.Trim() == rout.Trim()).Select(x => x.IMEI_ID).Distinct().ToList();
+                var routes = Context.Branches.Where(x => x.IdAccount == idAccount && x.RUTAAGGREGATE.Trim() == rout.Trim() && x.IMEI_ID!=null).Select(x => x.IMEI_ID).Distinct().ToList();
 
                 if (routes.Count() > 0)
                 {

@@ -147,7 +147,7 @@
                                                 <div v-for="(detail, k) in question.QuestionDetailCollection">
                                                     <div v-bind:class="classlenght(question.Weight)"
                                                          v-if="detail.Checked==true && detail.Id==harinas[0].Id">
-                                                        <v-autocomplete v-model="harinas[0].QuestionComplete"
+                                                        <v-autocomplete v-model="IdMarcaMolino"
                                                                         :disabled="isUpdating"
                                                                         :items="question.QuestionDetailCollection"
                                                                         box

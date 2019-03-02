@@ -118,5 +118,7 @@ namespace Mardis.Engine.Web.ViewModel.TaskViewModels
         public string StatusBranch { get; set; }
         
         public string CodeGemini { get; set; }
+
+        public string Cluster { get; set; }
     }
 }
