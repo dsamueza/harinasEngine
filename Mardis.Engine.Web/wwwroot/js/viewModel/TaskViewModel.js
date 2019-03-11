@@ -1138,7 +1138,7 @@ function updateBranchImg(id, img) {
 }
 function AddBranchImg(img, idb, idc, idt) {
     $.blockUI({ message: "Actualizando Imagen.." });
-  
+    console.log(img);
     $.ajax({
         url: "/Task/SaveImage",
         type: "POST",

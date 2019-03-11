@@ -56,7 +56,7 @@
                                                 <div v-bind:class="classlenght(question.Weight)" v-if="question.CodeTypePoll=='MANY' && question.HasPhoto=='N' " style="text-align:-webkit-center;">
                                                     <div class="panel panel-mardis-grey" style="margin-bottom: 1px;">
                                                         <div class="panel-heading" style="padding-bottom: 12px; padding-top: 0; height: 10%; color: white;">
-                                                            {{question.Id}}
+                                                            {{question.Title}}
                                                         </div>
 
                                                         <div v-for="answer in question.QuestionDetailCollection">

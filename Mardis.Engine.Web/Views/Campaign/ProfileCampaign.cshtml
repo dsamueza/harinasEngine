@@ -152,15 +152,17 @@
                     <div class="panel-body">
 
                         <div class="row">
+
+                            <div class="col-sm-4">
+                                <strong>PT Indice: </strong> {{poll.BranchExternalCode}}
+                            </div>
                             <div class="col-sm-4">
                                 <strong>Nombre de Local: </strong> {{poll.BranchName}}
                             </div>
                             <div class="col-sm-4">
                                 <strong>Calle Principal: </strong> {{poll.BranchMainStreet}}
                             </div>
-                            <div class="col-sm-4">
-                                <strong>Rótulo: </strong> {{poll.BranchLabel}}
-                            </div>
+
                         </div>
 
                         <div class="row">
@@ -177,18 +179,6 @@
 
                         <div class="row">
                             <div class="col-sm-4">
-                                <strong>Parroquia: </strong> {{poll.BranchParish}}
-                            </div>
-                            <div class="col-sm-4">
-                                <strong>Barrio: </strong> {{poll.BranchNeighborhood}}
-                            </div>
-                            <div class="col-sm-4">
-                                <strong>Propietario: </strong> {{poll.BranchOwnerName}}
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-sm-4">
                                 <strong>Cédula/Ruc: </strong> {{poll.BranchOwnerDocument}}
                             </div>
                             <div class="col-sm-4">
@@ -198,9 +188,18 @@
                                 <strong>Celular: </strong> {{poll.BranchOwnerMobile}}
                             </div>
                         </div>
-
+                        <div class="row">
+                            <div class="col-sm-4">
+                                <strong>Propietario: </strong> {{poll.BranchOwnerName}}
+                            </div>
+                            <div class="col-sm-4">
+                                <strong>Zona: </strong> {{poll.Cluster}}
+                            </div>
+                            <div class="col-sm-4">
+                                <strong>Canal: </strong> {{poll.BranchTypeBusiness}}
+                            </div>
+                        </div>
                     </div>
-                </div>
 
             </div>
         </div>@*Panel de Datos de local*@
