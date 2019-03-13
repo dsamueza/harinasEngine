@@ -178,7 +178,8 @@ namespace Mardis.Engine.Web.Controllers
             try
             {
                 if (!string.IsNullOrEmpty(idCampaign))
-                {    // SetSessionVariable("idCampaign", idCampaign);
+                {
+                     SetSessionVariable("idCampaign", idCampaign);
                     _taskCampaignBusiness.UserCampaignRedis(Guid.Parse(ApplicationUserCurrent.UserId), idCampaign);
                 }
                 else
@@ -211,13 +212,7 @@ namespace Mardis.Engine.Web.Controllers
                    
                 }
                 var filters = GetFilters(filterValues, deleteFilter);
-                if (filters.Where(x => x.NameFilter == "IdCampaign").Count() > 0) {
-                    var varcampid = filters.Where(x => x.NameFilter == "IdCampaign").First().Value;
-                    id = Guid.Parse(varcampid);
-                    idCampaign = _protector.Protect(varcampid);
-                    SetSessionVariable("idCampaign", idCampaign);
-                }
-               
+              
                 var tasks = _campaignBusiness.GetPaginatedTaskPerCampaignViewModelDinamic(id, pageIndex, pageSize, filters, ApplicationUserCurrent.AccountId);
                 ViewBag.CountTasks = _taskCampaignBusiness._CountAllTasCamping(id, filters).ToString();
                 ViewBag.idcampaign = idCampaign;
@@ -233,7 +228,7 @@ namespace Mardis.Engine.Web.Controllers
             catch (Exception e)
             {
                 _logger.LogError(new EventId(0, "Error Index"), e.Message);
-                return RedirectToAction("Index", "StatusCode", new { statusCode = 1 });
+                return RedirectToAction("GroupTask", "Task");
             }
         }
 
@@ -1250,6 +1245,69 @@ namespace Mardis.Engine.Web.Controllers
             }
         }
         #endregion
+
+        #region listaTareasCampaña
+
+        [HttpGet]
+        public IActionResult TasksList(string idCampaign, string filterValues, bool deleteFilter, string view, int pageIndex = 1, int pageSize = 6)
+        {
+            try
+            {
+
+                var id = Guid.Empty;
+                if (!string.IsNullOrEmpty(idCampaign))
+                {
+                    try
+                    {
+                        id = Guid.Parse(_protector.Unprotect(idCampaign));
+                    }
+                    catch (Exception)
+                    {
+
+                        return RedirectToAction("GroupTask", "Task");
+                    }
+
+                }
+                var filters = GetFilters(filterValues, deleteFilter);
+
+                var tasks = _campaignBusiness.GetListTasks(id);
       
+                if (view == "list")
+                {
+                    return View("~/Views/Task/TaskList.cshtml", tasks);
+                }
+
+                return View(tasks);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(new EventId(0, "Error Index"), e.Message);
+                return RedirectToAction("Index", "StatusCode", new { statusCode = 1 });
+            }
+        }
+        [HttpPost]
+        public JsonResult PdfMasive(String[] ids)
+        {
+            try
+            {
+                var Filepath = _Env.WebRootPath;
+                var imgg = "";
+                var outs = "";
+                if (ids != null)
+                    outs = _taskCampaignBusiness.PrintFileMasive(ids, Filepath, ApplicationUserCurrent.AccountId, imgg, Global.ProfileId);
+
+        
+                return Json(outs);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(new EventId(0, "Error Index"), ex.Message);
+
+                return Json("");
+            }
+        }
+        #endregion
+
+
     }
 }

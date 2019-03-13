@@ -776,6 +776,16 @@ namespace Mardis.Engine.Business.MardisCore
 
         }
         #endregion
+        #region listaTareasCampaña
+        public IList<ListTaskViewModel> GetListTasks(Guid Idcampaign)
+        {
+            IList<ListTaskViewModel> _modelData = new List<ListTaskViewModel>();
+
+           _modelData=     ConvertTask.ConvertTaskToListViewItemModel(_taskCampaignDao.GetListTaskViewItemModel(Idcampaign));
+
+            return _modelData;
+        }
+        #endregion
 
     }
 }

@@ -1399,6 +1399,10 @@ namespace Mardis.Engine.Web.Controllers
         }
 
         #endregion
+
+        #region listaTareasCampaña
+        #endregion
+
     }
 }
 

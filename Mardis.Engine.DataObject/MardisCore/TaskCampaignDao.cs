@@ -103,7 +103,7 @@ namespace Mardis.Engine.DataObject.MardisCore
 
             try
             {
-                var _data= Context.PollTasks.Where(x => x.idtask.Equals(idTask));
+                var _data = Context.PollTasks.Where(x => x.idtask.Equals(idTask));
 
                 return _data.Count() > 0 ? _data.First().novelty : null;
             }
@@ -239,8 +239,8 @@ namespace Mardis.Engine.DataObject.MardisCore
                 .Include(t => t.StatusTask)
                 .Include(t => t.Branch.PersonOwner)
                 .Include(t => t.Branch.District)
-                .Include(t=>t.Pollster)
-                .Include(t=>t.PollsTaskss)
+                .Include(t => t.Pollster)
+                .Include(t => t.PollsTaskss)
                 .Where(t => t.IdCampaign == idCampaign &&
                             t.StatusRegister == CStatusRegister.Active)
                 .ToList();
@@ -316,8 +316,8 @@ namespace Mardis.Engine.DataObject.MardisCore
                                $"&& IdAccount == \"{idAccount.ToString()}\" ";
 
             var dataElement = Context.TaskCampaigns
-                .Include(t => t.Branch)
-                .Include(t => t.Campaign);
+                .Include(t => t.Branch);
+             //   .Include(t => t.Campaign);
 
             strPredicate += GetFilterPredicate(filterValues);
 
@@ -333,27 +333,26 @@ namespace Mardis.Engine.DataObject.MardisCore
         public List<StatusTask> GetMyTaskViewItemModelFilter(int pageIndex, int pageSize, List<FilterValue> filterValues, Guid idAccount)
         {
 
-            var strPredicate = $" StatusRegister == \"{CStatusRegister.Active}\" " +
-                              $"&& IdAccount == \"{idAccount.ToString()}\" ";
+            var strPredicate = $" StatusRegister == \"{CStatusRegister.Active}\" ";
 
             var dataElement = Context.TaskCampaigns
                 .Include(t => t.StatusTask)
-                .Include(t => t.Campaign);
-               
-              
+                 .Include(t => t.Campaign);
+
+
             strPredicate += GetFilterPredicate(filterValues);
 
             var resultsList = dataElement
                 .Where(strPredicate)
-                .Select(x=>x.StatusTask)
+                .Select(x => x.StatusTask)
                 .Distinct()
                 .ToList();
-       var   data=  from st in resultsList
-            join stc in Context.StatusTaskAccounts
-            on st.Id equals stc.Idstatustask
-            where stc.Idaccount == idAccount
-                    orderby stc.ORDER
-            select st;
+            var data = from st in resultsList
+                       join stc in Context.StatusTaskAccounts
+                       on st.Id equals stc.Idstatustask
+                       //where stc.Idaccount == idAccount
+                       orderby stc.ORDER
+                       select st;
             return data.ToList();
         }
         public int GetTaskCountByCampaignAndStatus(string nameStatus, List<FilterValue> filterValues, Guid idAccount)
@@ -371,10 +370,10 @@ namespace Mardis.Engine.DataObject.MardisCore
         {
             var strPredicate = $"StatusTask.Name ==  \"{nameStatus}\" " +
                          $"&& StatusRegister == \"{CStatusRegister.Active}\" " +
-                         $"&& IdAccount == \"{idAccount.ToString()}\" "+
+                         $"&& IdAccount == \"{idAccount.ToString()}\" " +
                          $"&& IdCampaign == \"{idcamp.ToString()}\" ";
 
-      
+
 
             return Context.TaskCampaigns
                 .Count(strPredicate);
@@ -469,7 +468,7 @@ namespace Mardis.Engine.DataObject.MardisCore
             //    .ToDictionary(t => t.StatusName, t => t.Count);
         }
 
-        public void ImplementTask(Guid idTask, Guid idStatus, Guid idAccount , Guid status,Guid iduser, string comment)
+        public void ImplementTask(Guid idTask, Guid idStatus, Guid idAccount, Guid status, Guid iduser, string comment)
         {
             var task = Get(idTask, idAccount);
             task.DateModification = DateTime.Now.AddHours(-5);
@@ -478,7 +477,7 @@ namespace Mardis.Engine.DataObject.MardisCore
             task.CommentTaskNoImplemented = comment;
             InsertOrUpdate(task);
         }
-        public void ImplementTaskGemini(Guid idTask, Guid idStatus, Guid idAccount, Guid status,string Codigo)
+        public void ImplementTaskGemini(Guid idTask, Guid idStatus, Guid idAccount, Guid status, string Codigo)
         {
             var task = Get(idTask, idAccount);
             task.DateModification = DateTime.Now.AddHours(-5);
@@ -504,7 +503,7 @@ namespace Mardis.Engine.DataObject.MardisCore
             strPredicate += GetFilterPredicate(filters);
 
             var resultList = Context.TaskCampaigns
-                .Include(tb=>tb.Pollster)
+                .Include(tb => tb.Pollster)
                 .Where(strPredicate)
                 .OrderByDescending(s => s.StartDate)
                 .Skip((pageIndex - 1) * pageSize)
@@ -525,7 +524,8 @@ namespace Mardis.Engine.DataObject.MardisCore
                 .Where(strPredicate)
                 .Count();
         }
-        public List<StatusTask> statusAllow(Guid idaccount, int pageIndex, int pageSize) {
+        public List<StatusTask> statusAllow(Guid idaccount, int pageIndex, int pageSize)
+        {
 
             var _status = from st in Context.StatusTasks
                           join stc in Context.StatusTaskAccounts
@@ -537,8 +537,8 @@ namespace Mardis.Engine.DataObject.MardisCore
             return _status.ToList();
 
 
-                
-             
+
+
 
         }
 
@@ -546,19 +546,43 @@ namespace Mardis.Engine.DataObject.MardisCore
         #region  Historia de tareas
         public IList<historialTareas> GetDataHystory(Guid Idtask)
         {
-            return Context.HistoryTasks.Include(s=>s.StatusTask)
-                .Include(u=>u.Users)
-                .Where(x => x.idtask == Idtask && x.UserValidator!=null).ToList();
+            return Context.HistoryTasks.Include(s => s.StatusTask)
+                .Include(u => u.Users)
+                .Where(x => x.idtask == Idtask && x.UserValidator != null).ToList();
         }
         public IList<historialTareas> GetDataHystoryall(Guid idcampaign)
         {
             return Context.HistoryTasks.Include(s => s.StatusTask)
                 .Include(u => u.Users)
-                .Include(t=>t.Tasks)
-                .Where(x => x.Tasks.IdCampaign== idcampaign && x.UserValidator != null && x.Tasks.StatusRegister== CStatusRegister.Active).ToList();
+                .Include(t => t.Tasks)
+                .Where(x => x.Tasks.IdCampaign == idcampaign && x.UserValidator != null && x.Tasks.StatusRegister == CStatusRegister.Active).ToList();
         }
 
 
         #endregion
+
+
+        public List<TaskCampaign> GetListTaskViewItemModel(Guid Idcampaign)
+        {
+
+
+
+
+            var dataElement = Context.TaskCampaigns
+                .Include(t => t.Branch)
+                .Include(t => t.Branch.District)
+                .Include(t => t.Campaign)
+                .Include(t => t.Pollster)
+               .Include(t => t.StatusTask);
+
+            var resultsList = dataElement
+                .Where(x => x.IdCampaign == Idcampaign && x.StatusRegister == CStatusRegister.Active)
+                .OrderByDescending(t => t.DateModification)
+                .ToList();
+
+            return resultsList;
+
+
+        }
     }
 }

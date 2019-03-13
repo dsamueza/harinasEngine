@@ -87,13 +87,23 @@
                         </div>
                     </div>
                 </div>
-             
+
                 <div class="col-sm-1" style="text-align: center">
                     <div class="row">
                         <a class="fa fa-tasks fa-4x" href="@Url.Action("TasksCampaign", "Task", new {idCampaign = campaign.Id})"></a>
                     </div>
                     <div class="row">
                         @( campaign.TotalTasks + " Encuestas")
+                    </div>
+                </div>
+                <div class="col-sm-1">
+                    <div style="text-align: center">
+                        <div class="row">
+                            <a class="fa fa-print fa-4x" href="@Url.Action("TasksList", "Task", new {idCampaign = campaign.Id})"></a>
+                        </div>
+                        <div class="row">
+                            Imprimir Encuestas
+                        </div>
                     </div>
                 </div>
                 <div class="col-sm-1">

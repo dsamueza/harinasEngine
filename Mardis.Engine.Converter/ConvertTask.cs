@@ -23,7 +23,7 @@ namespace Mardis.Engine.Converter
                                 {
                                     Id = taskCampaign.Id,
                                     BranchName = taskCampaign.Branch.Name,
-                                    CampaignName = taskCampaign.Campaign.Name,
+                                    CampaignName ="--",
                                     StartDate = taskCampaign.StartDate,
                                     BranchExternalCode = taskCampaign.Branch.ExternalCode,
                                     BranchMardisCode = taskCampaign.Branch.Code,
@@ -34,6 +34,35 @@ namespace Mardis.Engine.Converter
                                     BranchId = taskCampaign.IdBranch
                                     , StatusMigrate = taskCampaign.StatusMigrate
                                     ,Icon=taskCampaign.Icon
+                                })
+                .ToList();
+        }
+        public static List<ListTaskViewModel> ConvertTaskToListViewItemModel(List<TaskCampaign> taskCampaignList)
+        {
+            return taskCampaignList
+                .Select(taskCampaign =>
+                                new ListTaskViewModel()
+                                {
+                                    Id = taskCampaign.Id,
+                                    BranchName = taskCampaign.Branch.Name,
+                                    CampaignName = taskCampaign.Campaign.Name,
+                                    StartDate = taskCampaign.StartDate,
+                                    BranchExternalCode = taskCampaign.Branch.ExternalCode,
+                                    BranchMardisCode = taskCampaign.Branch.Code,
+                                    Route = taskCampaign.Route,
+                                    Code = taskCampaign.Code,
+                                    Longitude = taskCampaign.Branch.LenghtBranch,
+                                    Latitude = taskCampaign.Branch.LatitudeBranch,
+                                    BranchId = taskCampaign.IdBranch
+                                    ,TypeBussiness=taskCampaign.Branch.TypeBusiness
+                                    ,NamePollster=taskCampaign.Pollster.Name,
+                                    StatusMigrate = taskCampaign.StatusMigrate
+                                   , city=taskCampaign.Branch.District.Name
+                                   ,status=taskCampaign.StatusTask.Name
+                                   ,comment=taskCampaign.CommentTaskNoImplemented
+                                   ,Street=taskCampaign.Branch.MainStreet
+                                  
+                                    ,Icon = taskCampaign.Icon
                                 })
                 .ToList();
         }

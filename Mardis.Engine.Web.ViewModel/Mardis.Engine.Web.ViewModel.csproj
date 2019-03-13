@@ -312,6 +312,7 @@
     <Compile Include="ServiceViewModels\ServiceItemViewModel.cs" />
     <Compile Include="ServiceViewModels\ServiceRegisterViewModel.cs" />
     <Compile Include="ServiceViewModels\TypeServiceListViewModel.cs" />
+    <Compile Include="TaskViewModels\ListTaskViewModel.cs" />
     <Compile Include="TaskViewModels\MyStatusTaskViewModel.cs" />
     <Compile Include="TaskViewModels\MytaskAnwerDetailSecondModel.cs" />
     <Compile Include="TaskViewModels\MyTaskItemViewModel.cs" />
