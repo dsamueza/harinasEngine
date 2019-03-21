@@ -372,5 +372,20 @@ namespace Mardis.Engine.Web.Controllers
 
             return JSonConvertUtil.Convert(resultList);
         }
+
+
+        #region timeline Locales
+
+        public IActionResult Timeline(Guid idBranch)
+        {
+            var branch = _branchBusiness.GetBranchCompleteProfile(idBranch, ApplicationUserCurrent.AccountId);
+            var smslista = _smsBusiness.GetCampaignByIdSms(ApplicationUserCurrent.AccountId);
+           //branch.BranchImages = _branchImageBusiness.GetBranchesImagesList(branch.Id, ApplicationUserCurrent.AccountId);
+
+            var itemReturn = ConvertBranch.ConvertBranchToBranchProfileViewModel(branch, smslista);
+
+            return View(itemReturn);
+        }
+        #endregion
     }
 }

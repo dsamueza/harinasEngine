@@ -106,19 +106,25 @@ Vue.directive('info-sender', {
     bind: function (el, binding, vnode) {
         el.addEventListener("change", function () {
             if (store.get(el.name) == null) {
-                if (el.name != "00000000-0000-0000-0000-000000000000")
-                    store.set(el.name, { Idquestion: el.id, AnswerQuestion: el.value, idTask: getParameterByName('idTask'), idanswer: el.name, estado: "P" });
-                else
-                    store.set(el.id, { Idquestion: el.id, AnswerQuestion: el.value, idTask: getParameterByName('idTask'), idanswer: el.name, estado: "P" });
+                if (el.name != "00000000-0000-0000-0000-000000000000") {
 
+                    store.set(el.name, { Idquestion: el.id, AnswerQuestion: el.value, idTask: getParameterByName('idTask'), idanswer: el.name, estado: "P" });
+                }
+                else {
+
+                    store.set(el.id, { Idquestion: el.id, AnswerQuestion: el.value, idTask: getParameterByName('idTask'), idanswer: el.name, estado: "P" });
+                }
 
             }
             else {
-                if (store.get(el.name).idanswer == "00000000-0000-0000-0000-000000000000" || store.get(el.id).idanswer == "") {
+                if (store.get(el.name).idanswer == "00000000-0000-0000-0000-000000000000" || store.get(el.name).idanswer == "") {
+
                     store.set(el.name, { Idquestion: el.id, AnswerQuestion: el.value, idTask: getParameterByName('idTask'), idanswer: el.name, estado: "P" });
                 }
-                else
-                    store.set(el.name, { Idquestion: el.id, AnswerQuestion: el.value, idTask: getParameterByName('idTask'), idanswer: store.get(el.id).idanswer, estado: "P" });
+                else {
+
+                    store.set(el.name, { Idquestion: el.id, AnswerQuestion: el.value, idTask: getParameterByName('idTask'), idanswer: store.get(el.name).idanswer, estado: "P" });
+                }
             }
             //alert(el.value);
             let storeSize = 0;

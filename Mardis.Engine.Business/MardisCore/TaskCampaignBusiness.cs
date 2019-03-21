@@ -3426,8 +3426,16 @@ namespace Mardis.Engine.Business.MardisCore
         public void UserCampaignRedis(Guid user, string Idcampaing)
         {
 
-   
-          _redisCache.Set("UsersbyCampaign:" + user, Idcampaing);
+            try
+            {
+                _redisCache.Set("UsersbyCampaign:" + user, Idcampaing);
+            }
+            catch (Exception e)
+            {
+
+              
+            }
+         
                 
                 
         }
@@ -3439,10 +3447,20 @@ namespace Mardis.Engine.Business.MardisCore
         /// <returns></returns>
         public string GetUserCampaignRedis(Guid user, string Idcampaing)
         {
-            var _securityModel = _redisCache.Get<string>("UsersbyCampaign:" + user);
+
+            try
+            {
+                var _securityModel = _redisCache.Get<string>("UsersbyCampaign:" + user);
 
 
-            return _securityModel != null ? _securityModel.ToString() : "";
+                return _securityModel != null ? _securityModel.ToString() : "";
+            }
+            catch (Exception)
+            {
+
+                return Guid.Empty.ToString();
+            }
+      
 
 
         }

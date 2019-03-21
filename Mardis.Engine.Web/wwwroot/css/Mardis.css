@@ -328,10 +328,10 @@ img.zoom {
     border-bottom: none !important;
     border-left: none !important;
 }
-.timeline:before {
+/*.timeline:before {
     width: 0.12rem !important;
     background: #33475bab !important;
-}
+}*/
 .bg-timeline {
     background-color: #dcdee0;
     border-color: #cbd6e2 !important;

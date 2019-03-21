@@ -2084,17 +2084,18 @@ a:focus {
   padding: 0;
   list-style: none;
 }
-.timeline:before {
-  content: '';
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  width: 4px;
-  background: #ddd;
-  left: 31px;
-  margin: 0;
-  border-radius: 2px;
-}
+    .timeline:before {
+        content: '';
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        width: 4px;
+        background: #a49da7;
+       
+        left: 31px;
+        margin: 0;
+        border-radius: 2px;
+    }
 .timeline > li {
   position: relative;
   margin-right: 10px;

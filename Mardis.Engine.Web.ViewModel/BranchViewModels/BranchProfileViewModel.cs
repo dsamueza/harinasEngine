@@ -27,6 +27,7 @@ namespace Mardis.Engine.Web.ViewModel.BranchViewModels
         public string OwnerPhone { get; set; }
 
         public string OwnerMobile { get; set; }
+        public string cluster { get; set; }
 
         public string BranchTypeBusiness { get; set; }
 

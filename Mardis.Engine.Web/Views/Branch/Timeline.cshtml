@@ -1,0 +1,468 @@
+
+@model BranchProfileViewModel
+@{
+    ViewData["Menu"] = "Locales";
+    ViewData["Title"] = "";
+    ViewData["Description"] = "";
+    Layout = "_Layout";
+}
+
+@section buttons{}
+@section filters{}
+<style>
+    .profile-user-img {
+        width: 300px !important;
+        height: 300px !important;
+    }
+    /*.timeline:before {
+      width:0 !important; 
+       background: none !important;
+    }*/
+    div.timeline {
+    
+        overflow: visible  !important;
+
+    }
+    .infobranch {
+        /*-webkit-box-shadow: 0px 0px 35px 3px rgba(0,0,0,0.75);
+        -moz-box-shadow: 0px 0px 35px 3px rgba(0,0,0,0.75);
+        box-shadow: 0px 0px 35px 3px rgba(0,0,0,0.75);
+        border-top-color: #742f8b !important ;*/
+    }
+    .description {
+        color: black;
+        font-family: 'Source Sans Pro', 'Helvetica Neue', Helvetica, Arial, sans-serif !important;
+        font-weight: 400 !important;
+       font-size:13px;
+    }
+</style>
+<style>
+    /* width */
+    div::-webkit-scrollbar {
+        width: 1em;
+    }
+
+    div::-webkit-scrollbar-track {
+        -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+    }
+
+    div::-webkit-scrollbar-thumb {
+        background-color: darkgrey;
+        outline: 1px solid slategrey;
+    }
+    #DatosTabla tbody {
+        font-size: 12px;
+        color: #545454;
+        font-weight: 600;
+    }
+
+    .user-footer a {
+        color: #be0811 !important;
+    }
+    #DatosTabla td {
+        padding-right: 30px !important;
+    }
+
+    #DatosTabla th {
+        font-size: 12px;
+        font-weight: 700;
+        color: black;
+    }
+
+    #DatosTabla a {
+        color: #20a0c6;
+        font-size: 16px;
+    }
+
+        #DatosTabla a:hover {
+            color: #20a0c6;
+            font-size: 18px;
+        }
+
+    .paginate_button {
+        font-size: 13px !important
+    }
+
+    .input-group .input-group__selections__comma {
+        padding-left: 0.9pc !important;
+    }
+
+</style>
+<link href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons' rel="stylesheet">
+
+<link href="~/bower_components/NewFolder/Timeline.css" rel="stylesheet" />
+<link rel="stylesheet" href="~/bower_components/viewer/viewer.css">
+<div id="divRegisterBranch">
+
+    @Html.Partial("ServiceBranchTaskPartial")
+
+
+
+    <section class="contenst">
+        <div class="row">
+            <div class="col-md-3">
+                <div class="box box-default infobranch">
+                    <div class="box-body box-profile">
+                        @if (Model.BranchImages.Count > 0)
+                        {
+
+                            <img class="profile-user-img img-responsive img-circle" src="@Model.BranchImages.First().Base64Image" alt="User profile picture" width="300px">
+                        }
+
+                        <h3 class="profile-username text-center">@Model.Name </h3>
+
+
+                        <p class="text-muted text-center">Acerca de</p>
+
+                        <div class="box-body">
+                            <hr>
+                            <div class="pull-right-container" style=" text-align: center;">
+                                <strong><i class="fa fa-user margin-r-5"></i> Propietario</strong>
+                                <p class="text-muted">
+                                    @Model.OwnerName
+                                </p>
+                            </div>
+                            <div class="pull-right-container" style=" text-align: center;">
+                                <strong><i class="fa fa-globe margin-r-5"></i> Ciudad</strong>
+                                <p class="text-muted">
+                                    @Model.DistrictName
+                                </p>
+                            </div>
+                            <div class="pull-right-container" style=" text-align: center;">
+                                <strong><i class="fa fa-map margin-r-5"></i> Sector</strong>
+                                <p class="text-muted">
+                                    @Model.Zone
+                                </p>
+                            </div>
+                            <div class="pull-right-container" style=" text-align: center;">
+                                <strong><i class="fa fa-map-marker margin-r-5"></i> Dirección</strong>
+                                <p class="text-muted">
+                                    @Model.Direction
+                                </p>
+                            </div>
+                            <div class="pull-right-container" style=" text-align: center;">
+                                <strong><i class="fa fa-ellipsis-h margin-r-5"></i> Referencia</strong>
+                                <p class="text-muted">
+                                    @Model.Reference
+                                </p>
+                            </div>
+                            <div class="pull-right-container" style=" text-align: center;">
+                                <strong><i class="fa fa-map-o margin-r-5"></i> Zona</strong>
+                                <p class="text-muted">
+                                    @Model.cluster
+                                </p>
+                            </div>
+                            <div class="pull-right-container" style=" text-align: center;">
+                                <strong><i class="fa fa-shopping-bag margin-r-5"></i> Tipologia</strong>
+                                <p class="text-muted">
+                                    @Model.BranchTypeBusiness
+                                </p>
+                            </div>
+                            <div class="pull-right-container" style=" text-align: center;">
+                                <strong><i class="fa fa-phone margin-r-5"></i> Teléfono</strong>
+                                <p class="text-muted">
+                                    @Model.OwnerPhone
+                                </p>
+                            </div>
+                        </div>
+
+
+                    </div>
+                    <!-- /.box-body -->
+
+                </div>
+
+                <div class="box box-default">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">Geo Ubicación</h3>
+                    </div>
+                    <!-- /.box-header -->
+                    <div class="box-body">
+                        <strong><i class="fa fa-info margin-r-5"></i> Información</strong>
+
+                        <p class="text-muted">
+                          La referencias es la ultima ingresada en el local
+                        </p>
+                        <hr>
+                        <strong><i class="fa fa-map-marker margin-r-5"></i> Location</strong>
+
+                        <div style="padding-top: 10px;">
+
+                            <div id="map_canvas" style="width: 100%; height: 200px; overflow: visible; position: fixed;"></div>
+                            <hr style="border-color: #CCCCCC; margin-top: 0;" />
+                        </div>
+
+                    </div>
+                    <!-- /.box-body -->
+                </div>
+            </div>
+            <div class="col-lg-9 col-">
+                <div class="box box-default infobranch" style="border-top-color:#742f8b !important; max-height: 900px; overflow-y: scroll;">
+
+                    <h2 class="pull-left col-md-12">Timeline <small> Local</small> </h2>
+                    <br />
+
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="timeline timeline-inverse">
+                                    @foreach (var task in Model.TaskCampaigns.OrderByDescending(x => x.StartDate))
+                                    {
+
+                                        <!-- timeline time label -->
+                                        <li class="time-label">
+                                            <span class="bg-gray-light" style="    font-size: 15px;">
+                                                @task.StartDate.ToString("dd/MM/yyyy")
+                                            </span>
+                                        </li>
+                                        <!-- /.timeline-label -->
+                                        <!-- timeline item -->
+                                        <li>
+                                            <i class="fa fa-tasks bg-orange"></i>
+
+                                            <div class="timeline-item">
+                                                @*<span class="time"><i class="fa fa-sticky-note-o"></i> @task.StatusName</span>*@
+                                                <strong class="time">
+                                                    <b>Ultima Modificación</b>      @task.DateModi.ToString("dd/MM/yyyy")
+                                                </strong>
+                                                <h3 class="timeline-header"><a href="#">Medición :</a> @task.CampaignName</h3>
+
+                                                <div class="timeline-body">
+                                                    <table class="col-lg-12" style="margin-bottom: 10px;">
+                                                        <tbody>
+                                                            <tr>
+                                                                <td>
+                                                                    <strong>
+                                                                        <b>Codigo Encuesta:</b>
+                                                                    </strong>
+                                                                    @task.TaskCode
+                                                                </td>
+                                                                <td>
+                                                                    <strong>
+                                                                        <b>Encuestador :</b>
+                                                                    </strong>
+                                                                    @task.pollster
+                                                                </td>
+                                                                <td>
+                                                                    <strong>
+                                                                        <b>Ruta:</b>
+                                                                    </strong>
+                                                                    @task.Route
+                                                                </td>
+                                                                <td>
+                                                                    <strong>
+                                                                        <b>Estado:</b>
+                                                                    </strong>
+                                                                    @task.StatusName
+                                                                </td>
+                                                            </tr>
+
+                                                        </tbody>
+                                                    </table>
+                                                    <br />
+                                                    <p class="description">
+                                                        <strong>
+                                                            <b>Observación:</b>
+                                                        </strong>
+                                                    </p>
+                                                    <p class="description">
+                                                        @task.Comment
+                                                    </p>
+                                                </div>
+                                                <div class="timeline-footer">
+                                                    <a href="@Url.Action("ProfileCampaign", "Campaign", new { idTask = task.Id , idcampaing=task.Idcampaign})" class="btn btn-blue btn-xs">Encuesta</a>
+                                                    @*<a onclick="History('@task.Id','@ViewBag.idcampaign','@task.TaskCode')" class="btn btn-info btn-xs">Historial</a>*@
+                                                </div>
+                                            </div>
+                                        </li>
+                                        <!-- timeline item -->
+                                        <li>
+                                            <i class="fa fa-camera bg-purple" onclick="imgvue('@task.Id.ToString()')"></i>
+
+                                            <div class="timeline-item">
+                                                <span class="time"><i class="fa fa-photo"></i> </span>
+
+                                                <strong>
+                                                    <b>Multimedia</b>
+                                                </strong>
+
+                                                <div class="timeline-body">
+                                                    <div id="@task.Id.ToString()">
+                                                        <div class="pictures">
+                                                            <div class="wrap-image">
+                                                                @foreach (var image in Model.BranchImages)
+                                                                {
+                                                                    @if (image.Idtask == task.Id)
+                                                                    {
+                                                                        <img src="@image.Base64Image" alt="..." class="margin" width="150px" height="100px" style="border: solid #e2dcdc;;">
+                                                                    }
+
+                                                                }
+                                                               </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                        </li>
+                                    }
+                                    <!-- END timeline item -->
+                                    <li>
+                                        <i class="fa fa-clock-o bg-gray"></i>
+                                    </li>
+
+                                </ul>
+
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <hr>
+
+
+                </div>
+
+                <div style="margin-top: 14px;"></div>
+
+                <div style="text-align: center">
+                    <a class="btn btn-app" onclick="window.history.back();">
+                        <i class="fa fa-repeat"></i> Retornar
+                    </a>
+                    
+                </div>
+            </div>
+    </section>
+    <div id="responsive" class="modal fade " role="dialog" style="padding-top:10%">
+        <div class="modal-dialog  modal-scrollable modal-lg">
+            <div class="modal-content">
+                @*<div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+
+                    </div>*@
+
+                <div class="modal-body" style="background-color:#d2d6de">
+                    <div class="box">
+                        <div class="box-header with-border">
+                            <div id="InfoEncuesta">
+                                <h4 class="box-title">Historial de Estados</h4>
+
+                                <a v-bind:href="link" id="linktask" class="fa fa-tasks pull-right" style="   margin-right: 16px;    font-size: 15px;    color: rgb(5, 123, 150)  ">
+                                    <strong> {{code}}</strong>
+                                </a>
+                            </div>
+
+                        </div>
+                        <div class="box-body">
+                            <div id="DatosTabla" class="col-xs-10 col-md-10 col-lg-12 " style="overflow: auto; width: 97%; ">
+                                <table id="table-mardis-dt" class="uk-table uk-table-hover uk-table-striped">
+                                    <thead>
+                                        <tr>
+
+                                            <th style="text-align: center">Fecha</th>
+                                            <th style="text-align: center">Usuario </th>
+                                            <th style="text-align: center">Estado</th>
+                                            <th style="text-align: center">Observación</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody style="text-align: center"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    @section scripts{
+        <script src="~/js/viewModel/MapHelper.js"></script>
+
+        <script src="~/bower_components/viewer/viewer.js"></script>
+        <script>
+
+        var marcador = [{ LatitudeBranch: "@Model.Latitude", LenghtBranch: "@Model.Longitude", Name: "@Model.Name" }];
+        LoadMarkers(marcador);
+            generarTabla()
+        function History(id, idcampaign, code) {
+            idtask = id;
+
+
+
+            var table = $('#table-mardis-dt').DataTable();
+
+            table.clear().draw();
+            table.ajax.reload();
+            var link = "../Task/Profile?idTask=" + id + "&campaign=" + idcampaign
+
+            app.$data.code = code;
+            app.$data.link = link;
+
+            //           - $('#lbdT').val=code
+
+            $('#responsive').modal('show');
+            }
+            var app = new Vue({
+                el: '#InfoEncuesta',
+                data: {
+                    code: '',
+                    link: ''
+                }
+            })
+            function generarTabla() {
+                $.blockUI({ message: "cargando..." });
+             table = $('#table-mardis-dt').dataTable({
+                "language": {
+                    "url": "@Url.Content("~/js/latin.json")"
+                 },
+                 "pageLength": 10,
+                "ajax": {
+                    "url": '/Task/HistoryTB',
+                    "type": "GET",
+                    "data": function (d) {
+                        return $.extend({}, d, {
+                            "Id": idtask
+                        });
+                    },
+                    "dataSrc": function (json) {
+                        //     jQuery.each(json, function (index, value) {
+                        //         //now you can access properties using dot notation
+
+
+
+                        //         if (json[index].status) { json[index].status = "<input type='checkbox'   class='custom-control-input' id=" + json[index].route + " checked onclick='onToggle(this)'>"; }
+                        //         else { json[index].status = "<input type='checkbox' class='editor-active' id=" + json[index].route + " onclick='onToggle(this)' >" }
+
+                        //         json[index].linkbranch = "<a href='#responsive'" + " '   onclick='ModalPerfil(this);'  "+"id=" + (json[index].route+"link" )+ "><i class='fa fa-fw fa-group'></i> </a>";
+
+
+                        //});
+
+                        return json;
+                    }
+                },
+                "columns": [
+                    { "data": "date" },
+                    { "data": "user" },
+                    { "data": "status" },
+                     { "data": "comment" }
+                ],
+
+
+
+             }
+
+                );
+                $.unblockUI();
+            }
+        
+            function imgvue(id) {
+                var galley = document.getElementById(id);
+                viewer = new Viewer(galley, {
+                    url: 'src',
+
+                });
+
+
+            }
+        </script>
+    }

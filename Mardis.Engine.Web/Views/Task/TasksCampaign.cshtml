@@ -248,7 +248,10 @@
                                                 </div>
                                                 <div class="row">
                                                     <div class="col-sm-12">
-                                                        <label style="font-size-adjust: 0.2;">@task.BranchExternalCode</label>
+
+                                                        <a href="@Url.Action("Timeline", "Branch", new {idBranch = task.BranchId})" style="color: @listtask.color">@task.BranchExternalCode</a>
+                                                        @*<a href="@Url.Action("Profile", "Branch", new {idBranch = task.BranchId})">@task.BranchName</a>
+                                                        <label style="font-size-adjust: 0.2;">@task.BranchExternalCode</label>*@
                                                     </div>
                                                 </div>
                                                 <div class="row">

@@ -38,7 +38,7 @@ namespace Mardis.Engine.Converter
                 Latitude = branch.LatitudeBranch.Replace(",", "."),
                 Longitude = branch.LenghtBranch.Replace(",", "."),
                 SmsListas = ListaSms
-                
+                ,cluster=branch.Cluster
 
             };
         }
@@ -51,6 +51,8 @@ namespace Mardis.Engine.Converter
                     Id = i.Id,
                     Base64Image = i.UrlImage,
                     FileName = i.NameFile
+                    ,Idtask=i.idtask
+                    ,Idcampaign=i.IdCampaign
                 })
                 .ToList();
         }
@@ -68,6 +70,10 @@ namespace Mardis.Engine.Converter
                     CampaignServices = GetCampaignServices(t.Campaign.CampaignServices),
                     TaskCode = t.Code
                     ,Idcampaign=t.IdCampaign
+                    ,Comment=t.CommentTaskNoImplemented
+                    ,pollster=t.Pollster.Name
+                    ,DateModi=t.DateModification
+                    ,Route=t.Route
                 })
                 .ToList();
         }

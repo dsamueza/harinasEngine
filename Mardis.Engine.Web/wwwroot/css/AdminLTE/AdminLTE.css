@@ -2098,7 +2098,7 @@ a:focus {
   bottom: 0;
   width: 4px;
   background: #ddd;
-  left: 31px;
+  /*left: 31px;*/
   margin: 0;
   border-radius: 2px;
 }

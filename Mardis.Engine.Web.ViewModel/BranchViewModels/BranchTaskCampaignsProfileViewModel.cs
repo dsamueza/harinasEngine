@@ -22,7 +22,11 @@ namespace Mardis.Engine.Web.ViewModel.BranchViewModels
         public string Icon { get; set; }
 
         public string IconColor { get; set; }
+        public string Comment { get; set; }
+        public string pollster { get; set; }
+        public string Route { get; set; }
 
+        public DateTime DateModi { get; set; }
         public List<BranchCampaignServicesProfileViewModel> CampaignServices { get; set; }
 
     }

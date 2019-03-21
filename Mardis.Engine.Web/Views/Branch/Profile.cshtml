@@ -107,7 +107,7 @@
                         <h5>Referencia</h5>
                     </div>
                     <div class="col-sm-8" style="text-align: left;">
-                        <label>@Model.Reference</label>
+                        <label>@Model.BranchTypeBusiness</label>
                     </div>
                 </div>
 
@@ -159,7 +159,7 @@
         </div>
         <div class="col-sm-9">
             <ul class="timeline">
-                @foreach (var task in Model.TaskCampaigns)
+                @foreach (var task in Model.TaskCampaigns.OrderByDescending(x=>x.StartDate))
                 {
                     <li>
                         <i class="glyphicon glyphicon-flag bg-orange"></i>

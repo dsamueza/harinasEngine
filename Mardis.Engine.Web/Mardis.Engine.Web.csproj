@@ -27,6 +27,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Include="wwwroot\bower_components\NewFolder\Timeline.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Include="Controllers\BulkLoadController.cs" />
     <Content Include="wwwroot\bower_components\bootstrap-progressbar\.bower.json" />
     <Content Include="wwwroot\bower_components\bootstrap-progressbar\bower.json" />
@@ -104,6 +108,7 @@
     <Content Include="wwwroot\bower_components\jquery.easy-pie-chart\package.json" />
     <Content Include="wwwroot\bower_components\jqueryui-touch-punch\.bower.json" />
     <Content Include="wwwroot\bower_components\jqueryui-touch-punch\bower.json" />
+    <Content Include="wwwroot\bower_components\NewFolder\Timeline.css" />
     <Content Include="wwwroot\bower_components\notify\bower.json" />
     <Content Include="wwwroot\bower_components\notify\composer.json" />
     <Content Include="wwwroot\bower_components\notify\jshintrc.json" />

@@ -206,13 +206,19 @@ namespace Mardis.Engine.Web.Controllers
                     }
                     catch (Exception)
                     {
-
+                        
                         return RedirectToAction("GroupTask", "Task");
                     }
                    
                 }
                 var filters = GetFilters(filterValues, deleteFilter);
-              
+                //if (filters.Where(x => x.NameFilter == "IdCampaign").Count() > 0)
+                //{
+                //    //var varcampid = filters.Where(x => x.NameFilter == "IdCampaign").First().Value;
+                //    //id = Guid.Parse(varcampid);
+                //    //idCampaign = _protector.Protect(varcampid);
+                //    //SetSessionVariable("idCampaign", idCampaign);
+                //}
                 var tasks = _campaignBusiness.GetPaginatedTaskPerCampaignViewModelDinamic(id, pageIndex, pageSize, filters, ApplicationUserCurrent.AccountId);
                 ViewBag.CountTasks = _taskCampaignBusiness._CountAllTasCamping(id, filters).ToString();
                 ViewBag.idcampaign = idCampaign;

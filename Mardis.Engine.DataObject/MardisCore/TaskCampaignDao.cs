@@ -350,7 +350,7 @@ namespace Mardis.Engine.DataObject.MardisCore
             var data = from st in resultsList
                        join stc in Context.StatusTaskAccounts
                        on st.Id equals stc.Idstatustask
-                       //where stc.Idaccount == idAccount
+                       where stc.Idaccount == idAccount
                        orderby stc.ORDER
                        select st;
             return data.ToList();
@@ -384,7 +384,8 @@ namespace Mardis.Engine.DataObject.MardisCore
             return Context.TaskCampaigns
                 .Include(t => t.StatusTask)
                 .Include(t => t.Campaign.CampaignServices)
-                    .ThenInclude(c => c.Service)
+                .ThenInclude(c => c.Service)
+                .Include(t=>t.Pollster)
                 .Include(t => t.Merchant.Profile)
                 .Include(t => t.Merchant.Person)
                 .Where(t => t.IdBranch == idBranch &&
