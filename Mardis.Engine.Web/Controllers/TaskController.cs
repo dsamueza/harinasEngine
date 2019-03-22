@@ -186,6 +186,9 @@ namespace Mardis.Engine.Web.Controllers
                 {
                     //idCampaign = GetSessionVariable("idCampaign");
                     idCampaign = _taskCampaignBusiness.GetUserCampaignRedis(Guid.Parse(ApplicationUserCurrent.UserId), idCampaign);
+                    if (idCampaign == Guid.Empty.ToString()) {
+                        idCampaign = GetSessionVariable("idCampaign");
+                    }
                 }
 
                 if (!string.IsNullOrEmpty(view))
@@ -202,7 +205,7 @@ namespace Mardis.Engine.Web.Controllers
                 {
                     try
                     {
-                        id = Guid.Parse(_protector.Unprotect(idCampaign));
+                        id = Guid.Parse(idCampaign);
                     }
                     catch (Exception)
                     {
