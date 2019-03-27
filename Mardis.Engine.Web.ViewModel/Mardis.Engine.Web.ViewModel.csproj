@@ -329,6 +329,7 @@
     <Compile Include="TaskViewModels\TaskPerCampaignViewModel.cs" />
     <Compile Include="TaskViewModels\TaskRegisterModelView.cs" />
     <Compile Include="TaskViewModels\TaskRegisterViewModel.cs" />
+    <Compile Include="TaskViewModels\TaskStatusIdModel.cs" />
     <Compile Include="UserViewModels\UserIndexViewModel.cs" />
     <Compile Include="UserViewModels\UserVIewModel.cs" />
     <Compile Include="UserViewModels\ViewSecurityTasksModel.cs" />

@@ -851,7 +851,7 @@ namespace Mardis.Engine.Web.Controllers
                 var id = Guid.Empty;
                 if (!string.IsNullOrEmpty(idCampaign))
                 {
-                    id = Guid.Parse(Protector.Unprotect(idCampaign));
+                    id = Guid.Parse(idCampaign);
                 }
                 var model = _campaignBusiness.GetCampaign(id, ApplicationUserCurrent.AccountId);
 
@@ -1056,7 +1056,7 @@ namespace Mardis.Engine.Web.Controllers
                 {
                     try
                     {
-                        id = Guid.Parse(Protector.Unprotect(idCampaign));
+                        id = Guid.Parse(idCampaign);
                     }
                     catch (Exception)
                     {
@@ -1069,7 +1069,7 @@ namespace Mardis.Engine.Web.Controllers
                 {
                     var varcampid = filters.Where(x => x.NameFilter == "IdCampaign").First().Value;
                     id = Guid.Parse(varcampid);
-                    idCampaign = Protector.Protect(varcampid);
+                    idCampaign = varcampid;
                     SetSessionVariable("idCampaign", idCampaign);
 
                 }

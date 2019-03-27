@@ -24,13 +24,17 @@
                     <span class="caret"></span>
                 </button>
                 <ul class="dropdown-menu" role="menu">
-                    
+
                     <li>
                         <a href="#" id="btnDelete" onclick="MasivePdf();">
                             <i class="clip-minus-circle-2"></i> Imprimir PDF
                         </a>
                     </li>
-                
+                    <li>
+                        <a  href="@Url.Action("xml", "Task", new {idCampaign = @ViewBag.IdCam })">
+                        <i class="fa fa-file-excel-o"></i> Exportar locales
+                        </a>
+                    </li>
                 </ul>
             </div>
         </div>
@@ -164,8 +168,48 @@
 
         function MasivePdf() {
 
-     
-            $.blockUI({ message: "Generando el PDF..." });
+//            selectedItems = [
+//                "8D3B40E6-0542-423D-BAC9-08F70B7F2D36",
+//                "CDB3633B-1E46-4E9E-A083-094A6FF59510",
+//                "9CEA13AA-2FDE-4C3E-9A9B-14FF1153F1CA",
+//                "C894675D-FE25-47E2-9AB8-1B7AD0047A84",
+//                "ABD67199-CBB4-4FA4-9681-1F915168FCB2",
+//                "B0A36CE8-F000-490A-A48B-22DBCC325FD9",
+//                "5C493EE6-E2E2-4775-9767-23AA8146E5E6",
+//                "EEE28148-2145-4D3B-8845-32DF98B9C7B9",
+//                "0F564794-4D86-4FFF-A3A2-42EC070D1D7C",
+//                "3830F502-321E-4BCC-95B2-4AE5C17355D5",
+//                "94D9AE54-A629-41FD-849C-4E50CD9C8E95",
+//                "4E293080-E093-4464-8629-5116A2E07101",
+//                "4E49E236-8DB4-4936-A975-5485B6039EA2",
+//                "71ABF87F-A78C-4BA0-94B5-5A936A11FA20",
+//                "0C5CAE6C-29AE-447E-901E-6343B0CEE902",
+//                "249D3802-DDE3-4671-B784-767B66E527E1",
+//                "29187C55-3E70-4589-867E-8BD09162C786",
+//                "C0E1D788-C54F-4C48-AD9D-8F9DA9021C68",
+//                "7132643E-20D3-4BB4-9A4C-93DD84516724",
+//                "C25F399E-9947-437B-8E9F-971698325F6E",
+//                "4897CB1E-4BF8-4892-8C63-97832A54F08C",
+//                "6878897B-B7C0-4725-B9C6-993AC322E484",
+//                "7B826ACD-7140-4F0B-85AC-A0DFAED17952",
+//                "9BCF8982-FABE-4FBD-A501-A9293D062A26",
+//                "37E9CB44-2568-45C1-8511-BFAEC3C760C4",
+//                "75C0F1D8-E247-4303-87AE-C552E2F5E962",
+//                "4BBA5C47-825F-40E0-B8D7-CE71ADC6EDD0",
+//                "D00063AF-7B6C-4B27-96C4-D0FCADD7C56A",
+//                "FD48A6D0-8D71-471E-94F7-D4184F0F6CD4",
+//                "A12E8A7D-C79B-40E0-97A6-DC5C19CF57AC",
+//                "55A242C7-C93A-41D4-BFCC-E03A8BCE869E",
+//                "6BA4A168-2BF2-4CA0-B2D5-E0B573BA2628",
+//                "81FD7812-E4AE-4474-9EC9-EC0962C285C5",
+//                "A97233CC-081F-47D3-A388-ED66FA4BC9F5",
+//                "C08D8155-26C0-4C7B-B9F6-ED925C0F9817",
+//                "EF5746F2-926B-4FE0-B387-F4F2DB6773D5",
+//                "3166CC83-32C0-40F4-90A8-F7CB2029EEEE",
+//                "C97523AE-9A24-4197-8E7A-F99C81B5A6D3",
+//                "B44D988D-A37D-4284-85D8-5554C3AEB88A"
+//];
+           $.blockUI({ message: "Generando el PDF..." });
             $.ajax({
                 url: '/task/PdfMasive',
                 type: "POST",

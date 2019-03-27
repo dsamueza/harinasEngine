@@ -176,6 +176,7 @@
 
 <div id="divMyTask">
     <section class="regular slider" align="center">
+       
         @{var cont = 1; var numStatus=10;
             var tam = (Model.tasks.Count() > numStatus ? numStatus : Model.tasks.Count()); int pages = (Model.tasks.Count() > numStatus ? (Model.tasks.Count() / tam) + 1 : 1);}
         @for (int i = 0; i < pages; i++)
@@ -416,6 +417,15 @@
                 link: ''
             }
         })
+        function myFunction(event, s) {
+            //console.log(s)
+            //var form = document.getElementById("Filter");
+            //console.log(form)
+            //if (event.keyCode == 13) {
+            //    $('#btnFilter').click();
+
+            //}
+        }
 
     </script>
 }
