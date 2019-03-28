@@ -458,6 +458,39 @@ namespace Mardis.Engine.Web.Controllers
             }
         }
 
+        [HttpPost]
+        public JsonResult BorrarHarina(String Idtask, String dinamic)
+        {
+            List<String> result = new List<String>();
+            try
+            {
+                if (dinamic != null)
+                {
+                    var modelAnswer = JSonConvertUtil.Deserialize<List<MytaskAnwerDetailSecondModel>>(dinamic);
+                    if (modelAnswer == null) return Json("2");
+
+                    //var _post = _taskCampaignBusiness.saveDinamicCambioHarinas(modelAnswer);
+                    var _post = _taskCampaignBusiness.deleteHarina(modelAnswer);
+
+                    return Json(_post);
+                }
+                else
+                {
+                    _logger.LogError(new EventId(0, "Error Index"), "EL Campo de la Harina Actual es Obligatorio");
+                    result.Add("-1");
+                    result.Add((new List<MytaskAnwerDetailSecondModel>()).ToString());
+                    return Json(result);
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(new EventId(0, "Error Index"), ex.Message);
+                result.Add("-1");
+                result.Add((new List<MytaskAnwerDetailSecondModel>()).ToString());
+                return Json(result);
+            }
+        }
+
         public async void _SaveAnswerQuestionComplete(String _model,string Idtask) {
             int resp = 0;
             var _task = JSonConvertUtil.Deserialize<MyTaskViewModel>(_model);

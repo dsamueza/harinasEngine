@@ -181,9 +181,39 @@
                                 </div>
                             </div>
                             <div class="box-footer ">
-                                <button type="submit" id="btndinamic" class="btn bg-navy btn-flat margin  pull-right" v-on:click="acceptDinamicCambioHarina(i,j,k)">Guardar</button>
+                                <button type="submit" id="btndinamic" class="btn btn btn-success margin  pull-right" v-on:click="acceptDinamicCambioHarina(i,j,k)">Guardar</button>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Eliminar Harina -->
+<div id="IdConfirmarEliminarHarina" class="modal fade " role="dialog" style="padding-top:10%">
+    <div class="modal-dialog  modal-scrollable modal-lg">
+        <div class="modal-content">
+            <div class="modal-body" style="background-color:#d2d6de">
+                <div class="box">
+                    <div class="box-header with-border">
+                        <h4 class="box-title">Confirmar Eliminación Harina</h4>
+                        <button type="button" class="pull-right close" data-dismiss="modal" style="    color: black;  font-size: 20px;  font-weight: 700;">&times;</button>
+                    </div>
+                    <div class="box-body">
+                        <div class="box-body">
+                            <div class="form-group col-md-12">
+                                <label for="exampleInputEmail1" class="txtHarinas">Esta Seguro Que Desea Eliminar Esta Harina?</label>
+                            </div>
+                            <div class="box-footer ">
+                                <button type="submit" id="btneliminareliminarharina" class="btn btn-info margin pull-right" v-on:click="deleteDinamicCambioHarina()">Si</button>
+                                <button type="submit" id="btncerrareliminarharina" class="btn btn btn-info margin pull-right" v-on:click="OcultarModalEliminarHarina()">No</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
