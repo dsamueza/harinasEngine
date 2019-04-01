@@ -30,6 +30,7 @@ using System.Timers;
 using OfficeOpenXml;
 using System.Drawing;
 using System.Net.Http.Headers;
+using System.Web.Helpers;
 
 namespace Mardis.Engine.Web.Controllers
 {
@@ -177,6 +178,7 @@ namespace Mardis.Engine.Web.Controllers
         {
             try
             {
+             
                 if (!string.IsNullOrEmpty(idCampaign))
                 {
                      SetSessionVariable("idCampaign", idCampaign);

@@ -400,7 +400,7 @@ img.zoom {
     /*width: 14.2%;*/
     position: relative;
     min-height: 1px;
-    padding-right: 15px;
-    padding-left: 15px;
+    padding-right: 7px;
+    padding-left: 7px;
     float: left;
 }
