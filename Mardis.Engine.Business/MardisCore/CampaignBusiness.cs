@@ -408,7 +408,7 @@ namespace Mardis.Engine.Business.MardisCore
         {
 #if DEBUG
             var myWatch = new Stopwatch();
-            myWatch.Start();
+             myWatch.Start();
 #endif
 
             var itemResult = new CampaignListViewModel();
@@ -419,10 +419,7 @@ namespace Mardis.Engine.Business.MardisCore
             {
                 var ts = campaign.EndDate - DateTime.Now;
 
-                int numberNotImplementedTasks;
-                int numberStartedTasks;
-                int numberPendingTasks;
-                int numberImplementedTasks;
+        
                 //var totalTasks = GetCampaignStatistics(idAccount, campaign, out numberNotImplementedTasks, out numberStartedTasks, out numberPendingTasks, out numberImplementedTasks);
                 var totalTasks = _campaignDao.NumbertaskbyCampaign(campaign.Id);
                 var usercampaign = _userCanpaignDao.GetCampaignById(campaign.Id, userid);
@@ -433,7 +430,7 @@ namespace Mardis.Engine.Business.MardisCore
                         var cvm = new CampaignItemViewModel
                         {
                             EndDate = campaign.EndDate,
-                            Id = protector.Protect(campaign.Id.ToString()),
+                            Id = campaign.Id.ToString(),
                             Name = campaign.Name,
                             StartDate = campaign.StartDate,
                             RemainingDays = ts.Days,
@@ -466,7 +463,7 @@ namespace Mardis.Engine.Business.MardisCore
                     var cvm = new CampaignItemViewModel
                     {
                         EndDate = campaign.EndDate,
-                        Id = protector.Protect(campaign.Id.ToString()),
+                        Id = campaign.Id.ToString(),
                         Name = campaign.Name,
                         StartDate = campaign.StartDate,
                         RemainingDays = ts.Days,

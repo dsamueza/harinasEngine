@@ -115,7 +115,7 @@
 
         function OpenProfileTaskClick(element) {
             $.blockUI({ message: '' });
-            var idTask = element.id;
+            
             $.ajax({
                 url: "/Campaign/TaskPoll",
                 type: "get",

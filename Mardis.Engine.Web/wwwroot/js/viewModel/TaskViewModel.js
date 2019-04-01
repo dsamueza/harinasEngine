@@ -6,6 +6,7 @@ var idTask = "";
 var idTaskcampaing = ""
 var espera = 0;
 var numsec = 0;
+var posi, posj, posk;
 
 
 function LoadTaskById(idTask,campaign) {
@@ -186,6 +187,7 @@ function SaveQuestionRepeat() {
 function SaveQuestionRepeatCambioHarinas(i, j, k) {
     $.blockUI({ message: "" });
     $('#btndinamic').prop("disabled", true);
+    $('#btneliminardinamic').prop("disabled", true);
     $('#idsavedinamic').show();
     idsavedinamic
     $.ajax({
@@ -232,8 +234,75 @@ function SaveQuestionRepeatCambioHarinas(i, j, k) {
             }
 
         },
+                
+        error: function () {
 
+            $.unblockUI();
+        }
+        ,
+        async: true, // La petición es síncrona
+    });
+}
 
+//function MostrarModalEliminar() {
+//    $('#IdConfirmarEliminarHarina').show();
+//    $('#btneliminardinamic').prop("disabled", true);
+//}
+
+function OcultarModalEliminarHarinajs() {
+    $('#IdConfirmarEliminarHarina').modal("hide");
+}
+
+function DeleteQuestionRepeatCambioHarinas(i, j, k) {
+    $.blockUI({ message: "" });
+    $('#btneliminareliminarharina').prop("disabled", true);
+    $('#btncerrareliminarharina').prop("disabled", true);
+    $('#IdConfirmarEliminarHarina').prop("disabled", true);
+    $.ajax({
+        url: '/Task/BorrarHarina',
+        type: "POST",
+        content: "application/json; charset=utf-8",
+        data: {
+            Idtask: getParameterByName('idTask')
+            ,dinamic: ko.toJSON(vueVM.$data.harinas)
+        },
+        success: function (data) {
+            $.unblockUI();
+            $("#btneliminareliminarharina").prop("disabled", false);
+            $('#btncerrareliminarharina').prop("disabled", false);
+            $('#IdConfirmarEliminarHarina').prop("disabled", false);
+            if (data[0] == "0") {
+                $.notify({
+                    title: '<strong>Información :</strong>',
+                    message: 'La información fue almacenada correctamente'
+                });
+                vueVM.$data.poll.ServiceCollection[0].ServiceDetailCollection[i].QuestionCollection[j].QuestionDetailCollection[k].Checked = false;
+                $('#IdConfirmarEliminarHarina').modal('hide');
+            }
+            if (data[0] == "1") {
+                $.notify({
+                    title: '<strong>Información :</strong>',
+                    message: 'La información fue almacenada correctamente'
+                });
+                vueVM.$data.poll.novelty = "CON FACTURA";
+                vueVM.$data.poll.ServiceCollection[0].ServiceDetailCollection[i].QuestionCollection[j].QuestionDetailCollection[k].Checked = false;
+                $('#IdConfirmarEliminarHarina').modal('hide');
+            }
+            if (data[0] == "-1") {
+                $.notify({
+                    title: '<strong>Información :</strong>',
+                    message: 'La información no pudo se guarda. Intente de nuevo o contactese con el administrador'
+                });
+            }
+            if (data[0] == "2") {
+                $.notify({
+                    title: '<strong>Información :</strong>',
+                    message: 'La información fue almacenada correctamente'
+                });
+                vueVM.$data.poll.ServiceCollection[0].ServiceDetailCollection[i].QuestionCollection[j].QuestionDetailCollection[k].Checked = false;
+                $('#IdConfirmarEliminarHarina').modal('hide');
+            }
+        },
 
         error: function () {
 
@@ -403,6 +472,12 @@ function ApplyBindingTaskService(data) {
             acceptDinamicCambioHarina: function (i, j, k) {
                 SaveQuestionRepeatCambioHarinas(i, j, k);
             },
+            OcultarModalEliminarHarina: function () {
+                OcultarModalEliminarHarinajs();
+            },
+            deleteDinamicCambioHarina: function () {
+                DeleteQuestionRepeatCambioHarinas(posi, posj, posk);
+            },
             OpenModalEncuesta: function (e) {
                 $('#responsive').modal('show');
             },
@@ -410,6 +485,14 @@ function ApplyBindingTaskService(data) {
                 this.harinas.splice(0, 1);
                 this.harinas.push(_model[0])
                 $('#IdQuestionDinamic').modal('show');
+            },
+            OpenModalEliminarHarina: function (_model, i, j, k) {
+                this.harinas.splice(0, 1);
+                this.harinas.push(_model[0])
+                posi = i;
+                posj = j;
+                posk = k;
+                $('#IdConfirmarEliminarHarina').modal('show');
             },
             OpenModalQuestionDinamicCambioHarina: function (_model, i, j, k) {
                 this.harinas.splice(0, 1);

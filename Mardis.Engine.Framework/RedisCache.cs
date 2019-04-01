@@ -60,7 +60,7 @@ namespace Mardis.Engine.Framework
         // multiplexer seems to not be reconnecting, so re-create the multiplexer
         public static TimeSpan ReconnectErrorThreshold = TimeSpan.FromSeconds(30);
 
-        static string connectionString = "engine.redis.cache.windows.net:6380,password=0+gPTLWo+jkZGVZdrgcafHTkQi7cm50gXuBI/vGcrCg=,ssl=True,abortConnect=False,ConnectTimeout=1800000000 , KeepAlive = 240";
+        static string connectionString = "engine.redis.cache.windows.net:6380,password=0+gPTLWo+jkZGVZdrgcafHTkQi7cm50gXuBI/vGcrCg=,ssl=True,abortConnect=False,ConnectTimeout=1800000000 , KeepAlive = 240 ,SyncTimeout=1800000000";
         //static string connectionString = "192.168.0.58:6379,ssl=False,allowAdmin=True,abortConnect=False,defaultDatabase=0,connectTimeout=500,connectRetry=3";
         static Lazy<ConnectionMultiplexer> multiplexer = CreateMultiplexer();
 

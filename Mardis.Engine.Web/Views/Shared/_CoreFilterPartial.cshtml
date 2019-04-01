@@ -19,7 +19,7 @@
 @*</div>*@
 
 <div id="popover-content" class="hide" style="width: 300px;">
-    <form id="Filter" class="form-inline" role="form">
+    <form id="Filter" class="form-inline" >
         <div class="row">
             <div class="col-sm-3">
                 <label class="control-label input-sm" for="selFilterName">Campos</label>
@@ -59,12 +59,14 @@
                 <label class="control-label input-sm" for="txtValueFilter">Valor</label>
             </div>
             <div class="col-sm-9">
-                <input type="text" name="txtValueFilter" id="txtValueFilter" class="form-control input-sm">
+                <input type="text" name="txtValueFilter" id="txtValueFilter" class="form-control input-sm" onkeypress="myFunction(event,this.form)">
             </div>
         </div>
 
         <div style="margin-top: 7px;"></div>
-        <div class="form-group"  style="text-align: center;">
+        <div class="form-group" style="text-align: center;">
+
+            @*<input class="btn btn-primary" type="submit"/>Aplicar*@
             <button class="btn btn-primary" id="btnApplyFilter">Aplicar</button>
             <a class="page-link hidden" id="linkFilter"
                asp-action="@Model.ActionName">
@@ -73,6 +75,8 @@
     </form>
 </div>
 <script>
+
+    
+
    
-     
 </script>

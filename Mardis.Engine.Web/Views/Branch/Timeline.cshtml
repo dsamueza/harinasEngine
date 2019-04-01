@@ -106,7 +106,7 @@
                         @if (Model.BranchImages.Count > 0)
                         {
 
-                            <img class="profile-user-img img-responsive img-circle" src="@Model.BranchImages.First().Base64Image" alt="User profile picture" width="300px">
+                            <img class="profile-user-img img-responsive img-circle" src="@Model.BranchImages.Last().Base64Image" alt="User profile picture" width="300px">
                         }
 
                         <h3 class="profile-username text-center">@Model.Name </h3>
@@ -181,14 +181,14 @@
                         <strong><i class="fa fa-info margin-r-5"></i> Información</strong>
 
                         <p class="text-muted">
-                          La referencias es la ultima ingresada en el local
+                            La ubicación es la ultima visita realizada en el local
                         </p>
                         <hr>
                         <strong><i class="fa fa-map-marker margin-r-5"></i> Location</strong>
 
                         <div style="padding-top: 10px;">
 
-                            <div id="map_canvas" style="width: 100%; height: 200px; overflow: visible; position: fixed;"></div>
+                            <div id="map_canvas" style="width: 100%; height: 400px; overflow: visible; position: fixed;"></div>
                             <hr style="border-color: #CCCCCC; margin-top: 0;" />
                         </div>
 
@@ -269,8 +269,8 @@
                                                         @task.Comment
                                                     </p>
                                                 </div>
-                                                <div class="timeline-footer">
-                                                    <a href="@Url.Action("ProfileCampaign", "Campaign", new { idTask = task.Id , idcampaing=task.Idcampaign})" class="btn btn-blue btn-xs">Encuesta</a>
+                                                <div class="timeline-footer">                          
+                                                    <a href="@Url.Action("Profile", "Task", new { idTask = task.Id , campaign=task.Idcampaign})" class="btn btn-blue btn-xs">Encuesta</a>
                                                     @*<a onclick="History('@task.Id','@ViewBag.idcampaign','@task.TaskCode')" class="btn btn-info btn-xs">Historial</a>*@
                                                 </div>
                                             </div>
@@ -298,11 +298,11 @@
                                                                     }
 
                                                                 }
-                                                               </div>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
+                                            </div>
                                         </li>
                                     }
                                     <!-- END timeline item -->
@@ -310,28 +310,30 @@
                                         <i class="fa fa-clock-o bg-gray"></i>
                                     </li>
 
-                                </ul>
+                                    </ul>
 
+                                </div>
                             </div>
                         </div>
+
+
+                        <hr>
+
+
                     </div>
 
-
-                    <hr>
+                    <div style="margin-top: 14px;"></div>
 
 
                 </div>
 
-                <div style="margin-top: 14px;"></div>
-
-                <div style="text-align: center">
-                    <a class="btn btn-app" onclick="window.history.back();">
-                        <i class="fa fa-repeat"></i> Retornar
-                    </a>
-                    
-                </div>
-            </div>
     </section>
+    <div style="text-align: center">
+        <a class="btn btn-app" onclick="window.history.back();">
+            <i class="fa fa-repeat"></i> Retornar
+        </a>
+
+    </div>
     <div id="responsive" class="modal fade " role="dialog" style="padding-top:10%">
         <div class="modal-dialog  modal-scrollable modal-lg">
             <div class="modal-content">
@@ -454,7 +456,7 @@
                 );
                 $.unblockUI();
             }
-        
+
             function imgvue(id) {
                 var galley = document.getElementById(id);
                 viewer = new Viewer(galley, {

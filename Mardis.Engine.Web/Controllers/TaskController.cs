@@ -30,6 +30,7 @@ using System.Timers;
 using OfficeOpenXml;
 using System.Drawing;
 using System.Net.Http.Headers;
+using System.Web.Helpers;
 
 namespace Mardis.Engine.Web.Controllers
 {
@@ -177,6 +178,7 @@ namespace Mardis.Engine.Web.Controllers
         {
             try
             {
+             
                 if (!string.IsNullOrEmpty(idCampaign))
                 {
                      SetSessionVariable("idCampaign", idCampaign);
@@ -186,6 +188,9 @@ namespace Mardis.Engine.Web.Controllers
                 {
                     //idCampaign = GetSessionVariable("idCampaign");
                     idCampaign = _taskCampaignBusiness.GetUserCampaignRedis(Guid.Parse(ApplicationUserCurrent.UserId), idCampaign);
+                    if (idCampaign == Guid.Empty.ToString()) {
+                        idCampaign = GetSessionVariable("idCampaign");
+                    }
                 }
 
                 if (!string.IsNullOrEmpty(view))
@@ -202,7 +207,7 @@ namespace Mardis.Engine.Web.Controllers
                 {
                     try
                     {
-                        id = Guid.Parse(_protector.Unprotect(idCampaign));
+                        id = Guid.Parse(idCampaign);
                     }
                     catch (Exception)
                     {
@@ -266,7 +271,7 @@ namespace Mardis.Engine.Web.Controllers
                 }
 
                 var filters = GetFilters(filterValues, deleteFilter);
-                var idCampaign = Guid.Parse(CampaignController.Protector.Unprotect(pidCampaign));
+                var idCampaign = Guid.Parse(pidCampaign);
                 var idAccount = ApplicationUserCurrent.AccountId;
                 var model = _taskCampaignBusiness.GetPaginatedTasksList(idCampaign, idAccount, filters, pageIndex, pageSize);
 
@@ -435,6 +440,39 @@ namespace Mardis.Engine.Web.Controllers
                     //modelAnswer.First().AnwerDetailSecondModel.First().QuestionComplete.Add(idMarca.First());
                     modelAnswer.First().SelectedAnswer = idMarca.First();
                     var _post = _taskCampaignBusiness.saveDinamicCambioHarinas(modelAnswer);
+
+                    return Json(_post);
+                }
+                else
+                {
+                    _logger.LogError(new EventId(0, "Error Index"), "EL Campo de la Harina Actual es Obligatorio");
+                    result.Add("-1");
+                    result.Add((new List<MytaskAnwerDetailSecondModel>()).ToString());
+                    return Json(result);
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(new EventId(0, "Error Index"), ex.Message);
+                result.Add("-1");
+                result.Add((new List<MytaskAnwerDetailSecondModel>()).ToString());
+                return Json(result);
+            }
+        }
+
+        [HttpPost]
+        public JsonResult BorrarHarina(String Idtask, String dinamic)
+        {
+            List<String> result = new List<String>();
+            try
+            {
+                if (dinamic != null)
+                {
+                    var modelAnswer = JSonConvertUtil.Deserialize<List<MytaskAnwerDetailSecondModel>>(dinamic);
+                    if (modelAnswer == null) return Json("2");
+
+                    //var _post = _taskCampaignBusiness.saveDinamicCambioHarinas(modelAnswer);
+                    var _post = _taskCampaignBusiness.deleteHarina(modelAnswer);
 
                     return Json(_post);
                 }
@@ -694,7 +732,7 @@ namespace Mardis.Engine.Web.Controllers
             var idCa = Guid.Empty;
             if (!string.IsNullOrEmpty(id))
             {
-                idCa = Guid.Parse(_protector.Unprotect(id));
+                idCa = Guid.Parse(id);
             }
             string sWebRootFolder = _Env.WebRootPath;
 
@@ -1265,7 +1303,7 @@ namespace Mardis.Engine.Web.Controllers
                 {
                     try
                     {
-                        id = Guid.Parse(_protector.Unprotect(idCampaign));
+                        id = Guid.Parse(idCampaign);
                     }
                     catch (Exception)
                     {
@@ -1277,7 +1315,9 @@ namespace Mardis.Engine.Web.Controllers
                 var filters = GetFilters(filterValues, deleteFilter);
 
                 var tasks = _campaignBusiness.GetListTasks(id);
-      
+                ViewBag.IdCam = idCampaign;
+
+
                 if (view == "list")
                 {
                     return View("~/Views/Task/TaskList.cshtml", tasks);
@@ -1296,6 +1336,9 @@ namespace Mardis.Engine.Web.Controllers
         {
             try
             {
+            
+
+        
                 var Filepath = _Env.WebRootPath;
                 var imgg = "";
                 var outs = "";
@@ -1311,6 +1354,51 @@ namespace Mardis.Engine.Web.Controllers
 
                 return Json("");
             }
+        }
+
+        public IActionResult xml(Guid idcampaign, string returnUrl = null)
+        {
+
+            ViewData["ReturnUrl"] = returnUrl;
+            SetSessionVariable("idcampaingSession", idcampaign.ToString());
+      
+            return View();
+        }
+        [HttpPost]
+        public JsonResult ExcelPDF(IFormFile fileBranch)
+        {
+            try
+            {
+                DateTime localDate = DateTime.Now;
+                if (fileBranch == null)
+                {
+
+                    ViewBag.error = "Verfique si el archivo fue cargado";
+                    return Json("-1");
+                }
+                string id = GetSessionVariable("idcampaingSession");
+                string LogFile = localDate.ToString("yyyyMMddHHmmss");
+                var Filepath = _Env.WebRootPath + "\\form\\ " + LogFile + "_" + fileBranch.FileName.ToString();
+                using (var fileStream = new FileStream(Filepath, FileMode.Create))
+                {
+                    fileBranch.CopyTo(fileStream);
+                }
+
+                var success = _taskCampaignBusiness.GenerateXmlPDf(Filepath, Guid.Parse(id), "Encuesta Pruebas");
+
+                var Filepath2 = _Env.WebRootPath;
+                var imgg = "";
+                var outs = "";
+                if (success != null)
+                    outs = _taskCampaignBusiness.PrintFileMasive(success, Filepath2, ApplicationUserCurrent.AccountId, imgg, Global.ProfileId);
+                return Json(outs);
+            }
+            catch (Exception)
+            {
+
+                return Json("3");
+            }
+
         }
         #endregion
 
