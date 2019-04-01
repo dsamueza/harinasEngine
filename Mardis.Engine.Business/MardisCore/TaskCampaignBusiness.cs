@@ -937,6 +937,85 @@ namespace Mardis.Engine.Business.MardisCore
 
         }
 
+        public List<String> deleteHarina(List<MytaskAnwerDetailSecondModel> _data)
+        {
+            using (var transaction = Context.Database.BeginTransaction())
+            {
+                List<String> result = new List<String>();
+                try
+                {
+                    int _res = 0;
+
+                    var idAnswerDetail = _data[0].AnswerDetailId;
+                    var idAnswerDetailSecondLevel = _data[0].Id;
+
+                    var answerList = Context.AnswerDetails.Include(tb => tb.Answer).Where(x => x.Id.Equals(idAnswerDetail));
+                    var idTask = answerList.First().Answer.IdTask;
+                    var idQuestion = answerList.First().Answer.IdQuestion;
+
+                    var itemAnswerDetail = Context.AnswerDetails.Where(ad => ad.Id == idAnswerDetail).First();
+                    var itemAnswerDetailSecondLevel = Context.AnswerDetailSecondLevels.Where(adsl => adsl.Id == idAnswerDetailSecondLevel).First();
+
+                    Context.AnswerDetailSecondLevels.Remove(itemAnswerDetailSecondLevel);
+                    Context.AnswerDetails.Remove(itemAnswerDetail);
+                    Context.SaveChanges();
+
+                    var _isfac = Context.Answers.Where(x => x.IdTask.Equals(idTask) && x.IdQuestion.Equals(idQuestion));
+                    if (_isfac.Count() > 0)
+                    {
+                        //var idtask = _isfac.First().Answer.IdTask;
+                        //var idquestion = _isfac.First().Answer.IdQuestion;
+                        var distintc = (from a in Context.Answers
+                                        join b in Context.AnswerDetails on a.Id equals b.IdAnswer
+                                        join c in Context.AnswerDetailSecondLevels on b.Id equals c.AnswerDetailId
+                                        where a.IdTask.Equals(idTask) && a.Question.Equals(idQuestion)
+                                        select new
+                                        {
+                                            c.Factura
+                                        }).Distinct();
+                        var tasksmodel = Context.PollTasks.Where(x => x.idtask.Equals(idTask)).First();
+                        if (distintc.Count() > 1)
+                        {
+                            tasksmodel.novelty = null;
+                            Context.PollTasks.Update(tasksmodel);
+                            Context.SaveChanges();
+                            _res = 2;
+                        }
+                        else
+                        {
+                            if (distintc.First().Factura.Equals("no"))
+                            {
+                                tasksmodel.novelty = null;
+                                Context.PollTasks.Update(tasksmodel);
+                                Context.SaveChanges();
+                                _res = 2;
+                            }
+                            else
+                            {
+                                tasksmodel.novelty = "CON FACTURA";
+                                Context.PollTasks.Update(tasksmodel);
+                                Context.SaveChanges();
+                                _res = 1;
+                            }
+                        }
+                    }
+
+                    transaction.Commit();
+
+                    result.Add(_res.ToString());
+                    return result;
+                }
+                catch (Exception ex)
+                {
+                    transaction.Rollback();
+                    result.Add("-1");
+                    result.Add((new List<MytaskAnwerDetailSecondModel>()).ToString());
+                    return result;
+                }
+            }
+
+        }
+
         #endregion
         /*Crear Respuestas para gurdar informacion por seccion*/
         #region AnswerQuestion
