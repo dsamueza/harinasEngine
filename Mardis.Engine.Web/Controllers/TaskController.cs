@@ -130,6 +130,7 @@ namespace Mardis.Engine.Web.Controllers
             {
                 var filters = GetFilters(filterValues, deleteFilter);
                 var campaigns = _campaignBusiness.GetPaginatedCampaignsDinamic(filters, pageSize, pageIndex, ApplicationUserCurrent.AccountId, _protector, _userId, _typeuser);
+                SetSessionVariable("StatusNum", null);
                 return View(campaigns);
             }
             catch (Exception e)
@@ -174,11 +175,11 @@ namespace Mardis.Engine.Web.Controllers
         }
 
         [HttpGet]
-        public IActionResult TasksCampaign(string idCampaign, string filterValues, bool deleteFilter, string view, int pageIndex = 1, int pageSize = 6)
+        public IActionResult TasksCampaign(string idCampaign, string filterValues, bool deleteFilter, string view, int pageIndex = 1, int pageSize = 6 , int statusNum=10)
         {
             try
             {
-             
+              
                 if (!string.IsNullOrEmpty(idCampaign))
                 {
                      SetSessionVariable("idCampaign", idCampaign);
@@ -192,7 +193,24 @@ namespace Mardis.Engine.Web.Controllers
                         idCampaign = GetSessionVariable("idCampaign");
                     }
                 }
+                if (statusNum != 10)
+                {
+                    SetSessionVariable("StatusNum", statusNum.ToString());
+                
+                }
+                else {
+                    var _sessionStatus= GetSessionVariable("StatusNum");
+                    if (_sessionStatus != null)
+                    {
+                        statusNum = int.Parse(_sessionStatus);
 
+                    }
+                    else {
+                        statusNum = 10;
+                    }
+                   
+
+                }
                 if (!string.IsNullOrEmpty(view))
                 {
                     SetSessionVariable("view", view);
@@ -233,7 +251,7 @@ namespace Mardis.Engine.Web.Controllers
                 {
                     return View("~/Views/Task/TaskList.cshtml", tasks);
                 }
-
+                ViewData["StatusNum"] = statusNum;
                 return View(_MyTask);
             }
             catch (Exception e)
@@ -625,6 +643,7 @@ namespace Mardis.Engine.Web.Controllers
         [HttpPost]
         public IActionResult DuplicateSection(MyTaskViewModel model)
         {
+
 
             //if (!ModelState.IsValid)
             //{

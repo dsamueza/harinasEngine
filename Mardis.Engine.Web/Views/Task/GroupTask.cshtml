@@ -90,7 +90,8 @@
 
                 <div class="col-sm-1" style="text-align: center">
                     <div class="row">
-                        <a class="fa fa-tasks fa-4x" href="@Url.Action("TasksCampaign", "Task", new {idCampaign = campaign.Id})"></a>
+                        @*<a class="fa fa-tasks fa-4x" href="@Url.Action("TasksCampaign", "Task", new {idCampaign = campaign.Id})"></a>*@
+                        <a class="fa fa-tasks fa-4x" onclick="GetCampaign('@campaign.Id.ToString()')"></a>
                     </div>
                     <div class="row">
                         @( campaign.TotalTasks + " Encuestas")
@@ -137,6 +138,25 @@
                             {
             @:var point = { 'IdFilter': "@filter.IdFilter", 'NameFilter': "@filter.NameFilter", 'Criteria': "@filter.Criteria", 'Value': "@filter.Value", 'Visible':'@filter.Visible' };
             @:filters.push(point);
+        }
+
+    function GetCampaign(Idcampaigns){
+
+        var num = 10;
+        if (screen.width > 1200) {
+
+            num=10
+        }
+        if (screen.width < 1200) {
+     
+            num = 8
+        }
+        if (screen.width < 700) {
+
+            num = 3
+        }
+
+        window.location.href = "/Task/TasksCampaign?idCampaign=" + Idcampaigns + "&&statusNum=" + num;
         }
     </script>
 }

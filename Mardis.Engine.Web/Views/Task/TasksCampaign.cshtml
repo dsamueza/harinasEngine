@@ -180,9 +180,13 @@
     <h4><strong>Tareas totales: </strong>@ViewBag.CountTasks</h4>
     <section class="regular slider" align="center">
 
-        @{var cont = 1; var numStatus = 10; var y = 0;
-            var tam = (Model.tasks.Count() > numStatus ? numStatus : Model.tasks.Count()); int pages = (Model.tasks.Count() > numStatus ? (Model.tasks.Count() / tam) + 1 : 1);}
-        @{var max = 100 / tam + "%";}
+        @{var cont = 1; var numStatus = (int)ViewData["StatusNum"]; var y = 0;
+            var tam = (Model.tasks.Count() > numStatus ? numStatus : Model.tasks.Count()); int pages = (Model.tasks.Count() > numStatus ? (Model.tasks.Count() / tam) + 1 : 1); }
+
+
+
+        @{
+            var max = tam==0? 100+"%" : (100 / tam )+ "%";}
         @for (int i = 0; i < pages; i++)
         {
             <div class="row">
@@ -194,7 +198,7 @@
                             if (cont > (tam * i) && cont <= (tam * (i + 1)))
                             {
 
-                                if (@status.CountTasks == 0)
+                                if (status.TasksList.Count == 0)
                                 {<div class="col-sm-2-mdr" style="width: @max !important;">
                                         <div style="text-align: center;  background-color: @status.color;     min-height: 75px; margin-bottom:3px !important; margin-bottom:3px !important">
                                             <h5 class="control-label" style="color: white; margin-top:0px !important;margin-bottom:0px !important;font-size:14px !important"> @status.type </h5>
