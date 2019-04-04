@@ -914,6 +914,15 @@ a.bricky:hover {
         border-radius: 5px;
     }
 
+@media (max-width: 900px) {
+    .sidebar-search {
+
+        right: 80px !important;
+     
+    
+    }
+}
+
         .search-box .show-search i {
             color: #999999;
         }

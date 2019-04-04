@@ -25,7 +25,7 @@ namespace Mardis.Engine.DataObject.MardisCore
                               select c.IdAccount).First();
 
             var lista = (from b in Context.Branches
-                         join t in Context.TaskCampaigns.Where(t => t.IdCampaign == Guid.Parse(id)).Select(idb => idb.IdBranch).Distinct()
+                         join t in Context.TaskCampaigns.Where(t => t.IdCampaign == Guid.Parse(id) && t.IdStatusTask== Guid.Parse("3488BA56-CB18-4A7E-B56D-8FE348E9E4E4")).Select(idb => idb.IdBranch).Distinct()
                          on b.Id equals t
                          where b.IdAccount == idAccount
                          select b);
