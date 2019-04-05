@@ -26,9 +26,9 @@ namespace Mardis.Engine.DataAccess.MardisCore
         public int? Peso { get; set; }
         public string Factura { get; set; }
         public string ImagenFactura { get; set; }
-
         public string ImagenSacos { get; set; }
         public Guid AnswerDetailId { get; set; }
+        public Guid? iduser { get; set; }
 
         [ForeignKey("AnswerDetailId")]
         public AnswerDetail AnswerdetailModel { get; set; }

@@ -490,7 +490,7 @@ namespace Mardis.Engine.Web.Controllers
                     if (modelAnswer == null) return Json("2");
 
                     //var _post = _taskCampaignBusiness.saveDinamicCambioHarinas(modelAnswer);
-                    var _post = _taskCampaignBusiness.deleteHarina(modelAnswer);
+                    var _post = _taskCampaignBusiness.deleteHarina(modelAnswer, Guid.Parse(ApplicationUserCurrent.UserId));
 
                     return Json(_post);
                 }
@@ -1147,7 +1147,7 @@ namespace Mardis.Engine.Web.Controllers
 
 
 
-                return Json(_taskCampaignBusiness.UpdateBranch(idIdimg, imgdata).ToString());
+                return Json(_taskCampaignBusiness.UpdateBranch(idIdimg, imgdata, Guid.Parse(ApplicationUserCurrent.UserId)).ToString());
 
             }
             catch (Exception e)
@@ -1167,7 +1167,7 @@ namespace Mardis.Engine.Web.Controllers
 
 
 
-                return Json(_taskCampaignBusiness.AddBranch(Idtask, imgdata, Guid.Parse(idbranch), Guid.Parse(idcampaign)));
+                return Json(_taskCampaignBusiness.AddBranch(Idtask, imgdata, Guid.Parse(idbranch), Guid.Parse(idcampaign), Guid.Parse(ApplicationUserCurrent.UserId)));
 
             }
             catch (Exception e)
@@ -1188,7 +1188,7 @@ namespace Mardis.Engine.Web.Controllers
 
 
 
-                return Json(_taskCampaignBusiness.DeleteBranch(imgdata));
+                return Json(_taskCampaignBusiness.DeleteBranch(imgdata, Guid.Parse(ApplicationUserCurrent.UserId)));
 
             }
             catch (Exception e)

@@ -937,7 +937,7 @@ namespace Mardis.Engine.Business.MardisCore
 
         }
 
-        public List<String> deleteHarina(List<MytaskAnwerDetailSecondModel> _data)
+        public List<String> deleteHarina(List<MytaskAnwerDetailSecondModel> _data, Guid iduser)
         {
             using (var transaction = Context.Database.BeginTransaction())
             {
@@ -955,6 +955,13 @@ namespace Mardis.Engine.Business.MardisCore
 
                     var itemAnswerDetail = Context.AnswerDetails.Where(ad => ad.Id == idAnswerDetail).First();
                     var itemAnswerDetailSecondLevel = Context.AnswerDetailSecondLevels.Where(adsl => adsl.Id == idAnswerDetailSecondLevel).First();
+
+                    itemAnswerDetailSecondLevel.iduser = iduser;
+                    itemAnswerDetail.iduser = iduser;
+
+                    Context.UpdateRange(itemAnswerDetailSecondLevel);
+                    Context.UpdateRange(itemAnswerDetail);
+                    Context.SaveChanges();
 
                     Context.AnswerDetailSecondLevels.Remove(itemAnswerDetailSecondLevel);
                     Context.AnswerDetails.Remove(itemAnswerDetail);
@@ -983,19 +990,22 @@ namespace Mardis.Engine.Business.MardisCore
                         }
                         else
                         {
-                            if (distintc.First().Factura.Equals("no"))
+                            if (distintc.Count() != 0)
                             {
-                                tasksmodel.novelty = null;
-                                Context.PollTasks.Update(tasksmodel);
-                                Context.SaveChanges();
-                                _res = 2;
-                            }
-                            else
-                            {
-                                tasksmodel.novelty = "CON FACTURA";
-                                Context.PollTasks.Update(tasksmodel);
-                                Context.SaveChanges();
-                                _res = 1;
+                                if (distintc.First().Factura.Equals("no"))
+                                {
+                                    tasksmodel.novelty = null;
+                                    Context.PollTasks.Update(tasksmodel);
+                                    Context.SaveChanges();
+                                    _res = 2;
+                                }
+                                else
+                                {
+                                    tasksmodel.novelty = "CON FACTURA";
+                                    Context.PollTasks.Update(tasksmodel);
+                                    Context.SaveChanges();
+                                    _res = 1;
+                                }
                             }
                         }
                     }
@@ -3137,7 +3147,7 @@ namespace Mardis.Engine.Business.MardisCore
         #endregion
 
         #region ActualizarBranchImage
-        public int UpdateBranch(string id, string imagen)
+        public int UpdateBranch(string id, string imagen,Guid iduser)
         {
             MemoryStream stream = new MemoryStream();
             StreamWriter writer = new StreamWriter(stream);
@@ -3153,11 +3163,11 @@ namespace Mardis.Engine.Business.MardisCore
             var uri = AzureStorageUtil.GetUriFromBlob(_modelImage.NameContainer, _modelImage.Id.ToString() + ".jpg");
 
 
-            return _branchDao.UpdateDataImage(Guid.Parse(id),uri);
+            return _branchDao.UpdateDataImage(Guid.Parse(id),uri, iduser);
             
 
         }
-        public BranchImages AddBranch(string id, string imagen ,  Guid idbranch, Guid idcampaign)
+        public BranchImages AddBranch(string id, string imagen ,  Guid idbranch, Guid idcampaign, Guid iduser)
         {
             MemoryStream stream = new MemoryStream();
             StreamWriter writer = new StreamWriter(stream);
@@ -3183,17 +3193,17 @@ namespace Mardis.Engine.Business.MardisCore
             MemoryStream imageStream = new MemoryStream(bytes);
             AzureStorageUtil.UploadFromStream(imageStream, contenedor, name + ".jpg").Wait();
             var uri = AzureStorageUtil.GetUriFromBlob(contenedor, name + ".jpg");
-            return _branchDao.AddDataImage(Guid.Parse(id), uri, idbranch,idcampaign,name,contenedor,order);
+            return _branchDao.AddDataImage(Guid.Parse(id), uri, idbranch,idcampaign,name,contenedor,order, iduser);
 
 
         }
 
-        public int DeleteBranch(string id)
+        public int DeleteBranch(string id,Guid iduser)
         {
 
 
 
-            return _branchDao.DeleteDataImage(Guid.Parse(id));
+            return _branchDao.DeleteDataImage(Guid.Parse(id), iduser);
 
         }
             #endregion

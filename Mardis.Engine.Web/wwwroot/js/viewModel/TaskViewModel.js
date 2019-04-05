@@ -293,6 +293,7 @@ function DeleteQuestionRepeatCambioHarinas(i, j, k) {
                     title: '<strong>Información :</strong>',
                     message: 'La información no pudo se guarda. Intente de nuevo o contactese con el administrador'
                 });
+                $('#IdConfirmarEliminarHarina').modal('hide');
             }
             if (data[0] == "2") {
                 $.notify({

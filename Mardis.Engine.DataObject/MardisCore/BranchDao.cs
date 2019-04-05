@@ -273,7 +273,7 @@ namespace Mardis.Engine.DataObject.MardisCore
         }
 
 
-        public int UpdateDataImage(Guid id,string url)
+        public int UpdateDataImage(Guid id,string url,Guid iduser)
         {
             try
             {
@@ -281,27 +281,24 @@ namespace Mardis.Engine.DataObject.MardisCore
 
                 var _model = Context.BranchImageses.Where(x => x.Id.Equals(id)).First();
                 _model.UrlImage = url;
-               Context.BranchImageses.Add(_model);
+                _model.iduser = iduser;
+                Context.BranchImageses.Add(_model);
                 Context.Entry(_model).State = stateRegister;
                 Context.SaveChanges();
                 return 1;
-
             }
             catch (Exception)
             {
-
                 return 0;
             }
          
    
         }
-        public BranchImages AddDataImage(Guid id, string url,Guid idbranch,Guid idcampaign,string name, string  contenedor, int order)
+        public BranchImages AddDataImage(Guid id, string url,Guid idbranch,Guid idcampaign,string name, string  contenedor, int order,Guid iduser)
         {
             try
             {
-   
                 var stateRegister = EntityState.Added;
-            
 
                 var _model = new BranchImages();
                 _model.NameFile = name;
@@ -311,39 +308,33 @@ namespace Mardis.Engine.DataObject.MardisCore
                 _model.idtask = id;
                 _model.IdBranch = idbranch;
                 _model.IdCampaign = idcampaign;
+                _model.iduser = iduser;
                 Context.BranchImageses.Add(_model);
                 Context.Entry(_model).State = stateRegister;
                 Context.SaveChanges();
                 return _model;
-
             }
             catch (Exception e)
             {
-
                 return null;
             }
-
-
         }
 
-        public int DeleteDataImage(Guid id)
+        public int DeleteDataImage(Guid id, Guid iduser)
         {
             try
             {
-             
                 var _model = Context.BranchImageses.Where(x => x.Id.Equals(id)).First();
+                _model.iduser = iduser;
+                Context.SaveChanges();
                 Context.BranchImageses.Remove(_model);
                 Context.SaveChanges();
                 return 1;
-
             }
             catch (Exception)
             {
-
                 return 0;
             }
-
-
         }
 
         #region Generador de codigos nuevos

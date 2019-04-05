@@ -27,8 +27,9 @@ namespace Mardis.Engine.DataAccess.MardisCore
         public Campaign Campaign { get; set; }
 
         public string ContentType { get; set; }
-       public int Order { get; set; }
+        public int Order { get; set; }
         public Guid? idtask { get; set; }
+        public Guid? iduser { get; set; }
 
     }
 }
