@@ -25,9 +25,9 @@
             </label>
         </div>
         <div v-for="(question, i) in _modelServicef(section.Id,answer.Id)">
-
+            
             <div v-bind:style="col_sm_mardis(answer.Weight)">
-                <input v-info-sender v-if="question.CodeTypePoll == 'OPEN'" class="form-control inputmardis subsec" style="margin: 0 auto; float: none; background-color: #cccccc;" v-model="question.Answer" v-bind:id="question.Id" v-bind:name="question.IdAnswer"  v-bind:disabled="!question.IsPermit"/>
+                <input v-info-sender v-if="question.CodeTypePoll == 'OPEN'" class="form-control inputmardis subsec" style="margin: 0 auto; float: none; background-color: #cccccc;" v-model="question.Answer" v-bind:id="question.Id" v-bind:name="question.IdAnswer" v-bind:disabled="!question.IsPermit" />
                 <select v-info-sender v-if="question.CodeTypePoll == 'ONE'" class="inputmardis subsec" v-model="question.IdQuestionDetail" v-bind:id="question.Id" v-bind:name="question.IdAnswer"
                         style="margin:0 auto; float: none;" onchange="valorseleccion(this)" v-bind:disabled="!question.IsPermit">
                     <div class="panel-body" style="padding: 5px;">
@@ -43,11 +43,11 @@
                                 color="blue-grey lighten-2"
                                 item-text="Idconcept"
                                 item-value="Id"
-                                 v-bind:disabled="!question.IsPermit"
+                                v-bind:disabled="!question.IsPermit"
                                 multiple
                                 v-if="question.CodeTypePoll == 'COMPLETE'"
                                 :get-label="getLabel"
-                                v-complete >
+                                v-complete>
                     <template slot="selection"
                               slot-scope="data">
                         <v-chip :selected="data.selected"
