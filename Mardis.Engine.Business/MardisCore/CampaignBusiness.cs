@@ -635,10 +635,10 @@ namespace Mardis.Engine.Business.MardisCore
 
             return model;
         }
-        public IList<Pollster> GetPollster()
+        public IList<Pollster> GetPollster(Guid idaccount)
         {
             IList<Pollster> model = new List<Pollster>();
-            model = _campaignServicesDao.GetPollsterdata();
+            model = _campaignServicesDao.GetPollsterdata(idaccount);
 
             return model;
         }

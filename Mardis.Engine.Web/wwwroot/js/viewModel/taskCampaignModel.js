@@ -421,10 +421,11 @@ function ApplyBindingTaskService(data) {
             },
 
             _modelServicef: function (id, idquestion) {
-
+                console.log(idquestion)
                 var data = this.poll.ServiceCollection[0].ServiceDetailCollection;
 
                 var _model = data.filter(d => d.Id === id);
+                console.log(_model)
                 var _data2 = _model[0].QuestionCollection;
                 var question = _data2.filter(d => d.idQuestionDetailMultiple === idquestion);
 

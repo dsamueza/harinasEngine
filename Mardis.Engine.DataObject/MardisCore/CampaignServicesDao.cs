@@ -155,10 +155,10 @@ namespace Mardis.Engine.DataObject.MardisCore
             return query;
         }
 
-        public IList<Pollster> GetPollsterdata()
+        public IList<Pollster> GetPollsterdata(Guid IdAccount)
         {
 
-            var query = Context.Pollsters.ToList();
+            var query = Context.Pollsters.Where(x=>x.idaccount.Equals(IdAccount)).ToList();
             //     result.upda
             return query;
         }

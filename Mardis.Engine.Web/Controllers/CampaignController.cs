@@ -1231,7 +1231,7 @@ namespace Mardis.Engine.Web.Controllers
 
             ViewData["ReturnUrl"] = returnUrl;
             
-            var _model = _campaignBusiness.GetPollster();
+            var _model = _campaignBusiness.GetPollster(ApplicationUserCurrent.AccountId);
             return View(_model);
         }
 
