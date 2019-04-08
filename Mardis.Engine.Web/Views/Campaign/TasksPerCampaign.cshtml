@@ -176,9 +176,19 @@
 <link href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons' rel="stylesheet">
 
 <div id="divMyTask">
+    @*ViewData["Title"] = "Tareas totales:";
+
+        ViewData["Description"] = ViewBag.CountTasks;*@
+    <h4><strong>Tareas totales: </strong>@ViewBag.CountTasks</h4>
     <section class="regular slider" align="center">
-        @{var cont = 1; var numStatus = 10;
-            var tam = (Model.tasks.Count() > numStatus ? numStatus : Model.tasks.Count()); int pages = (Model.tasks.Count() > numStatus ? (Model.tasks.Count() / tam) + 1 : 1);}
+
+        @{var cont = 1; var numStatus = (int)ViewData["StatusNum"]; var y = 0;
+            var tam = (Model.tasks.Count() > numStatus ? numStatus : Model.tasks.Count()); int pages = (Model.tasks.Count() > numStatus ? (Model.tasks.Count() / tam) + 1 : 1); }
+
+
+
+        @{
+            var max = tam == 0 ? 100 + "%" : (100 / tam) + "%";}
         @for (int i = 0; i < pages; i++)
         {
             <div class="row">
@@ -189,104 +199,90 @@
                         {
                             if (cont > (tam * i) && cont <= (tam * (i + 1)))
                             {
-                                <div class="col-sm-2-mdr" style="text-align: center; border: thick solid white; background-color: @status.color;     min-height: 75px;">
-                                    <h5 class="control-label" style="color: white; margin-top:0px !important;margin-bottom:0px !important;font-size:14px !important"> @status.type </h5>
-                                    <h5 class="control-label" style="color: white; margin-top:0px !important;margin-bottom:0px !important;font-size:14px !important"> @(((Model.PageIndex * Model.PageSize) - Model.PageSize + 1) + "-" + (Model.PageIndex * Model.PageSize) + "/" + status.CountTasks)</h5>
-                                </div>
-                            }
-                            cont++;
-                        }
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="row-fluid">
-                        @{cont = 1;}
-                        @foreach (var listtask in Model.tasks)
-                        {
-                            if (cont > (tam * i) && cont <= (tam * (i + 1)))
-                            {
-                                <div class="col-sm-2-mdr" style="border: thick solid #CCCCCC;">
-                                    @foreach (var task in listtask.TasksList)
-                                    {
-                                        <div class="panel panel-default" id="@("row" + task.Id )">
-                                            <div class="panel-body">
 
-                                                @*<div class="col-sm-7">
-                                                        <strong>CAMPAÑA:</strong>
-                                                        <a href="@Url.Action("ProfileCampaign", "Campaign", new { idTask = task.Id,idcampaing=@ViewBag.idcampaign  })">@task.CampaignName</a>
-                                                    </div>*@
-                                                <div class="row">
-                                                    <div class="col-sm-12 pull-right">
-                                                        <label style="font-size-adjust: 0.2;">@task.Route</label>
-                                                    </div>
+                                if (status.TasksList.Count == 0)
+                                {<div class="col-sm-2-mdr" style="width: @max !important;">
+                                        <div style="text-align: center;  background-color: @status.color;     min-height: 75px; margin-bottom:3px !important; margin-bottom:3px !important">
+                                            <h5 class="control-label" style="color: white; margin-top:0px !important;margin-bottom:0px !important;font-size:14px !important"> @status.type </h5>
+                                            <h5 class="control-label" style="color: white; margin-top:0px !important;margin-bottom:0px !important;font-size:14px !important"> @(((Model.PageIndex * Model.PageSize) - Model.PageSize + 1) + "-" + (Model.PageIndex * Model.PageSize) + "/" + status.CountTasks)</h5>
+                                        </div>
+                                    </div>
+                                }
+                                else
+                                {
+
+                                    <div class="col-sm-2-mdr" style="width: @max !important;">
+                                        @foreach (var task in status.TasksList)
+                                        {
+                                            if (y == 0)
+                                            {
+                                                <div style="text-align: center;  background-color: @status.color;     min-height: 75px; margin-bottom:3px !important">
+                                                    <h5 class="control-label" style="color: white; margin-top:0px !important;margin-bottom:0px !important;font-size:14px !important"> @status.type </h5>
+                                                    <h5 class="control-label" style="color: white; margin-top:0px !important;margin-bottom:0px !important;font-size:14px !important"> @(((Model.PageIndex * Model.PageSize) - Model.PageSize + 1) + "-" + (Model.PageIndex * Model.PageSize) + "/" + status.CountTasks)</h5>
                                                 </div>
+                                            }
 
-                                                <div class="row">
-
-                                                    <div class="col-sm-12">
-
-                                                        <a href="@Url.Action("ProfileCampaign", "Campaign", new { idTask = task.Id, idcampaing = @ViewBag.idcampaign })" style="color: @listtask.color">@task.BranchMardisCode</a>
-
-                                                    </div>
-
-
-                                                </div>
-                                                @*<div class="row">
-                                                        <div class="col-sm-12">
-                                                            <label style="font-size-adjust: 0.2;">@task.BranchName</label>
+                                            <div class="panel panel-default" id="@("row" + task.Id )" style="border:solid white; margin-bottom:5px !important">
+                                                <div class="panel-body">
+                                                    <div class="row">
+                                                        <div class="col-sm-12 pull-right">
+                                                            <label style="font-size-adjust: 0.2;">@task.Route</label>
                                                         </div>
-                                                    </div>*@
+                                                    </div>
 
-                                                @*<div class="row">
+                                                    <div class="row">
+
                                                         <div class="col-sm-12">
-                                                            <label style="font-size-adjust: 0.4;">@task.BranchMardisCode</label>
+
+                                                            <a href="@Url.Action("ProfileCampaign", "Campaign", new { idTask = task.Id, idcampaing = @ViewBag.idcampaign })" style="color: @status.color">@task.BranchMardisCode</a>
+
                                                         </div>
-                                                    </div>*@
-                                                <div class="row">
-                                                    <div class="col-sm-12">
-                                                        <label style="font-size-adjust: 0.2">Código: </label>
                                                     </div>
-                                                </div>
-                                                <div class="row">
-                                                    <div class="col-sm-12">
-                                                        <label style="font-size-adjust: 0.2;">@task.BranchExternalCode</label>
+                                                    <div class="row">
+                                                        <div class="col-sm-12">
+                                                            <label style="font-size-adjust: 0.2">Código: </label>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                                <div class="row">
-                                                    <div class="col-sm-12">
-
-                                                        <label style="font-size-adjust: 0.2; font-weight:700">@task.StartDate.ToString("dd/MM/yyyy")</label>
-
+                                                    <div class="row">
+                                                        <div class="col-sm-12">
+                                                            <a href="@Url.Action("Timeline", "Branch", new {idBranch = task.BranchId})" style="color: @status.color">@task.BranchExternalCode</a>
+                                                        </div>
                                                     </div>
-
-                                                </div>
-
-                                                <div class="row">
-                                                    <div class="col-sm-6">
-                                                        <a href="#" onclick="History('@task.Id','@ViewBag.idcampaign','@task.BranchMardisCode')" style="font-size-adjust: 0.4;" class="pull-left"><span class="fa fa-eye" style="color: @listtask.color"></span></a>
+                                                    <div class="row">
+                                                        <div class="col-sm-12">
+                                                            <label style="font-size-adjust: 0.2; font-weight:700">@task.StartDate.ToString("dd/MM/yyyy")</label>
+                                                        </div>
                                                     </div>
-                                                    <div class="col-sm-6">
-                                                        <span class="@task.Icon pull-right" style="font-size-adjust: 0.4; color: @listtask.color"></span>
-                                                    </div>
-
-                                                </div>
-                                                <div class="row">
-                                                    @if (task.StatusMigrate == "G")
-                                                    {
+                                                    <div class="row">
                                                         <div class="col-sm-6">
-                                                            <a href="#" style="font-size-adjust: 0.4;" class="col-lg-offset-7"><span class="fa  fa-expeditedssl" style="color: #a8222a"> Migrado</span></a>
+                                                            <a href="#" onclick="History('@task.Id','@ViewBag.idcampaign','@task.BranchMardisCode')" style="font-size-adjust: 0.4;" class="pull-left"><span class="fa fa-eye" style="color: @status.color"></span></a>
                                                         </div>
-                                                    }
+                                                        <div class="col-sm-6">
+                                                            <span class="@task.Icon pull-right" style="font-size-adjust: 0.4; color: @status.color"></span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        @if (task.StatusMigrate == "G")
+                                                        {
+                                                            <div class="col-sm-6">
+                                                                <a href="#" style="font-size-adjust: 0.4;" class="col-lg-offset-7"><span class="fa  fa-expeditedssl" style="color: #a8222a"> Migrado</span></a>
+                                                            </div>
+                                                        }
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                    }
-                                </div>
+
+                                            y++;
+                                        }
+                                    </div>
+                                }
                             }
+                            y = 0;
                             cont++;
                         }
                     </div>
                 </div>
+
                 <div id="divFooter" class="row">
                     @Html.Partial("_PagingPartial", Model)
                 </div>

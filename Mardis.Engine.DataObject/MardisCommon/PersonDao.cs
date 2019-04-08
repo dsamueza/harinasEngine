@@ -99,7 +99,7 @@ namespace Mardis.Engine.DataObject.MardisCommon
         public List<Pollster> GetActiveIMEI(Guid idaccount)
         {
             return Context.Pollsters
-                .Where(p => p.Status == CStatusRegister.Active )
+                .Where(p => p.Status == CStatusRegister.Active && p.idaccount.Equals(idaccount))
                 .ToList();
 
         }

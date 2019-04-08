@@ -134,7 +134,7 @@ namespace Mardis.Engine.Business.MardisCore
                     BranchName = branch.Name,
                     Code = task.Code,
                     Id = task.Id,
-                    MerchantName = task.Pollster.Name,
+                    MerchantName = task.Pollster!=null ? task.Pollster.Name:"SIN ASIGNAR",
                     Route = task.Route,
                     StartDate = task.StartDate,
                     StatusName = status.Name,

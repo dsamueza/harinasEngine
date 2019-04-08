@@ -106,7 +106,7 @@ namespace Mardis.Engine.Business.MardisCore
                         //elimino los CampaignServices
                         Context.CampaignsServices.RemoveRange(Context.CampaignsServices.Where(cs => cs.IdCampaign == campaign.Id));
                         Context.SaveChanges();
-                        campaign.CampaignServices.Clear();
+                        
                     }
 
                     if (Guid.Empty != campaign.Id)
@@ -717,10 +717,11 @@ namespace Mardis.Engine.Business.MardisCore
 
 
         }
-        public int SavePollsters(PollsterRegisterViewModel models)
+        public int SavePollsters(PollsterRegisterViewModel models , Guid idaccount )
         {
 
             var model = new PollsterRegisterViewModel();
+            models.idaccount = idaccount;
             Mapper.Initialize(cfg =>
             {
                 cfg.CreateMap<PollsterRegisterViewModel, Pollster>();

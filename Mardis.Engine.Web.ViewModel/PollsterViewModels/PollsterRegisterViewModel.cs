@@ -40,7 +40,7 @@ namespace Mardis.Engine.Web.ViewModel.PollsterViewModels
         public string UserCel { get; set; }
         [Display(Name = "Password Movil")]
         public string PassCel { get; set; }
-
+        public Guid? idaccount { get; set; }
 
     }
 

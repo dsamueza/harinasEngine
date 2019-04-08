@@ -35,7 +35,7 @@ namespace Mardis.Engine.DataAccess.MardisCommon
         public string UserCel { get; set; }
         public string PassCel { get; set; }
 
-        public Guid idaccount { get; set;}
+        public Guid? idaccount { get; set;}
         public ICollection<TaskCampaign> Tasks { get; set; }
     }
 }

@@ -1029,19 +1029,44 @@ namespace Mardis.Engine.Web.Controllers
         /// <param name="pageSize">Número de registros</param>
         /// <returns></returns>
         [HttpGet]
-        public IActionResult TasksPerCampaign(string idCampaign, string filterValues, bool deleteFilter, string view, int pageIndex = 1, int pageSize = 6)
+        public IActionResult TasksPerCampaign(string idCampaign, string filterValues, bool deleteFilter, string view, int pageIndex = 1, int pageSize = 6, int statusNum = 10)
         {
             try
             {
                 if (!string.IsNullOrEmpty(idCampaign))
                 {
+                    SetSessionVariable("idCampaign", idCampaign);
                     _taskCampaignBusiness.UserCampaignRedis(Guid.Parse(ApplicationUserCurrent.UserId), idCampaign);
                 }
                 else
                 {
+                    //idCampaign = GetSessionVariable("idCampaign");
                     idCampaign = _taskCampaignBusiness.GetUserCampaignRedis(Guid.Parse(ApplicationUserCurrent.UserId), idCampaign);
+                    if (idCampaign == Guid.Empty.ToString())
+                    {
+                        idCampaign = GetSessionVariable("idCampaign");
+                    }
                 }
+                if (statusNum != 10)
+                {
+                    SetSessionVariable("StatusNum", statusNum.ToString());
 
+                }
+                else
+                {
+                    var _sessionStatus = GetSessionVariable("StatusNum");
+                    if (_sessionStatus != null)
+                    {
+                        statusNum = int.Parse(_sessionStatus);
+
+                    }
+                    else
+                    {
+                        statusNum = 10;
+                    }
+
+
+                }
                 if (!string.IsNullOrEmpty(view))
                 {
                     SetSessionVariable("view", view);
@@ -1063,6 +1088,7 @@ namespace Mardis.Engine.Web.Controllers
 
                         return RedirectToAction("GroupTask", "Task");
                     }
+
                 }
                 var filters = GetFilters(filterValues, deleteFilter);
                 if (filters.Where(x => x.NameFilter == "IdCampaign").Count() > 0)
@@ -1084,6 +1110,7 @@ namespace Mardis.Engine.Web.Controllers
                 }
                 _MyTask.Properties.ActionName = "TasksPerCampaign";
                 _MyTask.Properties.ControllerName = "Campaign";
+                ViewData["StatusNum"] = statusNum;
                 return View(_MyTask);
             }
             catch (Exception e)
@@ -1267,7 +1294,7 @@ namespace Mardis.Engine.Web.Controllers
                  
                     return View(_model);
                 }
-                _campaignBusiness.SavePollsters(_model);
+                _campaignBusiness.SavePollsters(_model, ApplicationUserCurrent.AccountId);
                
                 return RedirectToAction("Pollsters");
 
