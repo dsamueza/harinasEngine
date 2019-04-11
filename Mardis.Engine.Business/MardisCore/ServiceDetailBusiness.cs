@@ -160,6 +160,7 @@ namespace Mardis.Engine.Business.MardisCore
                 {
                     var d = 0;
                 }
+              
                 foreach (var answerDetail in answer.AnswerDetails)
                 {
                     //tomar todas las secciones lista para tomar todas las secciones duplicadas

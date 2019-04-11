@@ -1392,9 +1392,10 @@ namespace Mardis.Engine.Business.MardisCore
                     });
                 campaignServices = servicesParalel.ToList();
 
-          
+
             //agregar seccion si es dinamica
-            if (campaignServices != null)
+
+if (campaignServices != null)
             {
                 int camp = 0;
                 foreach (var q in campaignServices)
@@ -1457,6 +1458,15 @@ namespace Mardis.Engine.Business.MardisCore
                                     }
                                     numero++;
                                 }
+                                
+
+                                foreach (var q1 in campaignServices.First().ServiceDetailCollection.Where(x => x.IsDynamic == true).First().QuestionCollection)
+                                {
+           
+                                    campaignServices.First().ServiceDetailCollection.Where(x => x.IsDynamic == true).First().QuestionCollection.Where(t => t.Id == q1.Id).First().sequence = 1;
+
+                                }
+                                //campaignServices.Sections.AsParallel().ForAll(sc => sc.QuestionCollection = GetQuestionsFromSectionID(sc.Id, Orden));
                             }
                         }
 
@@ -1644,6 +1654,7 @@ namespace Mardis.Engine.Business.MardisCore
 
         public List<MyTaskQuestionsViewModel> GetQuestionsFromSectiopdF(Guid idSection)
         {
+  
             var questions = Mapper.Map<List<MyTaskQuestionsViewModel>>(_questionDao.GetCompleteQuestion(idSection).Result);
 
 
@@ -1674,6 +1685,8 @@ namespace Mardis.Engine.Business.MardisCore
         }
         public List<MyTaskQuestionsViewModel> GetQuestionsFromSectionID(Guid idSection, int orden)
         {
+
+
             var questions = Mapper.Map<List<MyTaskQuestionsViewModel>>(_questionDao.GetCompleteQuestion(idSection).Result);
 
             foreach (var q in questions)
@@ -4280,12 +4293,11 @@ namespace Mardis.Engine.Business.MardisCore
                             document.Add(tbUBOV);
 
                         }
-                        document.NewPage();
+                        document.Add(Chunk.NEXTPAGE);
                     }
                     catch (Exception)
                     {
-
-                        document.NewPage();
+                        document.Add(Chunk.NEXTPAGE);
                     }
 
                     // var task = _taskCampaignDao.Get(idtask, idaccount);
